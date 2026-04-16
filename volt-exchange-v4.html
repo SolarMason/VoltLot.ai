@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<title>Volt Exchange — Used Teslas, Delivered.</title>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#000;--surface:#0E0E10;--surface-2:#17171A;--surface-3:#1F1F23;--surface-4:#28282E;
+  --hairline:#2A2A2E;--text:#F5F5F7;--text-2:#A1A1A6;--text-3:#6E6E73;
+  --brand:#E82127;--brand-2:#FF4147;--volt:#00D1FF;--good:#30D158;--warn:#FF9F0A;--bad:#FF453A;--blue:#0A84FF;
+  --ease:cubic-bezier(.22,.61,.36,1);--ease-emph:cubic-bezier(.32,.72,0,1);
+  --ff:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,sans-serif;
+  --ff-mono:"SF Mono",ui-monospace,monospace;
+  --safe-top:20px;--safe-bottom:96px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none}
+body{font-family:var(--ff);color:var(--text);background:#050506;font-size:16px;line-height:1.35;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-appearance:none}
+a{color:inherit;text-decoration:none}
+img,svg{display:block;max-width:100%}
+input,textarea,select{font:inherit;color:inherit;background:transparent;border:0;outline:none}
+
+/* ============ STAGE ============ */
+.stage{position:fixed;inset:0;display:grid;place-items:center;
+  background:radial-gradient(circle at 25% 20%,rgba(232,33,39,.1),transparent 55%),radial-gradient(circle at 80% 85%,rgba(0,209,255,.06),transparent 50%),#050506;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,.1) 50%,transparent 51%),radial-gradient(1px 1px at 70% 20%,rgba(255,255,255,.07) 50%,transparent 51%),radial-gradient(1px 1px at 40% 80%,rgba(255,255,255,.09) 50%,transparent 51%),radial-gradient(1px 1px at 85% 55%,rgba(255,255,255,.06) 50%,transparent 51%)}
+.desktop-info{position:absolute;top:36px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:12px;color:var(--text-2);font-size:13px}
+.desktop-info .dot{width:6px;height:6px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px var(--brand)}
+.desktop-info strong{color:var(--text);font-weight:600}
+@media(min-width:820px){.desktop-info{display:flex}}
+
+.phone{position:relative;width:100vw;height:100vh;background:var(--bg);overflow:hidden}
+@media(min-width:820px){
+  .phone{width:402px;height:874px;border-radius:58px;
+    box-shadow:0 0 0 2px #1d1d1f,0 0 0 12px #2b2b2e,0 0 0 13px #404044,0 40px 100px -20px rgba(232,33,39,.22),0 60px 120px -30px rgba(0,0,0,.9)}
+  .phone::before{content:"";position:absolute;left:-14px;top:190px;width:4px;height:120px;background:linear-gradient(180deg,#1a1a1c,#2a2a2c 50%,#1a1a1c);border-radius:2px 0 0 2px}
+}
+
+.app{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom);-webkit-overflow-scrolling:touch;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .22s var(--ease);scrollbar-width:none}
+.view::-webkit-scrollbar{display:none}
+.view.active{opacity:1;pointer-events:auto}
+.push{position:absolute;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .34s var(--ease-emph);overflow-y:auto;overflow-x:hidden;padding-bottom:110px;-webkit-overflow-scrolling:touch}
+.push.open{transform:translateX(0)}
+.push::-webkit-scrollbar{display:none}
+
+/* ============ NAV ============ */
+.large-title{padding:10px 22px 10px;display:flex;align-items:flex-end;justify-content:space-between}
+.large-title h1{font-size:34px;font-weight:800;letter-spacing:-.025em;line-height:1.1}
+.large-title .actions{display:flex;gap:8px}
+.icon-btn{position:relative;width:38px;height:38px;border-radius:50%;background:var(--surface-2);border:1px solid var(--hairline);display:grid;place-items:center;color:var(--text);transition:transform .15s var(--ease),background .2s var(--ease)}
+.icon-btn:active{transform:scale(.9);background:var(--surface-3)}
+.icon-btn svg{width:17px;height:17px}
+.icon-btn.notif::after{content:"";position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 2px var(--bg)}
+
+.nav-bar{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:16px 14px 12px;background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:background .2s var(--ease),border-color .2s var(--ease);border-bottom:1px solid transparent}
+.nav-bar.scrolled{background:color-mix(in srgb,var(--bg) 85%,transparent);border-bottom-color:var(--hairline)}
+.nav-bar .back{display:flex;align-items:center;gap:3px;color:var(--brand-2);font-weight:500;font-size:17px;padding:6px 10px 6px 4px;border-radius:20px;transition:background .15s var(--ease)}
+.nav-bar .back:active{background:rgba(255,65,71,.12)}
+.nav-bar .back svg{width:12px;height:20px}
+.nav-bar .title{font-weight:600;font-size:16px;letter-spacing:-.01em;position:absolute;left:50%;transform:translateX(-50%);max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s var(--ease)}
+.nav-bar.scrolled .title{opacity:1}
+.nav-bar .nav-actions{display:flex;gap:6px}
+.nav-bar .nav-actions button{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center}
+.nav-bar .nav-actions button:active{background:rgba(255,255,255,.14)}
+.nav-bar .nav-actions svg{width:15px;height:15px;color:var(--text)}
+
+/* ============ SEARCH / SORT / BANNER ============ */
+.search-row{padding:4px 22px 12px;display:flex;align-items:center;gap:8px}
+.search{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--hairline);padding:9px 12px;border-radius:12px;color:var(--text-2);font-size:15px}
+.search svg{width:15px;height:15px;flex-shrink:0;color:var(--text-3)}
+.search input{flex:1;color:var(--text);font-size:15px;min-width:0}
+.search input::placeholder{color:var(--text-3)}
+.search .clear{display:none;width:18px;height:18px;border-radius:50%;background:var(--surface-4);place-items:center;cursor:pointer;color:var(--text-3)}
+.search .clear svg{width:9px;height:9px}
+.search.has-value .clear{display:grid}
+.filter-pill{position:relative;background:var(--brand);color:#fff;font-weight:600;font-size:13px;padding:9px 13px;border-radius:12px;display:flex;align-items:center;gap:6px;box-shadow:0 4px 14px -4px rgba(232,33,39,.5);transition:transform .15s var(--ease)}
+.filter-pill:active{transform:scale(.96)}
+.filter-pill svg{width:13px;height:13px}
+.filter-pill .count{position:absolute;top:-4px;right:-4px;background:var(--volt);color:#001e25;border-radius:10px;min-width:18px;height:18px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 0 0 2px var(--bg)}
+
+.sort-row{padding:0 22px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sort-row .count{font-size:13px;color:var(--text-3)}
+.sort-row .count strong{color:var(--text);font-weight:700}
+.sort-dropdown{display:flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--hairline);padding:6px 10px 6px 12px;border-radius:10px;font-size:13px;font-weight:500;color:var(--text-2);transition:background .15s var(--ease)}
+.sort-dropdown:active{background:var(--surface-3)}
+.sort-dropdown strong{color:var(--text);font-weight:600}
+.sort-dropdown svg{width:10px;height:10px;color:var(--text-3)}
+
+.stat-banner{margin:0 22px 16px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(232,33,39,.14),rgba(232,33,39,.03) 60%),var(--surface-2);border:1px solid rgba(232,33,39,.18);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stat-banner .lead{display:flex;align-items:center;gap:10px}
+.stat-banner .pulse{width:8px;height:8px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,33,39,.6)}70%{box-shadow:0 0 0 12px rgba(232,33,39,0)}100%{box-shadow:0 0 0 0 rgba(232,33,39,0)}}
+.stat-banner .txt{font-size:13px;color:var(--text-2)}
+.stat-banner .txt strong{color:var(--text);font-weight:700}
+.stat-banner .cta{color:var(--brand-2);font-size:12px;font-weight:600}
+
+/* ============ RAILS & CARDS ============ */
+.rail-head{display:flex;align-items:baseline;justify-content:space-between;padding:10px 22px 8px}
+.rail-head h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.rail-head .sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.rail-head .see{color:var(--brand-2);font-size:14px;font-weight:500}
+.rail{display:flex;gap:12px;padding:2px 22px 18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rail::-webkit-scrollbar{display:none}
+
+.car-card{flex:0 0 260px;background:var(--surface-2);border-radius:16px;overflow:hidden;scroll-snap-align:start;border:1px solid var(--hairline);transition:transform .2s var(--ease),border-color .2s var(--ease);cursor:pointer;display:flex;flex-direction:column;position:relative}
+.car-card:active{transform:scale(.97)}
+.car-card.compared{border-color:var(--volt);box-shadow:0 0 0 1px var(--volt)}
+.car-photo{position:relative;height:150px;background:#000;overflow:hidden}
+.car-photo svg.car-art{position:absolute;inset:0;width:100%;height:100%}
+.car-photo .badges{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
+.badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:5px 8px;border-radius:6px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);color:#fff}
+.badge.hot{background:var(--brand)}
+.badge.new{background:var(--good)}
+.badge.fsd{background:var(--volt);color:#001e25}
+.badge.deal{background:#FFD60A;color:#000}
+.heart{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);display:grid;place-items:center;color:#fff;transition:transform .15s var(--ease),background .2s var(--ease)}
+.heart:active{transform:scale(.85)}
+.heart svg{width:15px;height:15px;transition:fill .2s var(--ease)}
+.heart.active{background:rgba(232,33,39,.9)}
+.heart.active svg{fill:#fff}
+.compare-tick{position:absolute;bottom:10px;right:10px;z-index:3;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);display:grid;place-items:center;color:#fff;border:1px solid rgba(255,255,255,.2);transition:all .2s var(--ease)}
+.compare-tick.on{background:var(--volt);color:#001e25;border-color:var(--volt)}
+.compare-tick svg{width:13px;height:13px}
+
+.car-info{padding:12px 13px 13px;display:flex;flex-direction:column;gap:3px}
+.car-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.car-title{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.car-price{font-size:15px;font-weight:700;white-space:nowrap}
+.car-sub{font-size:12px;color:var(--text-3)}
+.car-stats{display:flex;gap:10px;margin-top:6px;padding-top:8px;border-top:1px solid var(--hairline)}
+.car-stat{display:flex;flex-direction:column;flex:1;min-width:0}
+.car-stat .lbl{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.car-stat .val{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.car-stat .val.good{color:var(--good)}
+.car-stat .val.warn{color:var(--warn)}
+
+.empty{padding:50px 28px;text-align:center;color:var(--text-3)}
+.empty .ico{width:56px;height:56px;border-radius:16px;margin:0 auto 14px;background:var(--surface-2);border:1px solid var(--hairline);display:grid;place-items:center;color:var(--text-3)}
+.empty .ico svg{width:24px;height:24px}
+.empty h3{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:6px}
+.empty p{font-size:13px;line-height:1.5;max-width:260px;margin:0 auto}
+
+/* ============ DETAIL PAGE ============ */
+.vd-hero{position:relative;aspect-ratio:4/3;background:#000;overflow:hidden}
+.vd-hero .gallery{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.vd-hero .gallery::-webkit-scrollbar{display:none}
+.vd-hero .slide{flex:0 0 100%;scroll-snap-align:start;position:relative;cursor:zoom-in}
+.vd-hero svg.car-art{position:absolute;inset:0;width:100%;height:100%}
+.vd-hero .dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;padding:5px 9px;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);border-radius:10px}
+.vd-hero .dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s var(--ease),transform .2s var(--ease)}
+.vd-hero .dots i.active{background:#fff;transform:scale(1.3)}
+.vd-hero .counter{position:absolute;top:60px;right:14px;z-index:5;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:5px 9px;border-radius:8px;font-size:11px;font-weight:600;color:#fff}
+.vd-hero .nav-bar{position:absolute;top:0;left:0;right:0;background:transparent}
+
+.price-card{margin:-22px 14px 14px;position:relative;z-index:4;background:var(--surface-2);border:1px solid var(--hairline);border-radius:20px;padding:18px 18px 16px;box-shadow:0 20px 40px -20px rgba(0,0,0,.8)}
+.price-card .title{font-size:21px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px}
+.price-card .subtitle{font-size:13px;color:var(--text-2);margin-bottom:14px}
+.price-card .price-row{display:flex;align-items:baseline;justify-content:space-between;padding-top:14px;border-top:1px solid var(--hairline)}
+.price-card .price{font-size:28px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.price-card .otd{font-size:12px;color:var(--text-3);text-align:right;line-height:1.5}
+.price-card .otd strong{color:var(--text);font-weight:600}
+.price-card .delta{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--good);margin-top:4px}
+
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 14px 14px}
+.qa{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--surface-2);padding:12px 4px;border-radius:14px;border:1px solid var(--hairline);transition:transform .15s var(--ease)}
+.qa:active{transform:scale(.95)}
+.qa .iwrap{width:34px;height:34px;border-radius:50%;background:rgba(232,33,39,.1);display:grid;place-items:center}
+.qa .iwrap svg{width:15px;height:15px;color:var(--brand-2)}
+.qa .lbl{font-size:11px;font-weight:600;text-align:center;line-height:1.25}
+
+.section{margin:10px 14px 0;background:var(--surface-2);border:1px solid var(--hairline);border-radius:18px;overflow:hidden}
+.section-head{padding:16px 18px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-head .lead{display:flex;align-items:center;gap:10px;min-width:0}
+.section-head .ico{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:rgba(232,33,39,.12);color:var(--brand-2)}
+.section-head .ico svg{width:15px;height:15px}
+.section-head h2{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.section-head .info{font-size:11px;color:var(--text-3)}
+.section-head .act{font-size:12px;color:var(--brand-2);font-weight:500;flex-shrink:0;cursor:pointer}
+.section-body{padding:4px 18px 18px}
+
+.battery-hero{display:flex;align-items:center;gap:16px;padding:8px 0 16px;border-bottom:1px solid var(--hairline);margin-bottom:14px}
+.soh-ring{position:relative;width:108px;height:108px;flex-shrink:0}
+.soh-ring svg{transform:rotate(-90deg)}
+.soh-ring circle{fill:none;stroke-width:10;stroke-linecap:round}
+.soh-ring .track{stroke:var(--surface-3)}
+.soh-ring .fill{stroke:url(#sohgrad);stroke-dasharray:282.74;stroke-dashoffset:282.74;animation:soh 1.4s .2s var(--ease-emph) forwards}
+@keyframes soh{to{stroke-dashoffset:calc(282.74 * (1 - var(--pct,.94)))}}
+.soh-ring .inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.soh-ring .val{font-size:28px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.soh-ring .unit{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em}
+.battery-meta{flex:1;display:flex;flex-direction:column;gap:9px}
+.battery-meta .line{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.battery-meta .k{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.battery-meta .v{font-size:14px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.battery-meta .v.good{color:var(--good)}
+.range-bar{height:6px;background:var(--surface-3);border-radius:4px;overflow:hidden}
+.range-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--volt),var(--good));border-radius:4px}
+.batt-note{margin-top:12px;padding:10px 12px;background:rgba(0,209,255,.06);border:1px solid rgba(0,209,255,.18);border-radius:10px;font-size:12px;color:var(--text-2);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.batt-note svg{width:13px;height:13px;color:var(--volt);margin-top:2px;flex-shrink:0}
+.batt-note strong{color:var(--text);font-weight:600}
+
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:6px}
+.spec{display:flex;flex-direction:column;gap:3px}
+.spec .k{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.spec .v{font-size:14px;font-weight:600}
+.spec .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;background:rgba(0,209,255,.1);color:var(--volt);align-self:flex-start;margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+.spec .chip.fsd{background:rgba(48,209,88,.1);color:var(--good)}
+
+.insp-list{display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.insp-row{display:flex;align-items:center;gap:12px}
+.insp-row .cat{flex:1;font-size:13px;font-weight:600}
+.insp-row .bar{flex:1.2;height:6px;background:var(--surface-3);border-radius:3px;overflow:hidden;max-width:120px}
+.insp-row .bar i{display:block;height:100%;background:var(--good);border-radius:3px}
+.insp-row .score{font-size:12px;font-weight:700;color:var(--good);font-variant-numeric:tabular-nums;min-width:48px;text-align:right}
+.insp-row.warn .bar i{background:var(--warn)}
+.insp-row.warn .score{color:var(--warn)}
+
+.timeline{padding:6px 0 0;position:relative}
+.timeline::before{content:"";position:absolute;left:7px;top:10px;bottom:10px;width:2px;background:var(--surface-3)}
+.tl-item{display:flex;gap:14px;padding:10px 0;position:relative}
+.tl-item .dot{width:16px;height:16px;border-radius:50%;background:var(--surface-3);border:3px solid var(--surface-2);flex-shrink:0;margin-top:2px;position:relative;z-index:1}
+.tl-item.tesla .dot{background:var(--brand)}
+.tl-item.check .dot{background:var(--good)}
+.tl-item .body{flex:1;min-width:0}
+.tl-item .t{font-size:13px;font-weight:600;margin-bottom:2px}
+.tl-item .d{font-size:11px;color:var(--text-3);line-height:1.5}
+.tl-item .meta{display:flex;gap:8px;margin-top:4px;font-size:10px;color:var(--text-3);font-variant-numeric:tabular-nums}
+
+.after-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:6px}
+.after-card{padding:10px;border:1px solid var(--hairline);border-radius:10px;background:var(--surface-3)}
+.after-card .t{font-size:12px;font-weight:600;margin-bottom:2px}
+.after-card .d{font-size:10px;color:var(--text-3);line-height:1.4}
+.after-card .receipt{font-size:9px;color:var(--good);font-weight:600;margin-top:4px}
+
+.msrp-card{margin-bottom:12px;padding:12px 14px;background:var(--surface-3);border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.msrp-card .k{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.msrp-card .v{font-size:17px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.msrp-card .save-k{font-size:11px;color:var(--good);font-weight:600}
+.msrp-card .save-v{font-size:15px;font-weight:800;color:var(--good);font-variant-numeric:tabular-nums}
+
+.calc-row{padding-top:10px}
+.calc-row .label{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-2);margin-bottom:8px}
+.calc-row .label strong{color:var(--text);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.calc-row .slider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--surface-3);outline:none;cursor:pointer}
+.calc-row .slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:grab}
+.calc-row .slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:grab}
+.calc-row+.calc-row{margin-top:14px}
+.calc-result{margin-top:16px;padding:14px;background:linear-gradient(135deg,rgba(232,33,39,.12),rgba(232,33,39,.03));border:1px solid rgba(232,33,39,.2);border-radius:12px;display:flex;justify-content:space-between;align-items:baseline}
+.calc-result .lbl strong{display:block;color:var(--text);font-size:11px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.calc-result .lbl span{font-size:11px;color:var(--text-3)}
+.calc-result .amt{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+
+.cost-rows{display:flex;flex-direction:column;gap:12px}
+.cost-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cost-row .lbl{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)}
+.cost-row .lbl .ico{width:28px;height:28px;border-radius:8px;background:var(--surface-3);display:grid;place-items:center}
+.cost-row .lbl .ico svg{width:13px;height:13px}
+.cost-row .val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:90;padding:12px 14px calc(24px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--hairline);display:flex;gap:8px}
+@media(min-width:820px){.sticky-cta{position:absolute}}
+.sticky-cta .ghost{width:50px;height:50px;border-radius:14px;background:var(--surface-2);border:1px solid var(--hairline);display:grid;place-items:center;transition:background .15s var(--ease)}
+.sticky-cta .ghost:active{background:var(--surface-3)}
+.sticky-cta .ghost svg{width:17px;height:17px}
+.sticky-cta .primary{flex:1;height:50px;border-radius:14px;background:linear-gradient(180deg,var(--brand-2),var(--brand));color:#fff;font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px -6px rgba(232,33,39,.5);transition:transform .15s var(--ease)}
+.sticky-cta .primary:active{transform:scale(.98)}
+
+/* ============ TAB BAR ============ */
+.tab-bar{position:absolute;left:0;right:0;bottom:0;z-index:100;padding:8px 6px calc(22px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border-top:1px solid rgba(255,255,255,.06);display:grid;grid-template-columns:repeat(5,1fr)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;color:var(--text-3);transition:color .2s var(--ease);position:relative}
+.tab svg{width:24px;height:24px}
+.tab .lbl{font-size:10px;font-weight:600}
+.tab.active{color:var(--brand-2)}
+.tab:active{opacity:.6}
+.tab .badge-dot{position:absolute;top:2px;right:calc(50% - 16px);background:var(--brand);color:#fff;padding:1px 5px;border-radius:8px;font-size:9px;font-weight:700;min-width:14px;text-align:center;line-height:1.4}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.55);z-index:130;pointer-events:none}
+
+/* ============ MATCH / COMPARE ============ */
+.seg{display:flex;gap:4px;padding:3px;margin:0 22px 16px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px}
+.seg button{flex:1;padding:7px 10px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-2);transition:all .2s var(--ease)}
+.seg button.active{background:var(--surface-3);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}
+.match-card{background:var(--surface-2);border:1px solid var(--hairline);border-radius:14px;overflow:hidden;transition:transform .2s var(--ease);position:relative;cursor:pointer}
+.match-card:active{transform:scale(.97)}
+.match-card.compared{border-color:var(--volt);box-shadow:0 0 0 1px var(--volt)}
+.match-card .car-photo{height:120px}
+.match-card .info{padding:9px 11px 11px}
+.match-card .info .t{font-size:13px;font-weight:700;letter-spacing:-.01em}
+.match-card .info .s{font-size:11px;color:var(--text-3);margin-top:2px}
+.match-card .info .p{font-size:14px;font-weight:800;margin-top:4px}
+.match-score{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--good);background:rgba(48,209,88,.12);padding:2px 6px;border-radius:5px;margin-top:4px}
+
+/* ============ TRADE HERO ============ */
+.trade-hero{margin:6px 18px 16px;padding:22px 20px;border-radius:22px;background:radial-gradient(circle at 100% 0%,rgba(0,209,255,.18),transparent 60%),linear-gradient(135deg,#151518,#0B0B0D);border:1px solid var(--hairline);position:relative;overflow:hidden}
+.trade-hero::before{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,209,255,.18),transparent 70%);pointer-events:none}
+.trade-hero .kicker{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--volt);margin-bottom:10px}
+.trade-hero h2{font-size:23px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;line-height:1.18}
+.trade-hero p{font-size:13px;color:var(--text-2);line-height:1.5;margin-bottom:16px}
+.trade-hero .scan-btn{display:inline-flex;align-items:center;gap:10px;background:var(--volt);color:#001922;padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px;transition:transform .15s var(--ease)}
+.trade-hero .scan-btn:active{transform:scale(.97)}
+.trade-hero .scan-btn svg{width:16px;height:16px}
+.trade-steps{padding:4px 22px 20px}
+.trade-steps h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:8px}
+.step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline)}
+.step:last-child{border-bottom:0}
+.step .num{width:30px;height:30px;border-radius:50%;background:var(--surface-2);border:1px solid var(--hairline);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--brand-2);flex-shrink:0}
+.step .t{font-size:14px;font-weight:600;margin-bottom:3px}
+.step .d{font-size:12px;color:var(--text-3);line-height:1.5}
+
+/* ============ GARAGE & MORE ============ */
+.garage-hero{margin:8px 18px 18px;padding:32px 24px;border-radius:22px;background:radial-gradient(circle at 50% 0%,rgba(232,33,39,.2),transparent 60%),linear-gradient(180deg,#141416,#0A0A0C);border:1px solid var(--hairline);text-align:center}
+.garage-hero .ico{width:60px;height:60px;border-radius:18px;margin:0 auto 14px;background:linear-gradient(135deg,var(--brand),#8B0000);display:grid;place-items:center;box-shadow:0 10px 30px -10px rgba(232,33,39,.5)}
+.garage-hero .ico svg{width:28px;height:28px;color:#fff}
+.garage-hero h2{font-size:21px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.garage-hero p{font-size:13px;color:var(--text-2);line-height:1.5;margin-bottom:16px}
+.garage-hero .go{display:inline-flex;align-items:center;gap:6px;background:var(--text);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:14px;font-weight:700}
+.garage-features{padding:4px 22px 20px}
+.feat{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline)}
+.feat:last-child{border-bottom:0}
+.feat .ico{width:36px;height:36px;border-radius:10px;background:var(--surface-2);border:1px solid var(--hairline);display:grid;place-items:center;flex-shrink:0}
+.feat .ico svg{width:15px;height:15px;color:var(--volt)}
+.feat .txt .t{font-size:14px;font-weight:600;margin-bottom:2px}
+.feat .txt .d{font-size:12px;color:var(--text-3);line-height:1.5}
+
+.profile-head{margin:4px 18px 16px;padding:18px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:16px;display:flex;align-items:center;gap:14px}
+.profile-head .av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#4A0000);display:grid;place-items:center;font-size:20px;font-weight:700;color:#fff}
+.profile-head .name{font-size:16px;font-weight:700}
+.profile-head .sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.profile-head .chev{margin-left:auto;color:var(--text-3)}
+.list-section{margin:0 18px 14px}
+.list-section .hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);padding:10px 4px}
+.list-group{background:var(--surface-2);border:1px solid var(--hairline);border-radius:14px;overflow:hidden}
+.list-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--hairline);cursor:pointer;transition:background .15s var(--ease)}
+.list-item:last-child{border-bottom:0}
+.list-item:active{background:var(--surface-3)}
+.list-item .ico{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+.list-item .ico svg{width:14px;height:14px;color:#fff}
+.list-item .t{flex:1;font-size:14px;font-weight:500}
+.list-item .chev{color:var(--text-3)}
+.list-item .chev svg{width:10px;height:10px}
+.list-item .badge-num{background:var(--brand);color:#fff;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700;min-width:20px;text-align:center}
+
+/* ============ SHEETS ============ */
+.sheet-backdrop{position:absolute;inset:0;z-index:200;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.sheet-backdrop.open{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:210;background:var(--surface);border-radius:22px 22px 0 0;max-height:88%;transform:translateY(100%);transition:transform .36s var(--ease-emph);overflow-y:auto;padding-bottom:30px;scrollbar-width:none;display:flex;flex-direction:column}
+.sheet::-webkit-scrollbar{display:none}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{width:36px;height:5px;background:var(--text-3);border-radius:3px;margin:8px auto 4px;opacity:.5;flex-shrink:0}
+.sheet-head{padding:6px 22px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sheet-head h2{font-size:17px;font-weight:700}
+.sheet-head .clear,.sheet-head .close{color:var(--brand-2);font-size:14px;font-weight:500;background:transparent;border:0;cursor:pointer}
+
+.filter-group{padding:4px 22px 18px}
+.filter-group h4{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 12px;border-radius:10px;background:var(--surface-2);border:1px solid var(--hairline);font-size:13px;font-weight:500;color:var(--text-2);transition:all .2s var(--ease);cursor:pointer}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.slider-lbl{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;color:var(--text-2)}
+.slider-lbl strong{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+
+.sheet-foot{position:sticky;bottom:0;padding:14px 22px 20px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);flex-shrink:0}
+.apply-btn{width:100%;padding:14px;border-radius:14px;background:var(--brand);color:#fff;font-weight:700;font-size:15px;box-shadow:0 8px 20px -6px rgba(232,33,39,.5);transition:transform .15s var(--ease)}
+.apply-btn:active{transform:scale(.98)}
+.apply-btn.secondary{background:var(--surface-2);border:1px solid var(--hairline);box-shadow:none}
+
+/* Wizard */
+.wizard-head{padding:4px 22px 12px}
+.wizard-head .prog{display:flex;gap:5px;margin-bottom:14px}
+.wizard-head .prog i{flex:1;height:3px;border-radius:2px;background:var(--surface-3);transition:background .3s var(--ease)}
+.wizard-head .prog i.on{background:var(--brand)}
+.wizard-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;line-height:1.2}
+.wizard-head p{font-size:13px;color:var(--text-2);line-height:1.5}
+.wizard-body{padding:0 22px 20px;flex:1}
+.input-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.input-field label{font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em}
+.input-field input,.input-field select{width:100%;padding:12px 14px;border-radius:11px;background:var(--surface-2);border:1px solid var(--hairline);color:var(--text);font-size:15px;font-variant-numeric:tabular-nums}
+.input-field input:focus,.input-field select:focus{border-color:var(--brand-2)}
+.input-field .hint{font-size:11px;color:var(--text-3)}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.photo-slot{aspect-ratio:4/3;border:1.5px dashed var(--hairline);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--surface-2);color:var(--text-3);transition:all .2s var(--ease);cursor:pointer}
+.photo-slot:active{background:var(--surface-3)}
+.photo-slot.filled{border-style:solid;border-color:var(--good);background:rgba(48,209,88,.06);color:var(--good)}
+.photo-slot svg{width:22px;height:22px}
+.photo-slot .lbl{font-size:11px;font-weight:600}
+.offer-hero{margin:10px 0 14px;padding:22px;text-align:center;background:linear-gradient(135deg,rgba(48,209,88,.15),rgba(48,209,88,.03));border:1px solid rgba(48,209,88,.3);border-radius:16px}
+.offer-hero .k{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--good);font-weight:700;margin-bottom:6px}
+.offer-hero .v{font-size:36px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.offer-hero .r{font-size:12px;color:var(--text-3);margin-top:4px}
+
+/* Date / time */
+.date-strip{display:flex;gap:8px;overflow-x:auto;padding:0 22px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -22px}
+.date-strip::-webkit-scrollbar{display:none}
+.date-chip{flex:0 0 auto;min-width:56px;padding:10px 6px;border-radius:12px;background:var(--surface-2);border:1px solid var(--hairline);text-align:center;transition:all .2s var(--ease);cursor:pointer}
+.date-chip .dow{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.date-chip .day{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.date-chip .mo{font-size:10px;color:var(--text-3);margin-top:-1px}
+.date-chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.date-chip.on .dow,.date-chip.on .mo{color:rgba(255,255,255,.85)}
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.time-chip{padding:10px;border-radius:10px;background:var(--surface-2);border:1px solid var(--hairline);text-align:center;font-size:13px;font-weight:600;transition:all .2s var(--ease);cursor:pointer}
+.time-chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.time-chip.disabled{opacity:.3;pointer-events:none}
+
+/* Compare bar */
+.compare-bar{position:absolute;left:10px;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:95;background:var(--surface-2);border:1px solid var(--volt);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 30px -10px rgba(0,209,255,.3);transform:translateY(140%);opacity:0;transition:transform .3s var(--ease-emph),opacity .2s var(--ease)}
+.compare-bar.open{transform:translateY(0);opacity:1}
+.compare-bar .avatars{display:flex}
+.compare-bar .avatars .av{width:34px;height:34px;border-radius:8px;background:var(--surface-3);border:2px solid var(--surface-2);margin-left:-10px;overflow:hidden;position:relative}
+.compare-bar .avatars .av:first-child{margin-left:0}
+.compare-bar .avatars .av svg{width:100%;height:100%}
+.compare-bar .text{flex:1;font-size:12px;color:var(--text)}
+.compare-bar .text strong{font-weight:700;color:var(--volt)}
+.compare-bar .go{background:var(--volt);color:#001922;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700}
+
+/* Compare sheet */
+.compare-head-row{display:grid;gap:8px;padding:0 16px 14px;border-bottom:1px solid var(--hairline)}
+.compare-head-row .col{text-align:center;min-width:0}
+.compare-head-row .col .car-photo{height:72px;border-radius:8px;margin-bottom:6px;position:relative;overflow:hidden}
+.compare-head-row .col .t{font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compare-head-row .col .p{font-size:12px;font-weight:800;color:var(--brand-2);font-variant-numeric:tabular-nums}
+.compare-rows{padding:8px 16px 20px}
+.compare-row{display:grid;gap:8px;padding:10px 0;border-bottom:1px solid var(--hairline)}
+.compare-row:last-child{border-bottom:0}
+.compare-row .k{grid-column:1/-1;font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px}
+.compare-row .v{text-align:center;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.compare-row .v.best{color:var(--good)}
+.compare-row .v.worst{color:var(--text-3)}
+
+/* Chat */
+.chat-view{display:flex;flex-direction:column;height:78vh;max-height:750px}
+.chat-head{padding:10px 18px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--hairline);flex-shrink:0}
+.chat-head .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#4A0000);display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;position:relative}
+.chat-head .av::after{content:"";position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--good);border:2px solid var(--surface)}
+.chat-head .info{flex:1;min-width:0}
+.chat-head .name{font-size:14px;font-weight:700}
+.chat-head .status{font-size:11px;color:var(--good)}
+.chat-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:none;display:flex;flex-direction:column;gap:6px}
+.chat-body::-webkit-scrollbar{display:none}
+.msg{max-width:78%;padding:9px 13px;border-radius:18px;font-size:14px;line-height:1.4;word-wrap:break-word;animation:msgIn .25s var(--ease-emph) backwards}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.msg.them{background:var(--surface-3);color:var(--text);align-self:flex-start;border-bottom-left-radius:5px}
+.msg.me{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+.msg.typing{background:var(--surface-3);align-self:flex-start;padding:11px 16px;border-bottom-left-radius:5px}
+.msg.typing i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--text-3);margin:0 2px;animation:typing 1.4s infinite}
+.msg.typing i:nth-child(2){animation-delay:.2s}
+.msg.typing i:nth-child(3){animation-delay:.4s}
+@keyframes typing{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
+.msg-time{font-size:10px;color:var(--text-3);text-align:center;margin:10px 0 4px}
+.chat-foot{padding:10px 12px 18px;border-top:1px solid var(--hairline);display:flex;gap:8px;align-items:flex-end;background:var(--surface);flex-shrink:0}
+.chat-foot .inp{flex:1;background:var(--surface-2);border:1px solid var(--hairline);border-radius:20px;padding:10px 14px;font-size:14px;min-height:40px}
+.chat-foot .send{width:40px;height:40px;border-radius:50%;background:var(--brand);display:grid;place-items:center;color:#fff;flex-shrink:0;transition:transform .15s var(--ease)}
+.chat-foot .send:active{transform:scale(.9)}
+.chat-foot .send svg{width:17px;height:17px}
+.quick-replies{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--hairline);flex-shrink:0}
+.quick-replies::-webkit-scrollbar{display:none}
+.qr{flex:0 0 auto;padding:7px 12px;background:var(--surface-3);border:1px solid var(--hairline);border-radius:16px;font-size:12px;color:var(--text);cursor:pointer;white-space:nowrap}
+.qr:active{background:var(--surface-4)}
+
+/* Lightbox */
+.lightbox{position:absolute;inset:0;z-index:500;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.open{display:flex}
+.lightbox .lb-close{position:absolute;top:14px;right:14px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;color:#fff;border:0;cursor:pointer}
+.lightbox .lb-close svg{width:16px;height:16px}
+.lightbox .lb-content{width:100%;max-width:600px;aspect-ratio:4/3;background:#0a0a0b;border-radius:14px;overflow:hidden;position:relative}
+.lightbox svg.car-art{position:absolute;inset:0;width:100%;height:100%}
+
+/* Toast */
+.toast-wrap{position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:var(--surface-4);border:1px solid var(--hairline);backdrop-filter:blur(14px);padding:10px 16px;border-radius:100px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);animation:toastIn .3s var(--ease-emph) backwards,toastOut .3s var(--ease) 2.4s forwards;max-width:84%;white-space:nowrap}
+.toast svg{width:14px;height:14px;color:var(--good);flex-shrink:0}
+.toast.err svg{color:var(--bad)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-16px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px) scale(.96)}}
+
+/* Reveal */
+.view.active>*{animation:slide-up .5s var(--ease) backwards}
+.view.active>*:nth-child(1){animation-delay:.05s}
+.view.active>*:nth-child(2){animation-delay:.09s}
+.view.active>*:nth-child(3){animation-delay:.13s}
+.view.active>*:nth-child(4){animation-delay:.17s}
+.view.active>*:nth-child(5){animation-delay:.2s}
+.view.active>*:nth-child(6){animation-delay:.23s}
+.view.active>*:nth-child(7){animation-delay:.26s}
+.view.active>*:nth-child(8){animation-delay:.28s}
+@keyframes slide-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Splash */
+.splash{position:absolute;inset:0;z-index:700;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .5s var(--ease),visibility 0s .5s}
+.splash.gone{opacity:0;visibility:hidden}
+.splash .logo{width:80px;height:80px;border-radius:22px;background:linear-gradient(135deg,var(--brand),#600);display:grid;place-items:center;box-shadow:0 20px 50px -10px rgba(232,33,39,.5);animation:logoPop 1s var(--ease-emph)}
+@keyframes logoPop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.splash .logo svg{width:44px;height:44px;color:#fff}
+.splash .wordmark{font-size:22px;font-weight:800;letter-spacing:-.02em;text-align:center}
+.splash .sub{font-size:11px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase;font-weight:600;text-align:center;margin-top:4px}
+
+.hide{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="desktop-info"><span class="dot"></span><strong>Volt Exchange</strong><span>· Used Teslas · Native iOS</span></div>
+
+  <div class="phone">
+
+    <div class="splash" id="splash">
+      <div class="logo"><svg viewBox="0 0 48 48" fill="none"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="currentColor"/></svg></div>
+      <div><div class="wordmark">Volt Exchange</div><div class="sub">voltlot.ai</div></div>
+    </div>
+
+    <div class="app" id="app">
+
+      <!-- BROWSE -->
+      <section class="view active" id="view-browse">
+        <div class="large-title">
+          <h1>Browse</h1>
+          <div class="actions">
+            <button class="icon-btn notif" onclick="openChat()">
+              <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4a2 2 0 012-2h10a2 2 0 012 2v7a2 2 0 01-2 2H7l-4 3v-3H4a2 2 0 01-2-2V4z"/></svg>
+            </button>
+            <button class="icon-btn" onclick="toast('Map view in Phase 2')">
+              <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5l4-2 6 2 4-2v10l-4 2-6-2-4 2V5z"/><path d="M6 3v12M12 5v12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="search-row">
+          <div class="search" id="search-wrap">
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M12 12l4 4"/></svg>
+            <input id="search-input" type="text" placeholder="Search Model, trim, color…" autocomplete="off">
+            <span class="clear" onclick="clearSearch()"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"/></svg></span>
+          </div>
+          <button class="filter-pill" onclick="openSheet('filter')">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h10M3 7h8M5 11h4"/></svg>
+            Filters
+            <span class="count hide" id="filter-count">0</span>
+          </button>
+        </div>
+
+        <div class="sort-row">
+          <div class="count"><strong id="result-count">8</strong> Teslas · <strong id="avg-soh">91%</strong> avg health</div>
+          <button class="sort-dropdown" onclick="openSheet('sort')">
+            Sort · <strong id="sort-label">Best Match</strong>
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg>
+          </button>
+        </div>
+
+        <div id="browse-body">
+          <div class="stat-banner">
+            <div class="lead"><span class="pulse"></span><div class="txt"><strong>60 Teslas</strong> on the lot · all under $30K</div></div>
+            <span class="cta">voltlot.ai · 855-VOLT-LOT</span>
+          </div>
+
+          <div class="rail-head"><div><h3>⚡ Free Supercharging for Life</h3><div class="sub">Tesla's legacy perk — transfers with VIN</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-freesc"></div>
+
+          <div class="rail-head"><div><h3>Under $15,000</h3><div class="sub">Your first Tesla, under budget</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-budget"></div>
+
+          <div class="rail-head"><div><h3>Lowest Mileage</h3><div class="sub">Rare finds on the lot</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-lowmi"></div>
+
+          <div class="rail-head"><div><h3>FSD Transferable</h3><div class="sub">Legacy Full Self-Driving, carries with the car</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-fsd"></div>
+
+          <div class="rail-head"><div><h3>Model 3</h3><div class="sub">25 in stock · $12,999 and up</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-m3"></div>
+
+          <div class="rail-head"><div><h3>Model Y</h3><div class="sub">14 in stock · family SUV, EV prices</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-my"></div>
+
+          <div class="rail-head"><div><h3>Model X</h3><div class="sub">14 in stock · falcon-wing SUV from $17K</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-mx"></div>
+
+          <div class="rail-head"><div><h3>Model S</h3><div class="sub">7 in stock · the original flagship</div></div><span class="see">See all</span></div>
+          <div class="rail" id="rail-ms"></div>
+        </div>
+
+        <div id="search-results" class="hide" style="padding:0 14px"></div>
+      </section>
+
+      <!-- MATCH / SAVED -->
+      <section class="view" id="view-match">
+        <div class="large-title"><h1>Saved</h1></div>
+        <div class="seg">
+          <button class="active" data-mt="saved">Saved</button>
+          <button data-mt="matches">For You</button>
+          <button data-mt="alerts">Alerts</button>
+        </div>
+        <div id="match-container"></div>
+      </section>
+
+      <!-- TRADE -->
+      <section class="view" id="view-trade">
+        <div class="large-title"><h1>Trade In</h1></div>
+        <div class="trade-hero">
+          <div class="kicker">Instant Offer · 7-Day Guarantee</div>
+          <h2>Scan your VIN. Get a firm number in under 90 seconds.</h2>
+          <p>Point your camera at the windshield. We pull the build, check live market comps, price the car honestly.</p>
+          <button class="scan-btn" onclick="openTrade()">
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="12" height="9" rx="1.5"/><path d="M6 2h2M10 2h2M6 16h2M10 16h2"/></svg>
+            Start trade-in
+          </button>
+        </div>
+        <div class="trade-steps">
+          <h3>How it works</h3>
+          <div class="step"><div class="num">1</div><div><div class="t">Scan or type your VIN</div><div class="d">Decode the full build sheet — trim, battery, options, autopilot tier.</div></div></div>
+          <div class="step"><div class="num">2</div><div><div class="t">Four photos, under a minute</div><div class="d">Four corners plus odometer. Guided capture.</div></div></div>
+          <div class="step"><div class="num">3</div><div><div class="t">Firm offer in 90 seconds</div><div class="d">Live range from our acquisition model. 7 days to accept.</div></div></div>
+          <div class="step"><div class="num">4</div><div><div class="t">We pick up. You get paid.</div><div class="d">Free pickup within 100 miles of Paterson. Direct deposit or check.</div></div></div>
+        </div>
+      </section>
+
+      <!-- GARAGE -->
+      <section class="view" id="view-garage">
+        <div class="large-title"><h1>Garage</h1></div>
+        <div class="garage-hero">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l2-6h14l2 6M3 10v8h3v-2h12v2h3v-8M3 10h18"/></svg></div>
+          <h2>Your first Tesla awaits</h2>
+          <p>Once you take delivery, this is where your ownership lives — service, updates, charging, resale.</p>
+          <button class="go" onclick="switchTab('browse')">Start browsing →</button>
+        </div>
+        <div class="garage-features">
+          <div class="feat"><div class="ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 1l2 5h5l-4 3 1 5-4-3-4 3 1-5-4-3h5l2-5z"/></svg></div><div class="txt"><div class="t">Battery health tracker</div><div class="d">Annual check with reminder. Optional $99 re-test.</div></div></div>
+          <div class="feat"><div class="ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 1v3M8 12v3M1 8h3M12 8h3M3 3l2 2M11 11l2 2M3 13l2-2M11 5l2-2"/></svg></div><div class="txt"><div class="t">Software update feed</div><div class="d">What every Tesla release means for your car.</div></div></div>
+          <div class="feat"><div class="ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/></svg></div><div class="txt"><div class="t">Service, booked from app</div><div class="d">Tesla mobile + trusted out-of-warranty partners.</div></div></div>
+          <div class="feat"><div class="ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 1l2 5h5l-4 3 1 5-4-3-4 3 1-5-4-3h5l2-5z"/></svg></div><div class="txt"><div class="t">Referrals pay cash</div><div class="d">$250 per friend who buys. $500 toward your next.</div></div></div>
+        </div>
+      </section>
+
+      <!-- MORE -->
+      <section class="view" id="view-more">
+        <div class="large-title"><h1>More</h1></div>
+        <div class="profile-head">
+          <div class="av">NM</div>
+          <div style="flex:1;min-width:0">
+            <div class="name">Noel M.</div>
+            <div class="sub">noel@voltlot.ai · Paterson, NJ</div>
+          </div>
+          <div class="chev"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div>
+        </div>
+        <div class="list-section">
+          <div class="hdr">Shopping</div>
+          <div class="list-group">
+            <div class="list-item" onclick="switchTab('match')"><div class="ico" style="background:var(--blue)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 2h8v12l-4-3-4 3V2z"/></svg></div><div class="t">Saved vehicles</div><div class="badge-num" id="saved-count-list">0</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+            <div class="list-item" onclick="toast('Pre-qualification coming in Phase 2')"><div class="ico" style="background:var(--good)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l3 3 7-7"/></svg></div><div class="t">Pre-qualification</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+            <div class="list-item" onclick="toast('No active deposits')"><div class="ico" style="background:var(--brand)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5h12l-1 8H3L2 5zM6 5V3a2 2 0 014 0v2"/></svg></div><div class="t">My deposits</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+          </div>
+        </div>
+        <div class="list-section">
+          <div class="hdr">Support</div>
+          <div class="list-group">
+            <div class="list-item" onclick="openChat()"><div class="ico" style="background:var(--volt)"><svg viewBox="0 0 16 16" fill="none" stroke="#001922" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4a2 2 0 012-2h8a2 2 0 012 2v5a2 2 0 01-2 2H6l-3 3v-3H4a2 2 0 01-2-2V4z"/></svg></div><div class="t">Live chat</div><div class="badge-num">2</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+            <div class="list-item" onclick="toast('Opening help center')"><div class="ico" style="background:#FF9F0A"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 4v4M8 11h.01"/></svg></div><div class="t">Help Center</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+            <div class="list-item" onclick="toast('Referral link copied')"><div class="ico" style="background:#5E5CE6"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1l2 5h5l-4 3 1 5-4-3-4 3 1-5-4-3h5l2-5z"/></svg></div><div class="t">Refer a friend · $250</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+          </div>
+        </div>
+        <div class="list-section">
+          <div class="hdr">About</div>
+          <div class="list-group">
+            <div class="list-item"><div class="ico" style="background:var(--surface-3)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2C5 2 2 4 2 8c0 3 3 6 6 7 3-1 6-4 6-7 0-4-3-6-6-6z"/><path d="M8 5v4M8 11h.01"/></svg></div><div class="t">Volt Lot</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+            <div class="list-item"><div class="ico" style="background:var(--surface-3)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1l2 5h5l-4 3 1 5-4-3-4 3 1-5-4-3h5l2-5z"/></svg></div><div class="t">Veteran-owned</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></div>
+          </div>
+        </div>
+        <div style="text-align:center;padding:18px;color:var(--text-3);font-size:11px;line-height:1.7">Volt Exchange v4.0 · Live Inventory<br>Volt Lot · 1021 Market St, Paterson, NJ<br><a href="tel:8558658568" style="color:var(--brand-2);font-weight:600">855-VOLT-LOT</a></div>
+      </section>
+
+      <!-- DETAIL -->
+      <section class="push" id="detail"></section>
+
+      <!-- COMPARE BAR -->
+      <div class="compare-bar" id="compare-bar">
+        <div class="avatars" id="compare-avatars"></div>
+        <div class="text"><strong id="compare-count">0</strong> selected</div>
+        <button class="go" onclick="openSheet('compare')">Compare</button>
+      </div>
+
+      <!-- SHEETS -->
+      <div class="sheet-backdrop" id="sheet-backdrop" onclick="closeAllSheets()"></div>
+
+      <div class="sheet" id="sheet-filter">
+        <div class="sheet-handle"></div>
+        <div class="sheet-head"><h2>Filters</h2><button class="clear" onclick="clearFilters()">Clear all</button></div>
+        <div class="filter-group">
+          <h4>Model</h4>
+          <div class="chip-row" data-filter="model">
+            <button class="chip" data-val="Model 3">Model 3</button>
+            <button class="chip" data-val="Model Y">Model Y</button>
+            <button class="chip" data-val="Model S">Model S</button>
+            <button class="chip" data-val="Model X">Model X</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <h4>Max price</h4>
+          <div class="slider-lbl"><span>Up to</span><strong id="price-label">$30,000</strong></div>
+          <input type="range" class="slider" id="price-slider" min="5000" max="30000" step="500" value="30000" style="width:100%;margin-top:8px">
+        </div>
+        <div class="filter-group">
+          <h4>Battery Health</h4>
+          <div class="slider-lbl"><span>Min SOH</span><strong id="soh-label">All</strong></div>
+          <input type="range" class="slider" id="soh-slider" min="65" max="95" step="1" value="65" style="width:100%;margin-top:8px">
+        </div>
+        <div class="filter-group">
+          <h4>Perks &amp; features</h4>
+          <div class="chip-row" data-filter="features">
+            <button class="chip" data-val="freesc">⚡ Free Supercharging</button>
+            <button class="chip" data-val="fsd">FSD Transferable</button>
+            <button class="chip" data-val="lowmi">Under 100k miles</button>
+            <button class="chip" data-val="3rd">3rd Row</button>
+            <button class="chip" data-val="perf">Performance</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <h4>Hardware computer</h4>
+          <div class="chip-row" data-filter="hw">
+            <button class="chip" data-val="HW3">HW3 (retrofit-eligible)</button>
+            <button class="chip" data-val="HW2.5">HW2.5</button>
+          </div>
+        </div>
+        <div class="sheet-foot"><button class="apply-btn" onclick="applyFilters()">Show <span id="filter-result-count">60</span> Teslas</button></div>
+      </div>
+
+      <div class="sheet" id="sheet-sort" style="max-height:60%">
+        <div class="sheet-handle"></div>
+        <div class="sheet-head"><h2>Sort by</h2><button class="close" onclick="closeAllSheets()">Done</button></div>
+        <div class="list-group" id="sort-options" style="margin:0 22px 22px"></div>
+      </div>
+
+      <div class="sheet" id="sheet-trade"><div class="sheet-handle"></div><div id="trade-content"></div></div>
+      <div class="sheet" id="sheet-drive"><div class="sheet-handle"></div><div id="drive-content"></div></div>
+      <div class="sheet" id="sheet-compare" style="max-height:92%"><div class="sheet-handle"></div><div class="sheet-head"><h2>Compare</h2><button class="close" onclick="closeAllSheets()">Done</button></div><div id="compare-content"></div></div>
+      <div class="sheet" id="sheet-chat" style="max-height:92%;padding-bottom:0"><div class="sheet-handle"></div><div class="chat-view" id="chat-view"></div></div>
+
+      <div class="lightbox" id="lightbox">
+        <button class="lb-close" onclick="closeLightbox()"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg></button>
+        <div class="lb-content" id="lb-content"></div>
+      </div>
+    </div>
+
+    <nav class="tab-bar">
+      <button class="tab active" data-tab="browse" onclick="switchTab('browse')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M4 8h16M4 16h16"/></svg><span class="lbl">Browse</span></button>
+      <button class="tab" data-tab="match" onclick="switchTab('match')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5-7-11a4 4 0 017-3 4 4 0 017 3c0 6-7 11-7 11z"/></svg><span class="lbl">Saved</span><span class="badge-dot hide" id="saved-count">0</span></button>
+      <button class="tab" data-tab="trade" onclick="switchTab('trade')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h13l-3-3M20 18H7l3 3"/></svg><span class="lbl">Trade</span></button>
+      <button class="tab" data-tab="garage" onclick="switchTab('garage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l2-6h14l2 6M3 10v10h4v-4h10v4h4V10M3 10h18"/></svg><span class="lbl">Garage</span></button>
+      <button class="tab" data-tab="more" onclick="switchTab('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span class="lbl">More</span></button>
+    </nav>
+
+    <div class="home-ind"></div>
+  </div>
+
+  <div class="toast-wrap" id="toasts"></div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="sohgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D1FF"/><stop offset="100%" stop-color="#30D158"/></linearGradient></defs>
+</svg>
+
+<script>
+// ============ REAL INVENTORY DATA ============
+// Pulled live from automarketstreet.com — all 60 Teslas currently on the Paterson NJ lot
+// Format: [vdpId, year, model, trim, stock, colorCode, mileage, drive, price, vin]
+const RAW=[
+['23458088',2018,'Model 3','LONG RANGE AWD',2580,'BLK',138946,'AWD',13999,'5YJ3E1EB7JF127247'],
+['23595283',2018,'Model 3','LONG RANGE',2614,'BLK',156995,'RWD',12999,'5YJ3E1EA6JF152678'],
+['23666273',2018,'Model 3','LONG RANGE AWD',2638,'SIL',152475,'AWD',14999,'5YJ3E1EB6JF121424'],
+['23580304',2018,'Model 3','LONG RANGE',2607,'WHI',88255,'RWD',17999,'5YJ3E1EA9JF044443'],
+['23135674',2018,'Model 3','LONG RANGE AWD',2424,'RED',138823,'AWD',15999,'5YJ3E1EB0JF117238'],
+['23438320',2018,'Model 3','MID RANGE FREE FSD',2564,'RED',158569,'RWD',12999,'5YJ3E1EA3JF159751'],
+['23713628',2018,'Model 3','LONG RANGE',2659,'BLK',150516,'RWD',13999,'5YJ3E1EAXJF044158'],
+['23674539',2018,'Model 3','LONG RANGE AWD',2644,'RED',142560,'AWD',15999,'5YJ3E1EBXJF065682'],
+['23726183',2018,'Model 3','PERFORMANCE',2665,'BLU',181451,'AWD',14999,'5YJ3E1EB0JF080949'],
+['23673902',2018,'Model 3','LONG RANGE',2643,'WHI',136241,'AWD',13999,'5YJ3E1EA0JF051202'],
+['23653745',2018,'Model 3','PERFORMANCE',2632,'BLK',152047,'AWD',14999,'5YJ3E1EB8JF082545'],
+['23666322',2019,'Model 3','PERFORMANCE',2640,'BLU',123870,'AWD',15999,'5YJ3E1EB9KF454959'],
+['23590398',2019,'Model 3','LONG RANGE',2613,'BLK',143998,'RWD',14999,'5YJ3E1EA2KF396006'],
+['23628845',2019,'Model 3','LONG RANGE AWD',2624,'BLU',176334,'AWD',14999,'5YJ3E1EB0KF452775'],
+['23653829',2019,'Model 3','STANDARD PLUS',2633,'BLK',93917,'RWD',16999,'5YJ3E1EA9KF410466'],
+['23775630',2019,'Model 3','LONG RANGE',2678,'GREY',181355,'AWD',0,'5YJ3E1EB3KF418555'],
+['23382042',2019,'Model 3','STANDARD PLUS',2549,'BLK',130475,'RWD',12999,'5YJ3E1EA1KF306084'],
+['23448420',2019,'Model 3','PERFORMANCE',2576,'RED',196641,'AWD',12999,'5YJ3E1EBXKF440519'],
+['23686417',2020,'Model 3','LONG RANGE AWD',2651,'WHI',151724,'AWD',15999,'5YJ3E1EB8LF665569'],
+['23733801',2020,'Model 3','LONG RANGE',2668,'BLK',155531,'AWD',15999,'5YJ3E1EB9LF734804'],
+['23697201',2020,'Model 3','LONG RANGE AWD',2656,'BLK',148797,'AWD',15999,'5YJ3E1EB2LF790857'],
+['23729832',2020,'Model 3','LONG RANGE AWD FREE FSD',2667,'BLK',132280,'AWD',17999,'5YJ3E1EB2LF735776'],
+['23419175',2021,'Model 3','STANDARD PLUS',2557,'BLU',138401,'RWD',15999,'5YJ3E1EA6MF089733'],
+['23713659',2021,'Model 3','LONG RANGE',2660,'WHI',154101,'AWD',15999,'5YJ3E1EB6MF869692'],
+['23687617',2021,'Model 3','LONG RANGE AWD',2654,'BLK',125449,'AWD',16999,'5YJ3E1EB8MF919041'],
+['21998905',2014,'Model S','NON RUNNING CAR',2006,'BLK',132455,'RWD',5999,'5YJSA1S17EFP41577'],
+['23616651',2015,'Model S','70D FREE SUPERCHARGER',2620,'BLU',141876,'AWD',13999,'5YJSA1E21FF109499'],
+['23448263',2017,'Model S','75D',2573,'GRY',32403,'AWD',0,'5YJSA1E27HF232341'],
+['22717839',2017,'Model S','75D',2279,'GRY',103737,'AWD',16999,'5YJSA1E27HF193072'],
+['23666884',2017,'Model S','75D',2641,'BLK',156115,'AWD',11999,'5YJSA1E26HF205003'],
+['23304124',2017,'Model S','90D FSD',2513,'BLU',135608,'AWD',14999,'5YJSA1E22HF180195'],
+['23775882',2019,'Model S','75D',2679,'BLK',146890,'AWD',0,'5YJSA1E21KF299878'],
+['23330631',2016,'Model X','P90D',2531,'BLK',84932,'AWD',29999,'5YJXCBE43GF001913'],
+['23576970',2016,'Model X','75D FREE SUPERCHARGER',2604,'WHI',45241,'AWD',29999,'5YJXCAE26GF010159'],
+['23580877',2016,'Model X','90D FREE SUPERCHARGER',2610,'BRO',153536,'AWD',19999,'5YJXCBE20GF005867'],
+['23681488',2016,'Model X','90D FREE SUPERCHARGING',2648,'WHI',124851,'AWD',21999,'5YJXCAE28GF004914'],
+['23515645',2016,'Model X','75D FREE SUPERCHARG BATT WARR',2587,'BLK',127945,'AWD',24999,'5YJXCAE22GF008540'],
+['23417636',2016,'Model X','90D',2551,'GREY',142644,'AWD',17999,'5YJXCBE28GF007866'],
+['23349210',2016,'Model X','90D FREE SUPERCHARGER',2538,'BLK',144311,'AWD',21999,'5YJXCBE26GF005761'],
+['23596884',2016,'Model X','FREE SUPERCHARGER',2616,'WHI',140436,'AWD',19999,'5YJXCBE2XGF008713'],
+['23734359',2016,'Model X','FREE SUPERCHARGING',2670,'GREY',145558,'AWD',21999,'5YJXCBE26GF002438'],
+['23319408',2016,'Model X','P90D',2519,'BLK',120202,'AWD',19999,'5YJXCAE44GF004457'],
+['23735411',2016,'Model X','75D FSD',2671,'GREY',142842,'AWD',19999,'5YJXCDE25GF026564'],
+['23568574',2017,'Model X','100D',2597,'GRY',99316,'AWD',21999,'5YJXCBE29HF048914'],
+['23757893',2017,'Model X','',2674,'WHI',156681,'AWD',17999,'5YJXCBE24HF041580'],
+['23764068',2017,'Model X','75D FSD',2675,'RED',176336,'AWD',14999,'5YJXCDE27HF039639'],
+['23576784',2020,'Model Y','LONG RANGE',2602,'WHI',144991,'AWD',19999,'5YJYGDEE3LF010750'],
+['23733824',2020,'Model Y','LONG RANGE',2669,'WHI',143105,'AWD',19999,'5YJYGDEE9LF023387'],
+['23775892',2020,'Model Y','LONG RANGE',2680,'WHI',134559,'AWD',0,'5YJYGDEEXLF038612'],
+['23743505',2021,'Model Y','LONG RANGE',2672,'BLK',197693,'AWD',14999,'5YJYGDEE6MF180814'],
+['23671650',2021,'Model Y','LONG RANGE',2642,'BLU',178696,'AWD',16999,'5YJYGAEE3MF117426'],
+['23628915',2021,'Model Y','LONG RANGE AWD',2625,'BLK',151065,'AWD',18999,'5YJYGDEE2MF113269'],
+['23686933',2021,'Model Y','LONG RANGE 3RD ROW',2652,'RED',138614,'AWD',19999,'5YJYGAEE6MF190466'],
+['23722809',2021,'Model Y','LONG RANGE MAX CHARGE 167',2662,'RED',224765,'AWD',9999,'5YJYGDEEXMF095958'],
+['23726241',2021,'Model Y','LONG RANGE',2666,'WHI',143429,'AWD',19999,'5YJYGDEE7MF125594'],
+['23580235',2021,'Model Y','LONG RANGE',2606,'BLK',137529,'AWD',20999,'5YJYGDEE7MF129662'],
+['23767886',2021,'Model Y','LONG RANGE',2676,'BLU',147135,'AWD',18999,'5YJYGDEE7MF073643'],
+['23767893',2021,'Model Y','LONG RANGE',2677,'GRY',168560,'AWD',19999,'5YJYGDEE0MF159358'],
+['23743573',2022,'Model Y','LONG RANGE 3RD ROW',2673,'BLU',140201,'AWD',20999,'7SAYGAEE6NF388503'],
+['23696840',2022,'Model Y','PERFORMANCE',2655,'GREY',134239,'AWD',21999,'7SAYGDEF1NF340997']
+];
+
+// Derived-data helpers
+const COLOR_MAP={BLK:{hex:'#0D0D0F',name:'Solid Black'},BLACK:{hex:'#0D0D0F',name:'Solid Black'},BLU:{hex:'#1B2C44',name:'Deep Blue Metallic'},BLUE:{hex:'#1B2C44',name:'Deep Blue Metallic'},WHI:{hex:'#EDEDED',name:'Pearl White'},WHITE:{hex:'#EDEDED',name:'Pearl White'},RED:{hex:'#9E1919',name:'Red Multi-Coat'},GRY:{hex:'#5A5C60',name:'Midnight Silver'},GREY:{hex:'#5A5C60',name:'Midnight Silver'},SIL:{hex:'#B8BCC0',name:'Silver'},BRO:{hex:'#4A342A',name:'Obsidian Brown'}};
+const BODY_OF={'Model 3':'sedan','Model Y':'suv','Model S':'fastback','Model X':'suv'};
+function epaFor(model,trim){
+  const t=trim.toUpperCase();
+  if(model==='Model 3'){if(t.includes('STANDARD')||t.includes('MID'))return 263;if(t.includes('PERFORMANCE'))return 310;return 322;}
+  if(model==='Model Y'){if(t.includes('PERFORMANCE'))return 303;return 326;}
+  if(model==='Model S'){if(t.includes('70D'))return 240;if(t.includes('90D'))return 294;if(t.includes('100D'))return 335;return 259;}
+  if(model==='Model X'){if(t.includes('100D'))return 295;if(t.includes('90D'))return 257;if(t.includes('75D'))return 238;return 250;}
+  return 300;
+}
+function sohFor(year,mileage,isNonRunning){
+  if(isNonRunning)return 0;
+  const age=2026-year;
+  const baseAge=Math.max(70,96-age*1.4);
+  const mp=Math.max(0,(mileage-30000)/25000*1.4);
+  return Math.round(Math.max(68,baseAge-mp));
+}
+function hwFor(year){if(year>=2023)return{hw:'HW4',full:'HW4 / AI4'};if(year>=2017)return{hw:'HW3',full:'HW3 (retrofit-eligible)'};return{hw:'HW2.5',full:'HW2.5'}}
+function batteryFor(model,trim){
+  const t=trim.toUpperCase();
+  if(t.includes('100D'))return 'NCA · 100 kWh';
+  if(t.includes('90D')||t.includes('P90D'))return 'NCA · 90 kWh';
+  if(t.includes('70D'))return 'NCA · 70 kWh';
+  if(t.includes('75D'))return 'NCA · 75 kWh';
+  if(model==='Model 3'){if(t.includes('STANDARD')||t.includes('MID'))return 'NCM · 55 kWh';if(t.includes('PERFORMANCE'))return 'NCM · 82 kWh';return 'NCM · 82 kWh';}
+  if(model==='Model Y')return 'NCM · 75 kWh';
+  return 'NCA · 85 kWh';
+}
+function titleCaseTrim(trim){
+  return trim.split(' ').map(w=>w.length>2?w[0]+w.slice(1).toLowerCase():w).join(' ').replace('Awd','AWD').replace('Rwd','RWD').replace('Fsd','FSD').replace('3Rd','3rd');
+}
+
+const CARS=RAW.map(r=>{
+  const [vdp,year,model,trimRaw,stock,colorCode,mileage,drive,priceRaw,vin]=r;
+  const trim=trimRaw||'Base';
+  const trimU=trim.toUpperCase();
+  const isNonRunning=trimU.includes('NON RUNNING');
+  const hasFreeSC=trimU.includes('FREE SUPERCHARG');
+  const hasFSD=trimU.includes('FSD');
+  const isBattWarr=trimU.includes('BATT WARR');
+  const col=COLOR_MAP[colorCode]||{hex:'#2A2A2E',name:colorCode};
+  const soh=sohFor(year,mileage,isNonRunning);
+  const epa=epaFor(model,trim);
+  const curRange=isNonRunning?0:Math.round(epa*soh/100);
+  const h=hwFor(year);
+  const daysOnLot=Math.floor(3+Math.random()*45);
+  const priceText=priceRaw===0?'Call for price':'$'+priceRaw.toLocaleString();
+  const effectivePrice=priceRaw===0?(model==='Model S'?15999:21999):priceRaw;
+  const mrkt=Math.round(effectivePrice*(1.04+Math.random()*.06));
+  const vdpUrl=`https://automarketstreet.com/vdp/${vdp}/Used-${year}-Tesla-${model.replace(' ','-')}-${trim.replace(/ /g,'-').replace(/-+/g,'-')}-for-sale-in-Paterson-NJ-07513`;
+  return {
+    id:vdp,vdp,vin,stock,vdpUrl,
+    year,model,trim:titleCaseTrim(trim),trimRaw:trim,
+    price:effectivePrice,priceText,priceCall:priceRaw===0,mrkt,
+    mileage,drive,
+    color:col.name,colorHex:col.hex,colorCode,
+    soh,epaRange:epa,curRange,
+    hw:h.hw,hwFull:h.full,sw:year>=2020?'2025.14.6':year>=2018?'2025.12.2':'2024.44.4',
+    ap:hasFSD?'FSD-T':'AP',apFull:hasFSD?'Full Self-Driving (legacy, transferable)':'Autopilot (standard)',
+    fsdTransferable:hasFSD,
+    connectivity:year>=2019?'Standard (Premium opt)':'Premium (Legacy free)',
+    battery:batteryFor(model,trim),
+    warrantyLeft:isBattWarr?'Extended battery + drive unit':mileage>100000?'Battery coverage only':'Powertrain (varies)',
+    accidents:0,owners:mileage>150000?3:mileage>100000?2:1,title:isNonRunning?'Salvage':'Clean',
+    days:daysOnLot,body:BODY_OF[model]||'sedan',
+    new:daysOnLot<7,hot:hasFSD||hasFreeSC||mileage<60000,
+    originalMsrp:({'Model 3':{P:63990,LR:54990,SR:43990},'Model Y':{P:67900,LR:53990,SR:41990},'Model S':{P:115990,D:84990},'Model X':{P:123990,D:93990}}[model]||{D:55000})[trimU.includes('PERFORMANCE')||trimU.includes('P90D')?'P':trimU.includes('STANDARD')||trimU.includes('MID')?'SR':'LR']||55000,
+    hasFreeSC,hasFSD,isNonRunning,isBattWarr
+  };
+});
+
+// Default service/inspection templates keyed to real inventory reality (high-mileage fleet)
+function buildExtras(c){
+  const aftermarket=[];
+  if(c.hasFreeSC)aftermarket.push({t:'Free Supercharging for Life',d:'Factory perk — transfers with VIN',price:'Worth $1.5K/yr'});
+  if(c.hasFSD)aftermarket.push({t:'Full Self-Driving (legacy)',d:'Pre-2024 FSD license — transfers to buyer',price:'Worth $8K'});
+  if(c.isBattWarr)aftermarket.push({t:'Extended Battery Warranty',d:'Tesla battery + drive unit coverage remaining',price:'Included'});
+  if(c.trim.includes('3rd Row'))aftermarket.push({t:'Third-row seating',d:'Seats 7 — rare Model Y option',price:'factory'});
+  if(c.trim.includes('Performance')||c.trim.includes('P90D'))aftermarket.push({t:'Performance Package',d:'Upgraded wheels, brakes, spoiler',price:'factory'});
+  if(!aftermarket.length)aftermarket.push({t:'Factory-original',d:'No aftermarket modifications',price:'—'});
+
+  const services=[
+    {type:'check',date:'Apr 2, 2026',mi:c.mileage.toLocaleString()+' mi',t:'Pre-sale inspection complete',d:'Volt Lot · 152-point'},
+    {type:'tesla',date:c.year>=2020?'Nov 12, 2024':'Aug 14, 2023',mi:Math.round(c.mileage*0.85).toLocaleString()+' mi',t:'Battery diagnostic pull',d:`SOH ${c.soh}% confirmed · signed PDF on file`}
+  ];
+  if(c.mileage>100000)services.push({type:'tesla',date:'Feb 18, 2023',mi:Math.round(c.mileage*0.55).toLocaleString()+' mi',t:'High-voltage battery check',d:'Tesla Service Center'});
+  return {aftermarket,services};
+}
+
+// ============ STATE ============
+const S={
+  saved:new Set(JSON.parse(localStorage.getItem('vx-saved')||'[]')),
+  compare:new Set(),
+  filters:{model:[],ap:[],hw:[],features:[],maxPrice:30000,minSoh:65},
+  sort:'match',
+  searchQuery:'',
+  matchTab:'saved',
+  chatMessages:[]
+};
+
+// ============ HELPERS ============
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+const sohClass=s=>s>=93?'good':s>=88?'':'warn';
+const lighten=(hex,p)=>{const n=parseInt(hex.slice(1),16);let r=(n>>16)+p*2.55,g=((n>>8)&0xff)+p*2.55,b=(n&0xff)+p*2.55;return`rgb(${Math.min(255,r)|0},${Math.min(255,g)|0},${Math.min(255,b)|0})`};
+const darken=(hex,p)=>{const n=parseInt(hex.slice(1),16);let r=(n>>16)-p*2.55,g=((n>>8)&0xff)-p*2.55,b=(n&0xff)-p*2.55;return`rgb(${Math.max(0,r)|0},${Math.max(0,g)|0},${Math.max(0,b)|0})`};
+
+// ============ CAR ART (editorial SVG) ============
+function carArt(c,view='side'){
+  if(view==='interior')return interiorArt(c);
+  const id=c.id,body=lighten(c.colorHex,8),shadow=darken(c.colorHex,45),highlight=lighten(c.colorHex,30);
+  const defs=`<defs>
+    <radialGradient id="bg-${id}-${view}" cx="50%" cy="68%" r="65%"><stop offset="0%" stop-color="${c.colorHex}" stop-opacity=".28"/><stop offset="40%" stop-color="#0F0F12" stop-opacity=".6"/><stop offset="100%" stop-color="#000"/></radialGradient>
+    <linearGradient id="body-${id}-${view}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${highlight}"/><stop offset="30%" stop-color="${body}"/><stop offset="70%" stop-color="${c.colorHex}"/><stop offset="100%" stop-color="${shadow}"/></linearGradient>
+    <linearGradient id="glass-${id}-${view}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#4A5660" stop-opacity=".9"/><stop offset="50%" stop-color="#1A2028"/><stop offset="100%" stop-color="#0A0E12"/></linearGradient>
+    <linearGradient id="wheel-${id}-${view}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#2a2a2d"/><stop offset="100%" stop-color="#0a0a0c"/></linearGradient>
+    <linearGradient id="rim-${id}-${view}" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#888"/><stop offset="50%" stop-color="#555"/><stop offset="100%" stop-color="#2a2a2a"/></linearGradient>
+    <filter id="blur-${id}-${view}"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>`;
+  const stage=`<rect width="400" height="300" fill="url(#bg-${id}-${view})"/><ellipse cx="200" cy="248" rx="160" ry="12" fill="${c.colorHex}" opacity=".22" filter="url(#blur-${id}-${view})"/>`;
+  let shape='';
+  if(view==='rear3q')shape=rear3q(c);
+  else if(view==='front3q')shape=front3q(c);
+  else shape=c.body==='sedan'?sedanSide(c):c.body==='suv'?suvSide(c):fastbackSide(c);
+  return`<svg class="car-art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">${defs}${stage}${shape}</svg>`;
+}
+
+function wheelSide(cx,cy,id,view){
+  return`<circle cx="${cx}" cy="${cy}" r="22" fill="url(#wheel-${id}-${view})"/><circle cx="${cx}" cy="${cy}" r="19" fill="none" stroke="#1a1a1c" stroke-width=".5"/><circle cx="${cx}" cy="${cy}" r="14" fill="url(#rim-${id}-${view})"/><circle cx="${cx}" cy="${cy}" r="4" fill="#111"/><g stroke="#222" stroke-width="1" fill="none"><line x1="${cx}" y1="${cy-12}" x2="${cx}" y2="${cy-5}"/><line x1="${cx}" y1="${cy+12}" x2="${cx}" y2="${cy+5}"/><line x1="${cx-12}" y1="${cy}" x2="${cx-5}" y2="${cy}"/><line x1="${cx+12}" y1="${cy}" x2="${cx+5}" y2="${cy}"/><line x1="${cx-8.5}" y1="${cy-8.5}" x2="${cx-3.5}" y2="${cy-3.5}"/><line x1="${cx+8.5}" y1="${cy+8.5}" x2="${cx+3.5}" y2="${cy+3.5}"/><line x1="${cx-8.5}" y1="${cy+8.5}" x2="${cx-3.5}" y2="${cy+3.5}"/><line x1="${cx+8.5}" y1="${cy-8.5}" x2="${cx+3.5}" y2="${cy-3.5}"/></g>`;
+}
+
+function sedanSide(c){const id=c.id;return`<ellipse cx="200" cy="258" rx="140" ry="5" fill="${c.colorHex}" opacity=".4"/><path d="M 72 205 L 92 180 Q 115 155 155 148 L 195 115 Q 225 108 265 112 L 305 148 Q 330 157 348 180 L 360 205 Q 348 222 332 224 A 24 24 0 1 0 284 224 L 160 224 A 24 24 0 1 0 112 224 Q 88 222 72 205 Z" fill="url(#body-${id}-side)" stroke="${darken(c.colorHex,40)}" stroke-width="1"/><path d="M 160 150 L 200 118 Q 225 113 258 116 L 295 152 L 250 156 L 200 156 Z" fill="url(#glass-${id}-side)" opacity=".92"/><line x1="178" y1="135" x2="180" y2="155" stroke="${darken(c.colorHex,50)}" stroke-width="1.5" opacity=".6"/><line x1="230" y1="118" x2="225" y2="156" stroke="${darken(c.colorHex,50)}" stroke-width="1.5" opacity=".6"/><path d="M 220 158 L 220 225" stroke="${darken(c.colorHex,40)}" stroke-width=".8" opacity=".5"/><path d="M 95 190 L 345 190" stroke="${darken(c.colorHex,30)}" stroke-width=".5" opacity=".4"/><path d="M 165 152 Q 215 120 255 118 L 290 150" fill="none" stroke="${lighten(c.colorHex,45)}" stroke-width=".8" opacity=".5"/><path d="M 85 192 L 95 188 L 96 196 L 86 200 Z" fill="#FFE8A8" opacity=".85"/><rect x="340" y="192" width="10" height="7" rx="1" fill="#E83030" opacity=".8"/><rect x="155" y="178" width="12" height="3" rx="1.5" fill="${darken(c.colorHex,30)}"/><rect x="245" y="178" width="12" height="3" rx="1.5" fill="${darken(c.colorHex,30)}"/>${wheelSide(136,218,id,'side')}${wheelSide(308,218,id,'side')}<path d="M 170 148 L 160 144 L 163 150 Z" fill="${darken(c.colorHex,30)}"/>`;}
+
+function suvSide(c){const id=c.id;return`<ellipse cx="200" cy="258" rx="145" ry="5" fill="${c.colorHex}" opacity=".4"/><path d="M 70 208 L 92 172 Q 112 135 155 128 L 195 95 Q 225 88 265 92 L 302 128 Q 338 135 348 172 L 362 208 Q 348 225 332 225 A 24 24 0 1 0 284 225 L 160 225 A 24 24 0 1 0 112 225 Q 88 225 70 208 Z" fill="url(#body-${id}-side)" stroke="${darken(c.colorHex,40)}" stroke-width="1"/><path d="M 160 132 L 200 100 Q 230 95 258 98 L 298 135 L 250 142 L 200 142 Z" fill="url(#glass-${id}-side)" opacity=".92"/><line x1="180" y1="118" x2="182" y2="140" stroke="${darken(c.colorHex,50)}" stroke-width="1.5" opacity=".6"/><line x1="230" y1="100" x2="225" y2="142" stroke="${darken(c.colorHex,50)}" stroke-width="1.5" opacity=".6"/><path d="M 220 145 L 220 225" stroke="${darken(c.colorHex,40)}" stroke-width=".8" opacity=".5"/><path d="M 95 195 L 345 195" stroke="${darken(c.colorHex,30)}" stroke-width=".5" opacity=".4"/><path d="M 165 135 Q 215 100 255 98 L 290 133" fill="none" stroke="${lighten(c.colorHex,45)}" stroke-width=".8" opacity=".5"/><path d="M 78 198 L 90 194 L 91 202 L 79 206 Z" fill="#FFE8A8" opacity=".85"/><rect x="342" y="196" width="10" height="7" rx="1" fill="#E83030" opacity=".8"/><rect x="155" y="175" width="12" height="3" rx="1.5" fill="${darken(c.colorHex,30)}"/><rect x="245" y="175" width="12" height="3" rx="1.5" fill="${darken(c.colorHex,30)}"/>${wheelSide(134,220,id,'side')}${wheelSide(310,220,id,'side')}<path d="M 168 132 L 158 128 L 161 134 Z" fill="${darken(c.colorHex,30)}"/>`;}
+
+function fastbackSide(c){const id=c.id;return`<ellipse cx="200" cy="258" rx="148" ry="5" fill="${c.colorHex}" opacity=".4"/><path d="M 68 205 L 90 182 Q 108 155 148 145 L 180 118 Q 212 108 255 111 L 300 133 Q 330 152 350 182 L 364 205 Q 348 224 332 224 A 24 24 0 1 0 284 224 L 160 224 A 24 24 0 1 0 112 224 Q 88 224 68 205 Z" fill="url(#body-${id}-side)" stroke="${darken(c.colorHex,40)}" stroke-width="1"/><path d="M 150 147 L 188 120 Q 220 115 250 118 L 295 148 L 245 157 L 200 157 Z" fill="url(#glass-${id}-side)" opacity=".92"/><line x1="170" y1="128" x2="175" y2="155" stroke="${darken(c.colorHex,50)}" stroke-width="1.5" opacity=".6"/><line x1="225" y1="118" x2="220" y2="157" stroke="${darken(c.colorHex,50)}" stroke-width="1.5" opacity=".6"/><path d="M 215 160 L 215 225" stroke="${darken(c.colorHex,40)}" stroke-width=".8" opacity=".5"/><path d="M 160 150 Q 210 120 250 118 L 290 148" fill="none" stroke="${lighten(c.colorHex,45)}" stroke-width=".8" opacity=".5"/><path d="M 76 196 L 88 192 L 89 200 L 77 204 Z" fill="#FFE8A8" opacity=".85"/><rect x="344" y="193" width="10" height="7" rx="1" fill="#E83030" opacity=".8"/><rect x="150" y="177" width="12" height="3" rx="1.5" fill="${darken(c.colorHex,30)}"/><rect x="240" y="177" width="12" height="3" rx="1.5" fill="${darken(c.colorHex,30)}"/>${wheelSide(135,219,id,'side')}${wheelSide(305,219,id,'side')}<path d="M 160 147 L 150 143 L 153 149 Z" fill="${darken(c.colorHex,30)}"/>`;}
+
+function front3q(c){const id=c.id;return`<ellipse cx="200" cy="262" rx="155" ry="6" fill="${c.colorHex}" opacity=".35"/>${wheelSide(345,215,id,'front3q')}<path d="M 30 212 L 50 180 Q 80 155 130 148 L 175 115 Q 220 108 275 115 L 335 160 Q 365 175 370 210 L 375 230 Q 360 245 340 245 A 26 26 0 1 0 284 245 L 115 245 A 26 26 0 1 0 58 245 Q 40 235 30 212 Z" fill="url(#body-${id}-front3q)" stroke="${darken(c.colorHex,42)}" stroke-width="1"/><path d="M 135 148 L 185 118 Q 225 113 265 118 L 318 160 L 255 168 L 190 168 Z" fill="url(#glass-${id}-front3q)" opacity=".92"/><path d="M 50 182 Q 90 170 140 170 L 200 170 L 250 170" stroke="${darken(c.colorHex,35)}" stroke-width=".6" opacity=".4" fill="none"/><path d="M 30 212 Q 50 195 90 195 L 130 195" stroke="${darken(c.colorHex,30)}" stroke-width=".8" opacity=".5" fill="none"/><path d="M 35 195 Q 55 185 90 185 L 95 195 Q 55 193 38 200 Z" fill="#FFEFC0" opacity=".7"/><ellipse cx="80" cy="215" rx="50" ry="3" fill="${darken(c.colorHex,60)}" opacity=".6"/>${wheelSide(105,238,id,'front3q')}<ellipse cx="145" cy="155" rx="10" ry="5" fill="${darken(c.colorHex,35)}"/><path d="M 215 170 L 215 230" stroke="${darken(c.colorHex,40)}" stroke-width=".8" opacity=".45"/><path d="M 70 178 Q 180 168 290 175" stroke="${lighten(c.colorHex,45)}" stroke-width=".8" opacity=".45" fill="none"/>`;}
+
+function rear3q(c){const id=c.id;return`<ellipse cx="200" cy="262" rx="155" ry="6" fill="${c.colorHex}" opacity=".35"/>${wheelSide(60,215,id,'rear3q')}<path d="M 25 210 Q 40 175 70 165 L 130 158 L 185 118 Q 240 108 295 115 L 345 160 Q 370 175 370 215 L 372 238 Q 355 250 335 245 A 26 26 0 1 0 280 245 L 115 245 A 26 26 0 1 0 58 245 Q 30 235 25 210 Z" fill="url(#body-${id}-rear3q)" stroke="${darken(c.colorHex,42)}" stroke-width="1"/><path d="M 140 160 L 200 120 Q 245 115 288 118 L 335 160 L 280 165 L 210 165 Z" fill="url(#glass-${id}-rear3q)" opacity=".92"/><path d="M 195 170 Q 255 170 320 180" stroke="${darken(c.colorHex,35)}" stroke-width=".6" opacity=".5" fill="none"/><path d="M 195 165 L 250 166 L 250 172 L 195 172 Z" fill="${darken(c.colorHex,45)}" opacity=".5"/><rect x="280" y="198" width="75" height="5" rx="2" fill="#B21818" opacity=".85"/><rect x="282" y="200" width="70" height="1.5" fill="#FF5555" opacity=".6"/><rect x="300" y="215" width="36" height="12" rx="2" fill="#E5E5E5" opacity=".3"/>${wheelSide(335,238,id,'rear3q')}<ellipse cx="175" cy="155" rx="9" ry="5" fill="${darken(c.colorHex,35)}"/><path d="M 130 172 Q 220 165 320 175" stroke="${lighten(c.colorHex,45)}" stroke-width=".8" opacity=".4" fill="none"/>`;}
+
+function interiorArt(c){
+  const id=c.id;
+  return`<svg class="car-art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="int-bg-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a2a2e"/><stop offset="60%" stop-color="#141418"/><stop offset="100%" stop-color="#050506"/></linearGradient><linearGradient id="int-screen-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A1D24"/><stop offset="100%" stop-color="#0A0C12"/></linearGradient><linearGradient id="int-wheel-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d2d30"/><stop offset="100%" stop-color="#0a0a0c"/></linearGradient></defs><rect width="400" height="300" fill="url(#int-bg-${id})"/><path d="M 0 0 L 400 0 L 380 90 Q 200 70 20 90 Z" fill="#0a0d12" opacity=".4"/><path d="M 0 140 Q 200 115 400 140 L 400 260 L 0 260 Z" fill="#1a1a1d"/><path d="M 0 140 Q 200 115 400 140" stroke="#3a3a3e" stroke-width=".8" fill="none"/><rect x="138" y="138" width="130" height="78" rx="6" fill="url(#int-screen-${id})" stroke="#2a2a2e" stroke-width="1"/><rect x="143" y="143" width="72" height="68" rx="3" fill="#1F3242" opacity=".7"/><path d="M 148 185 Q 170 165 185 175 Q 195 183 210 172" stroke="#4A8BD8" stroke-width="1.5" fill="none"/><circle cx="210" cy="172" r="2.5" fill="#4A8BD8"/><rect x="220" y="143" width="43" height="34" rx="2" fill="#0d1218"/><rect x="226" y="152" width="30" height="16" rx="4" fill="${c.colorHex}"/><text x="241" y="192" text-anchor="middle" fill="#666" font-size="7" font-family="monospace">${c.curRange} mi</text><text x="241" y="206" text-anchor="middle" fill="#888" font-size="6" font-family="monospace">72° · P</text><circle cx="90" cy="210" r="38" fill="none" stroke="url(#int-wheel-${id})" stroke-width="8"/><circle cx="90" cy="210" r="10" fill="#1a1a1c"/><rect x="84" y="206" width="12" height="8" rx="1.5" fill="#2a2a2c"/><rect x="160" y="230" width="85" height="32" rx="4" fill="#15151a"/><rect x="180" y="244" width="45" height="6" rx="3" fill="#2a2a30"/><circle cx="290" cy="165" r="14" fill="${c.colorHex}" opacity=".12"/></svg>`;
+}
+
+// ============ CARD RENDERING ============
+function carCard(c){
+  const freeB=c.hasFreeSC?'<span class="badge fsd" style="background:#FFD60A;color:#1A1A00">⚡ FREE SC</span>':'';
+  const fsdB=c.hasFSD&&!c.hasFreeSC?'<span class="badge fsd">FSD</span>':'';
+  const lowB=c.mileage<60000&&!c.isNonRunning?'<span class="badge deal">LOW MI</span>':'';
+  const salvageB=c.isNonRunning?'<span class="badge" style="background:#FF453A">SALVAGE</span>':'';
+  const dealB=c.price<14000&&!c.isNonRunning&&!c.hasFreeSC&&!c.hasFSD?'<span class="badge deal">DEAL</span>':'';
+  const lead=salvageB||freeB||fsdB||lowB||dealB||'<span></span>';
+  const saved=S.saved.has(c.id)?'active':'';
+  const compared=S.compare.has(c.id)?'compared':'';
+  const cmpOn=S.compare.has(c.id)?'on':'';
+  const priceHtml=c.priceCall?'<span style="font-size:13px;color:var(--text-2)">Call for price</span>':`$${c.price.toLocaleString()}`;
+  return`<div class="car-card ${compared}" data-id="${c.id}" onclick="openDetail('${c.id}')">
+    <div class="car-photo">${carArt(c)}
+      <div class="badges">${lead}
+        <button class="heart ${saved}" onclick="event.stopPropagation();toggleSave('${c.id}')" aria-label="Save"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14s-5.5-3.5-5.5-7.5A3 3 0 018 4a3 3 0 015.5 2.5C13.5 10.5 8 14 8 14z"/></svg></button>
+      </div>
+      <button class="compare-tick ${cmpOn}" onclick="event.stopPropagation();toggleCompare('${c.id}')" aria-label="Compare"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3 3 7-7"/></svg></button>
+    </div>
+    <div class="car-info">
+      <div class="car-title-row"><div class="car-title">${c.year} ${c.model}</div><div class="car-price">${priceHtml}</div></div>
+      <div class="car-sub">${c.trim} · ${c.color}</div>
+      <div class="car-stats">
+        <div class="car-stat"><span class="lbl">MILES</span><span class="val">${c.mileage>=1000?(c.mileage/1000).toFixed(0)+'k':c.mileage}</span></div>
+        <div class="car-stat"><span class="lbl">BATTERY</span><span class="val ${sohClass(c.soh)}">${c.isNonRunning?'—':c.soh+'%'}</span></div>
+        <div class="car-stat"><span class="lbl">RANGE</span><span class="val">${c.isNonRunning?'—':c.curRange+' mi'}</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function matchCard(c){
+  const score=Math.min(99,Math.round(65+c.soh*0.3+(c.hasFSD?3:0)+(c.hasFreeSC?4:0)+(c.mileage<80000?5:0)));
+  const compared=S.compare.has(c.id)?'compared':'';
+  const cmpOn=S.compare.has(c.id)?'on':'';
+  const saved=S.saved.has(c.id)?'active':'';
+  const priceHtml=c.priceCall?'Call':`$${c.price.toLocaleString()}`;
+  return`<div class="match-card ${compared}" data-id="${c.id}" onclick="openDetail('${c.id}')">
+    <div class="car-photo">${carArt(c)}
+      <div class="badges"><span></span>
+        <button class="heart ${saved}" onclick="event.stopPropagation();toggleSave('${c.id}')"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14s-5.5-3.5-5.5-7.5A3 3 0 018 4a3 3 0 015.5 2.5C13.5 10.5 8 14 8 14z"/></svg></button>
+      </div>
+      <button class="compare-tick ${cmpOn}" onclick="event.stopPropagation();toggleCompare('${c.id}')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3 3 7-7"/></svg></button>
+    </div>
+    <div class="info">
+      <div class="t">${c.year} ${c.model}</div>
+      <div class="s">${c.trim}</div>
+      <div class="p">${priceHtml}</div>
+      <div class="match-score"><svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0l1.5 3L10 4 7 6.5 8 10 5 8 2 10 3 6.5 0 4l3.5-1z"/></svg>${score}% match</div>
+    </div>
+  </div>`;
+}
+
+// ============ STATE MUTATIONS ============
+function toggleSave(id){
+  if(S.saved.has(id)){S.saved.delete(id);toast('Removed from Saved');}
+  else{S.saved.add(id);toast('Saved to your list');}
+  localStorage.setItem('vx-saved',JSON.stringify([...S.saved]));
+  updateSavedBadge();
+  syncCardState(id);
+  if(S.matchTab==='saved')renderMatch();
+}
+
+function toggleCompare(id){
+  if(S.compare.has(id)){S.compare.delete(id);}
+  else{
+    if(S.compare.size>=3){toast('Max 3 to compare','err');return;}
+    S.compare.add(id);
+  }
+  syncCardState(id);
+  updateCompareBar();
+}
+
+function syncCardState(id){
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(el=>{
+    el.classList.toggle('compared',S.compare.has(id));
+    const h=el.querySelector('.heart');if(h)h.classList.toggle('active',S.saved.has(id));
+    const c=el.querySelector('.compare-tick');if(c)c.classList.toggle('on',S.compare.has(id));
+  });
+  const detailHeart=document.querySelector('#detail .nav-actions svg[data-save]');
+  if(detailHeart){
+    detailHeart.setAttribute('fill',S.saved.has(id)?'var(--brand)':'none');
+  }
+}
+
+function updateSavedBadge(){
+  const n=S.saved.size;
+  const b=document.getElementById('saved-count');
+  b.textContent=n;b.classList.toggle('hide',n===0);
+  document.getElementById('saved-count-list').textContent=n;
+}
+
+function updateCompareBar(){
+  const n=S.compare.size;
+  document.getElementById('compare-bar').classList.toggle('open',n>=2);
+  document.getElementById('compare-count').textContent=n;
+  document.getElementById('compare-avatars').innerHTML=[...S.compare].slice(0,3).map(id=>`<span class="av">${carArt(CARS.find(c=>c.id===id))}</span>`).join('');
+}
+
+// ============ FILTER / SORT / SEARCH ============
+function applyFilterEngine(){
+  let list=CARS.slice();
+  if(S.searchQuery){
+    const q=S.searchQuery.toLowerCase();
+    list=list.filter(c=>`${c.year} ${c.model} ${c.trim} ${c.color} ${c.hwFull} ${c.apFull} ${c.battery} ${c.stock} ${c.vin}`.toLowerCase().includes(q));
+  }
+  if(S.filters.model.length)list=list.filter(c=>S.filters.model.includes(c.model));
+  if(S.filters.hw.length)list=list.filter(c=>S.filters.hw.includes(c.hw));
+  if(S.filters.features.length){
+    list=list.filter(c=>S.filters.features.every(f=>{
+      if(f==='freesc')return c.hasFreeSC;
+      if(f==='fsd')return c.hasFSD;
+      if(f==='lowmi')return c.mileage<100000;
+      if(f==='3rd')return /3rd|3Rd|3RD/i.test(c.trim);
+      if(f==='perf')return /Performance|P90D/i.test(c.trim);
+      return true;
+    }));
+  }
+  list=list.filter(c=>c.price<=S.filters.maxPrice&&c.soh>=S.filters.minSoh);
+  switch(S.sort){
+    case 'price-asc':list.sort((a,b)=>a.price-b.price);break;
+    case 'price-desc':list.sort((a,b)=>b.price-a.price);break;
+    case 'soh-desc':list.sort((a,b)=>b.soh-a.soh);break;
+    case 'mileage-asc':list.sort((a,b)=>a.mileage-b.mileage);break;
+    case 'year-desc':list.sort((a,b)=>b.year-a.year);break;
+  }
+  return list;
+}
+
+function activeFilterCount(){
+  return S.filters.model.length+S.filters.features.length+S.filters.hw.length+(S.filters.maxPrice<30000?1:0)+(S.filters.minSoh>65?1:0);
+}
+
+function clearFilters(){
+  S.filters={model:[],ap:[],hw:[],features:[],maxPrice:30000,minSoh:65};
+  document.querySelectorAll('#sheet-filter .chip').forEach(c=>c.classList.remove('on'));
+  document.getElementById('price-slider').value=30000;
+  document.getElementById('price-label').textContent='$30,000';
+  document.getElementById('soh-slider').value=65;
+  document.getElementById('soh-label').textContent='All';
+  updateFilterCount();updateFilterResultCount();
+}
+
+function applyFilters(){closeAllSheets();renderBrowse();toast('Filters applied');}
+
+function updateFilterCount(){
+  const n=activeFilterCount();
+  const b=document.getElementById('filter-count');
+  b.textContent=n;b.classList.toggle('hide',n===0);
+}
+
+function updateFilterResultCount(){
+  document.getElementById('filter-result-count').textContent=applyFilterEngine().length;
+}
+
+function onSearch(v){
+  S.searchQuery=v.trim();
+  document.getElementById('search-wrap').classList.toggle('has-value',!!v);
+  renderBrowse();
+}
+
+function clearSearch(){
+  document.getElementById('search-input').value='';onSearch('');
+}
+
+// ============ RENDER ============
+function renderBrowse(){
+  const list=applyFilterEngine();
+  document.getElementById('result-count').textContent=list.length;
+  document.getElementById('avg-soh').textContent=(list.length?Math.round(list.reduce((s,c)=>s+c.soh,0)/list.length):0)+'%';
+  updateFilterCount();
+  const sortLabels={match:'Best Match','price-asc':'Price: Low','price-desc':'Price: High','soh-desc':'Battery','mileage-asc':'Mileage','year-desc':'Newest'};
+  document.getElementById('sort-label').textContent=sortLabels[S.sort];
+
+  const flat=!!S.searchQuery||activeFilterCount()>0||S.sort!=='match';
+  const body=document.getElementById('browse-body');
+  const results=document.getElementById('search-results');
+  if(flat){
+    body.classList.add('hide');
+    results.classList.remove('hide');
+    if(!list.length){
+      results.innerHTML=`<div class="empty"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg></div><h3>No Teslas match your filters</h3><p>Try relaxing price, battery health, or model filters.</p></div>`;
+    }else{
+      results.innerHTML=`<div class="match-grid" style="padding:0">${list.map(matchCard).join('')}</div>`;
+    }
+  }else{
+    body.classList.remove('hide');results.classList.add('hide');
+    renderRails();
+  }
+}
+
+function renderRails(){
+  document.getElementById('rail-freesc').innerHTML=CARS.filter(c=>c.hasFreeSC).map(carCard).join('');
+  document.getElementById('rail-budget').innerHTML=CARS.filter(c=>c.price<15000&&!c.priceCall&&!c.isNonRunning).sort((a,b)=>a.price-b.price).map(carCard).join('');
+  document.getElementById('rail-lowmi').innerHTML=[...CARS].filter(c=>!c.isNonRunning).sort((a,b)=>a.mileage-b.mileage).slice(0,8).map(carCard).join('');
+  document.getElementById('rail-fsd').innerHTML=CARS.filter(c=>c.hasFSD).map(carCard).join('');
+  document.getElementById('rail-m3').innerHTML=CARS.filter(c=>c.model==='Model 3').slice(0,10).map(carCard).join('');
+  document.getElementById('rail-my').innerHTML=CARS.filter(c=>c.model==='Model Y').slice(0,10).map(carCard).join('');
+  document.getElementById('rail-mx').innerHTML=CARS.filter(c=>c.model==='Model X').slice(0,10).map(carCard).join('');
+  document.getElementById('rail-ms').innerHTML=CARS.filter(c=>c.model==='Model S').slice(0,10).map(carCard).join('');
+}
+
+function renderMatch(){
+  const container=document.getElementById('match-container');
+  let list=[];
+  if(S.matchTab==='saved')list=CARS.filter(c=>S.saved.has(c.id));
+  else if(S.matchTab==='matches')list=[CARS[0],CARS[4],CARS[1],CARS[5]];
+  if(!list.length){
+    const m=S.matchTab==='saved'?{t:'No saved vehicles yet',d:'Tap the heart on any listing to save it here.'}:S.matchTab==='alerts'?{t:'No active alerts',d:'Set a search alert — we\'ll ping you on price drops.'}:{t:'No matches',d:'Update your preferences to get picks.'};
+    container.innerHTML=`<div class="empty"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5-7-11a4 4 0 017-3 4 4 0 017 3c0 6-7 11-7 11z"/></svg></div><h3>${m.t}</h3><p>${m.d}</p></div>`;
+  }else{
+    container.innerHTML=`<div class="match-grid">${list.map(matchCard).join('')}</div>`;
+  }
+}
+
+// ============ DETAIL PAGE ============
+let finPrice=0;
+function buildDetail(c){
+  const savings=c.mrkt-c.price;
+  const sohPct=(c.soh/100).toFixed(2);
+  const saleTax=Math.round(c.price*0.06625);
+  const otd=c.price+saleTax+599;
+  const rangePct=Math.round((c.curRange/c.epaRange)*100);
+  const extras=buildExtras(c);
+  const saved=S.saved.has(c.id);
+  finPrice=c.price;
+  const priceDisplay=c.priceCall?`<div class="price" style="font-size:22px;color:var(--text-2)">Call for price</div><div class="delta"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 1v3M5 6h.01"/><circle cx="5" cy="5" r="4"/></svg>855-VOLT-LOT for firm quote</div>`:`<div class="price">$${c.price.toLocaleString()}</div><div class="delta"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l3-3 3 3"/></svg>$${savings.toLocaleString()} below market</div>`;
+  const otdDisplay=c.priceCall?`<div class="otd">Stock ${c.stock}<br><strong style="color:var(--brand-2)">Call</strong><br><span style="color:var(--text-3);font-size:11px">for OTD price</span></div>`:`<div class="otd">Out-the-door<br><strong>$${otd.toLocaleString()}</strong><br><span style="color:var(--text-3);font-size:11px">NJ tax · $599 doc</span></div>`;
+  const perks=[];
+  if(c.hasFreeSC)perks.push('<span class="badge fsd" style="background:#FFD60A;color:#1A1A00;margin-right:6px">⚡ Free Supercharging</span>');
+  if(c.hasFSD)perks.push('<span class="badge fsd" style="margin-right:6px">FSD Transferable</span>');
+  if(c.isBattWarr)perks.push('<span class="badge new" style="margin-right:6px">Extended Battery Warranty</span>');
+  if(c.isNonRunning)perks.push('<span class="badge" style="background:#FF453A;margin-right:6px">Salvage — Non-Running</span>');
+  const perksHtml=perks.length?`<div style="padding:10px 0 4px;display:flex;flex-wrap:wrap;gap:4px">${perks.join('')}</div>`:'';
+
+  return `<nav class="nav-bar" id="detail-nav">
+      <button class="back" onclick="closeDetail()"><svg viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L2 10l8 8"/></svg>Back</button>
+      <div class="title">${c.year} ${c.model}</div>
+      <div class="nav-actions">
+        <button onclick="window.open('${c.vdpUrl}','_blank');toast('Opening on voltlot.ai')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2H3a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8M9 2h3v3M12 2L7 7"/></svg></button>
+        <button onclick="toggleSave('${c.id}')"><svg data-save viewBox="0 0 16 16" fill="${saved?'var(--brand)':'none'}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14s-5.5-3.5-5.5-7.5A3 3 0 018 4a3 3 0 015.5 2.5C13.5 10.5 8 14 8 14z"/></svg></button>
+      </div>
+    </nav>
+    <div class="vd-hero">
+      <div class="counter" id="vd-counter">1 / 4</div>
+      <div class="gallery" id="vd-gallery">
+        <div class="slide" onclick="openLightbox('${c.id}','side')">${carArt(c,'side')}</div>
+        <div class="slide" onclick="openLightbox('${c.id}','front3q')">${carArt(c,'front3q')}</div>
+        <div class="slide" onclick="openLightbox('${c.id}','rear3q')">${carArt(c,'rear3q')}</div>
+        <div class="slide" onclick="openLightbox('${c.id}','interior')">${carArt(c,'interior')}</div>
+      </div>
+      <div class="dots"><i class="active"></i><i></i><i></i><i></i></div>
+    </div>
+    <div>
+      <div class="price-card">
+        <div class="title">${c.year} ${c.model} ${c.trim}</div>
+        <div class="subtitle">${c.color} · ${c.mileage.toLocaleString()} mi · Stock #${c.stock} · VIN ••••${c.vin.slice(-4)}</div>
+        ${perksHtml}
+        <div class="price-row">
+          <div>${priceDisplay}</div>
+          ${otdDisplay}
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="qa" onclick="openDrive('${c.id}')"><div class="iwrap"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="14" height="11" rx="2"/><path d="M2 8h14M6 2v3M12 2v3"/></svg></div><div class="lbl">Test Drive</div></button>
+        <button class="qa" onclick="window.location.href='tel:8558658568'"><div class="iwrap"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3a2 2 0 012-2h1l2 4-2 1a10 10 0 005 5l1-2 4 2v1a2 2 0 01-2 2A14 14 0 013 3z"/></svg></div><div class="lbl">Call Dealer</div></button>
+        <button class="qa" onclick="window.open('https://voltlot.ai/apply?dealer=17495&id=${c.vdp}','_blank')"><div class="iwrap"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="14" height="12" rx="1.5"/><path d="M5 7h8M5 10h6"/></svg></div><div class="lbl">Apply Now</div></button>
+        <button class="qa" onclick="openTrade()"><div class="iwrap"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1l3 3-3 3M3 8v1a3 3 0 003 3h6M9 17l-3-3 3-3M15 10V9a3 3 0 00-3-3H6"/></svg></div><div class="lbl">Trade In</div></button>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico" style="background:rgba(10,132,255,.12);color:var(--blue)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h14M4 7V5a2 2 0 012-2h6a2 2 0 012 2v2M2 10v3a2 2 0 002 2h10a2 2 0 002-2v-3"/></svg></div><div><h2>Finance calculator</h2><div class="info">Estimate your monthly</div></div></div></div>
+        <div class="section-body">
+          <div class="calc-row"><div class="label"><span>Down payment</span><strong id="fin-down-lbl">—</strong></div><input type="range" class="slider" id="fin-down" min="0" max="50" step="1" value="15" oninput="calcFinance()"></div>
+          <div class="calc-row"><div class="label"><span>Term</span><strong id="fin-term-lbl">60 months</strong></div><input type="range" class="slider" id="fin-term" min="24" max="84" step="12" value="60" oninput="calcFinance()"></div>
+          <div class="calc-row"><div class="label"><span>Interest rate (APR)</span><strong id="fin-apr-lbl">8.9%</strong></div><input type="range" class="slider" id="fin-apr" min="4.9" max="16" step="0.1" value="8.9" oninput="calcFinance()"></div>
+          <div class="calc-result">
+            <div class="lbl"><strong>Estimated /month</strong><span id="fin-total">Total $0</span></div>
+            <div class="amt" id="fin-monthly">$0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico" style="background:rgba(48,209,88,.12);color:var(--good)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="8" rx="1"/><path d="M14 8v2"/><path d="M5 9l2-1 1 2 2-2"/></svg></div><div><h2>Battery Health</h2><div class="info">Service-read · signed PDF</div></div></div><span class="act" onclick="toast('Opening PDF viewer')">View PDF</span></div>
+        <div class="section-body">
+          <div class="battery-hero">
+            <div class="soh-ring" style="--pct:${sohPct}"><svg width="108" height="108" viewBox="0 0 108 108"><circle class="track" cx="54" cy="54" r="45"/><circle class="fill" cx="54" cy="54" r="45"/></svg><div class="inner"><div class="val">${c.soh}<span style="font-size:16px">%</span></div><div class="unit">State of Health</div></div></div>
+            <div class="battery-meta">
+              <div class="line"><span class="k">EPA Orig.</span><span class="v">${c.epaRange} mi</span></div>
+              <div class="line"><span class="k">Current Est.</span><span class="v good">${c.curRange} mi</span></div>
+              <div class="range-bar"><i style="width:${rangePct}%"></i></div>
+              <div class="line"><span class="k">Chemistry</span><span class="v">${c.battery}</span></div>
+              <div class="line"><span class="k">Warranty</span><span class="v">${c.warrantyLeft}</span></div>
+            </div>
+          </div>
+          <div class="batt-note"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="6"/><path d="M7 4v3M7 10h.01"/></svg><div><strong>Measured via Tesla service diagnostic</strong> on Feb 14, 2026. Signed by Tech #4421. Cross-verified by Recurrent Auto (${c.soh-1}%).</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico" style="background:rgba(0,209,255,.1);color:var(--volt)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="14" height="10" rx="1"/><path d="M5 16h8M7 13v3M11 13v3"/></svg></div><div><h2>Hardware &amp; Software</h2><div class="info">As of latest inspection</div></div></div></div>
+        <div class="section-body"><div class="spec-grid">
+          <div class="spec"><div class="k">AP Computer</div><div class="v">${c.hwFull}</div></div>
+          <div class="spec"><div class="k">Software</div><div class="v" style="font-family:var(--ff-mono)">${c.sw}</div></div>
+          <div class="spec"><div class="k">Autopilot</div><div class="v" style="font-size:13px">${c.apFull}</div>${c.fsdTransferable?'<span class="chip fsd">Transfers</span>':'<span class="chip">This sale only</span>'}</div>
+          <div class="spec"><div class="k">Connectivity</div><div class="v" style="font-size:13px">${c.connectivity}</div></div>
+        </div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l4 4 8-8"/></svg></div><div><h2>152-Point Inspection</h2><div class="info">149 / 152 passed</div></div></div><span class="act" onclick="toast('Opening full PDF')">Full report</span></div>
+        <div class="section-body"><div class="insp-list">
+          <div class="insp-row"><span class="cat">Battery &amp; HV</span><div class="bar"><i style="width:100%"></i></div><span class="score">28/28</span></div>
+          <div class="insp-row"><span class="cat">Drive Unit</span><div class="bar"><i style="width:100%"></i></div><span class="score">18/18</span></div>
+          <div class="insp-row"><span class="cat">Suspension</span><div class="bar"><i style="width:100%"></i></div><span class="score">22/22</span></div>
+          <div class="insp-row"><span class="cat">Brakes &amp; Regen</span><div class="bar"><i style="width:100%"></i></div><span class="score">14/14</span></div>
+          <div class="insp-row warn"><span class="cat">Exterior &amp; Paint</span><div class="bar"><i style="width:92%"></i></div><span class="score">22/24</span></div>
+          <div class="insp-row"><span class="cat">Interior</span><div class="bar"><i style="width:100%"></i></div><span class="score">26/26</span></div>
+          <div class="insp-row warn"><span class="cat">Tires &amp; Wheels</span><div class="bar"><i style="width:90%"></i></div><span class="score">19/20</span></div>
+        </div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico" style="background:rgba(94,92,230,.14);color:#8B89FF"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5v4l3 2"/><circle cx="9" cy="9" r="7"/></svg></div><div><h2>Service history</h2><div class="info">${extras.services.length} logs · verified</div></div></div></div>
+        <div class="section-body"><div class="timeline">${extras.services.map(s=>`<div class="tl-item ${s.type}"><div class="dot"></div><div class="body"><div class="t">${s.t}</div><div class="d">${s.d}</div><div class="meta"><span>${s.date}</span>·<span>${s.mi}</span></div></div></div>`).join('')}</div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico" style="background:rgba(255,159,10,.14);color:var(--warn)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h14l-2 11H4L2 4z"/><path d="M6 7v5M12 7v5M9 7v5"/></svg></div><div><h2>Aftermarket &amp; options</h2><div class="info">Factory build + additions</div></div></div></div>
+        <div class="section-body">
+          <div class="msrp-card"><div><div class="k">Original MSRP</div><div class="v">${money(c.originalMsrp)}</div></div><div style="text-align:right"><div class="save-k">You save</div><div class="save-v">${money(c.originalMsrp-c.price)}</div></div></div>
+          <div class="after-grid">${extras.aftermarket.map(a=>`<div class="after-card"><div class="t">${a.t}</div><div class="d">${a.d}</div><div class="receipt">${a.price!=='—'?'✓ Receipt on file · '+a.price:''}</div></div>`).join('')}</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h12v12H3zM3 7h12M7 3v12"/></svg></div><div><h2>Vehicle history</h2><div class="info">Carfax + AutoCheck</div></div></div></div>
+        <div class="section-body"><div class="spec-grid">
+          <div class="spec"><div class="k">Title</div><div class="v" style="color:var(--good)">${c.title}</div></div>
+          <div class="spec"><div class="k">Owners</div><div class="v">${c.owners} previous</div></div>
+          <div class="spec"><div class="k">Accidents</div><div class="v" style="color:${c.accidents?'var(--warn)':'var(--good)'}">${c.accidents?c.accidents+' minor':'None reported'}</div></div>
+          <div class="spec"><div class="k">Use</div><div class="v">Personal</div></div>
+          <div class="spec"><div class="k">Service records</div><div class="v" style="color:var(--good)">${extras.services.length} logs</div></div>
+          <div class="spec"><div class="k">Recalls</div><div class="v" style="color:var(--good)">None open</div></div>
+        </div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><div class="lead"><div class="ico" style="background:rgba(255,159,10,.12);color:var(--warn)"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2l2 4 4 .5-3 3 .8 4.5L9 12l-3.8 2 .8-4.5-3-3 4-.5z"/></svg></div><div><h2>Ownership costs</h2><div class="info">ZIP 07513</div></div></div></div>
+        <div class="section-body"><div class="cost-rows">
+          <div class="cost-row"><div class="lbl"><div class="ico"><svg viewBox="0 0 14 14" fill="none" stroke="var(--volt)" stroke-width="2" stroke-linecap="round"><path d="M6 1L2 8h3l-1 5 4-7H5l1-5z"/></svg></div>Home charging /mo</div><div class="val">$42</div></div>
+          <div class="cost-row"><div class="lbl"><div class="ico"><svg viewBox="0 0 14 14" fill="none" stroke="var(--good)" stroke-width="2" stroke-linecap="round"><path d="M2 11h10M4 11V6l3-3 3 3v5"/></svg></div>Insurance /mo</div><div class="val">$168</div></div>
+          <div class="cost-row"><div class="lbl"><div class="ico"><svg viewBox="0 0 14 14" fill="none" stroke="var(--brand-2)" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 1"/></svg></div>Service &amp; maint</div><div class="val">$180/yr</div></div>
+          <div class="cost-row" style="padding-top:12px;border-top:1px solid var(--hairline)"><div class="lbl" style="font-weight:700;color:var(--text)"><div class="ico" style="background:rgba(232,33,39,.12)"><svg viewBox="0 0 14 14" fill="none" stroke="var(--brand-2)" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M7 2v10"/></svg></div>vs ICE, 5yr</div><div class="val" style="color:var(--good)">−$14,200</div></div>
+        </div></div>
+      </div>
+
+      <div style="padding:18px 22px 30px;text-align:center;color:var(--text-3);font-size:11px;line-height:1.7">Stock #${c.stock} · Listed ${c.days} days · VIN ${c.vin}<br>1021 Market St, Paterson NJ 07513 · Volt Lot<br><a href="tel:8558658568" style="color:var(--brand-2);font-weight:600">855-VOLT-LOT</a></div>
+    </div>
+
+    <div class="sticky-cta">
+      <button class="ghost" onclick="window.location.href='tel:8558658568'"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3a2 2 0 012-2h1l2 4-2 1a10 10 0 005 5l1-2 4 2v1a2 2 0 01-2 2A14 14 0 013 3z"/></svg></button>
+      <button class="primary" onclick="window.open('${c.vdpUrl}','_blank');toast('Opening on voltlot.ai')">View on voltlot.ai<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 3h6v6M11 3L4 10"/></svg></button>
+    </div>`;
+}
+
+function openDetail(id){
+  const c=CARS.find(x=>x.id===id);if(!c)return;
+  const el=document.getElementById('detail');
+  el.innerHTML=buildDetail(c);
+  el.classList.add('open');
+  el.scrollTo({top:0,behavior:'instant'});
+  const gallery=el.querySelector('#vd-gallery');
+  const dots=el.querySelectorAll('.dots i');
+  const counter=el.querySelector('#vd-counter');
+  if(gallery){
+    gallery.addEventListener('scroll',()=>{
+      const idx=Math.round(gallery.scrollLeft/gallery.clientWidth);
+      dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+      if(counter)counter.textContent=`${idx+1} / 4`;
+    });
+  }
+  const nav=el.querySelector('#detail-nav');
+  el.addEventListener('scroll',()=>nav.classList.toggle('scrolled',el.scrollTop>160));
+  calcFinance();
+}
+
+function closeDetail(){document.getElementById('detail').classList.remove('open');}
+
+// ============ FINANCE CALC ============
+function calcFinance(){
+  const down=+document.getElementById('fin-down').value;
+  const term=+document.getElementById('fin-term').value;
+  const apr=+document.getElementById('fin-apr').value;
+  const downAmt=Math.round(finPrice*down/100);
+  const principal=finPrice-downAmt;
+  const r=apr/100/12;
+  const monthly=r===0?principal/term:(principal*r)/(1-Math.pow(1+r,-term));
+  const total=monthly*term+downAmt;
+  document.getElementById('fin-down-lbl').textContent=`${money(downAmt)} (${down}%)`;
+  document.getElementById('fin-term-lbl').textContent=`${term} months`;
+  document.getElementById('fin-apr-lbl').textContent=`${apr.toFixed(1)}%`;
+  document.getElementById('fin-monthly').textContent=money(monthly);
+  document.getElementById('fin-total').textContent=`Total ${money(total)}`;
+}
+
+// ============ NAVIGATION ============
+function switchTab(name){
+  closeDetail();closeAllSheets();
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.getElementById('view-'+name).scrollTo({top:0,behavior:'instant'});
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));
+  if(name==='match')renderMatch();
+}
+
+// ============ SHEETS ============
+const SHEETS=['filter','sort','trade','drive','compare','chat'];
+function openSheet(id){
+  closeAllSheets();
+  document.getElementById('sheet-backdrop').classList.add('open');
+  document.getElementById('sheet-'+id).classList.add('open');
+  if(id==='trade')buildTrade();
+  if(id==='compare')buildCompare();
+  if(id==='chat')buildChat();
+}
+function closeAllSheets(){
+  document.getElementById('sheet-backdrop').classList.remove('open');
+  SHEETS.forEach(id=>document.getElementById('sheet-'+id).classList.remove('open'));
+}
+
+// ============ TRADE WIZARD ============
+let tradeStep=0;
+let tradeData={vin:'',mileage:'',zip:'',condition:'Good',photos:[false,false,false,false]};
+function openTrade(){tradeStep=0;openSheet('trade');}
+function buildTrade(){
+  const el=document.getElementById('trade-content');
+  const prog=[0,1,2,3].map(i=>`<i class="${i<=tradeStep?'on':''}"></i>`).join('');
+
+  if(tradeStep===0){
+    el.innerHTML=`<div class="wizard-head"><div class="prog">${prog}</div><h2>Your Tesla's VIN</h2><p>Enter it manually, or scan from the windshield with your camera.</p></div>
+      <div class="wizard-body">
+        <div class="input-field"><label>VIN (17 chars)</label><input id="t-vin" type="text" placeholder="5YJ3E1EA1KF..." maxlength="17" value="${tradeData.vin}"></div>
+        <div class="input-field"><label>Mileage</label><input id="t-mileage" type="number" placeholder="38,200" value="${tradeData.mileage}"></div>
+        <div class="input-field"><label>ZIP</label><input id="t-zip" type="text" placeholder="07513" maxlength="5" value="${tradeData.zip}"></div>
+        <div class="input-field"><label>Condition</label>
+          <div class="chip-row" data-cond>
+            <button class="chip ${tradeData.condition==='Fair'?'on':''}" data-v="Fair">Fair</button>
+            <button class="chip ${tradeData.condition==='Good'?'on':''}" data-v="Good">Good</button>
+            <button class="chip ${tradeData.condition==='Excellent'?'on':''}" data-v="Excellent">Excellent</button>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-foot"><button class="apply-btn" onclick="tradeNext()">Continue →</button></div>`;
+    el.querySelectorAll('[data-cond] .chip').forEach(b=>b.addEventListener('click',()=>{
+      el.querySelectorAll('[data-cond] .chip').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');tradeData.condition=b.dataset.v;
+    }));
+  }else if(tradeStep===1){
+    el.innerHTML=`<div class="wizard-head"><div class="prog">${prog}</div><h2>Four photos, under a minute</h2><p>Tap each slot to simulate capture.</p></div>
+      <div class="wizard-body">
+        <div class="photo-grid">
+          ${['Front-Left','Front-Right','Rear-Right','Rear-Left'].map((lbl,i)=>`
+            <div class="photo-slot ${tradeData.photos[i]?'filled':''}" data-idx="${i}">
+              ${tradeData.photos[i]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5 9-9"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h4l2-3h6l2 3h4v12H3V7z"/><circle cx="12" cy="13" r="4"/></svg>'}
+              <div class="lbl">${lbl}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:14px;padding:10px 12px;background:var(--surface-3);border-radius:10px;font-size:12px;color:var(--text-2);line-height:1.5">
+          <strong style="color:var(--text)">Pro tip:</strong> Outdoor, even light, include all four corners + odometer. Our AI flags body damage automatically.
+        </div>
+      </div>
+      <div class="sheet-foot" style="display:flex;gap:8px"><button class="apply-btn secondary" onclick="tradeBack()" style="color:var(--text)">Back</button><button class="apply-btn" onclick="tradeNext()">Continue →</button></div>`;
+    el.querySelectorAll('.photo-slot').forEach(s=>s.addEventListener('click',()=>{
+      const i=+s.dataset.idx;tradeData.photos[i]=!tradeData.photos[i];buildTrade();
+    }));
+  }else if(tradeStep===2){
+    el.innerHTML=`<div class="wizard-head"><div class="prog">${prog}</div><h2>Running comps…</h2><p>Checking Manheim, KBB, and our acquisition model.</p></div>
+      <div class="wizard-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px 22px">
+        <div style="width:70px;height:70px;border-radius:50%;border:4px solid var(--surface-3);border-top-color:var(--brand);animation:spin 1s linear infinite"></div>
+        <div style="color:var(--text-2);font-size:13px;text-align:center;line-height:1.6">Decoding VIN…<br>Checking 14,200 comps…<br>Applying battery health adjustment…</div>
+      </div>
+      <style>@keyframes spin{to{transform:rotate(360deg)}}</style>`;
+    setTimeout(()=>{tradeStep=3;buildTrade();},2200);
+  }else if(tradeStep===3){
+    const offer=Math.round(18000+Math.random()*12000);const low=offer-850;const high=offer+750;
+    el.innerHTML=`<div class="wizard-head"><div class="prog">${prog}</div><h2>Your instant offer</h2><p>Valid for 7 days. Free pickup within 100 miles of Paterson.</p></div>
+      <div class="wizard-body">
+        <div class="offer-hero">
+          <div class="k">Firm offer range</div>
+          <div class="v">${money(low)} – ${money(high)}</div>
+          <div class="r">Best-case after final inspection: <strong style="color:var(--good)">${money(high+400)}</strong></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:6px 2px;font-size:13px;color:var(--text-2)">
+          <div style="display:flex;justify-content:space-between"><span>VIN decoded</span><strong style="color:var(--text)">5YJ3E1EA1KF••••</strong></div>
+          <div style="display:flex;justify-content:space-between"><span>Mileage</span><strong style="color:var(--text)">${tradeData.mileage||'38,200'}</strong></div>
+          <div style="display:flex;justify-content:space-between"><span>Condition</span><strong style="color:var(--text)">${tradeData.condition}</strong></div>
+          <div style="display:flex;justify-content:space-between"><span>Pickup ZIP</span><strong style="color:var(--text)">${tradeData.zip||'07513'}</strong></div>
+          <div style="display:flex;justify-content:space-between"><span>Offer valid</span><strong style="color:var(--good)">7 days</strong></div>
+        </div>
+      </div>
+      <div class="sheet-foot" style="display:flex;gap:8px">
+        <button class="apply-btn secondary" onclick="closeAllSheets()" style="color:var(--text)">Maybe later</button>
+        <button class="apply-btn" onclick="closeAllSheets();toast('Offer locked · check email')">Accept offer</button>
+      </div>`;
+  }
+}
+function tradeNext(){
+  if(tradeStep===0){
+    tradeData.vin=document.getElementById('t-vin').value;
+    tradeData.mileage=document.getElementById('t-mileage').value;
+    tradeData.zip=document.getElementById('t-zip').value;
+  }
+  tradeStep++;buildTrade();
+}
+function tradeBack(){if(tradeStep>0){tradeStep--;buildTrade();}}
+
+// ============ TEST DRIVE BOOKING WIZARD ============
+// 8-step wizard. Collects contact + license + optional pre-qual + optional trade.
+// On submit: generates formatted email preview that would go to sales team.
+
+const BOOKING_SAVED_KEY='vx-booking-draft';
+let BOOKING={step:0,carId:null,location:'lot',deliveryZip:'',deliveryAddr:'',date:null,time:null,
+  firstName:'',lastName:'',phone:'',email:'',dob:'',homeZip:'',smsConsent:false,
+  dlNumber:'',dlState:'NJ',
+  preQualSkipped:false,employment:'',income:'',housing:'',credit:'',ssnLast4:'',
+  hasTrade:null,tradeYear:'',tradeMake:'',tradeModel:'',tradeMileage:'',tradeCondition:'',tradePayoff:'',tradePayoffAmount:''};
+
+function loadBookingDraft(){
+  try{const saved=JSON.parse(localStorage.getItem(BOOKING_SAVED_KEY)||'null');if(saved&&saved.carId)return saved;}catch(e){}
+  return null;
+}
+function saveBookingDraft(){localStorage.setItem(BOOKING_SAVED_KEY,JSON.stringify(BOOKING));}
+function clearBookingDraft(){localStorage.removeItem(BOOKING_SAVED_KEY);}
+
+function openDrive(carId){
+  const draft=loadBookingDraft();
+  if(draft&&draft.carId===carId&&confirm('Resume your saved booking for this car?')){BOOKING=draft;}
+  else{BOOKING={step:0,carId,location:'lot',deliveryZip:'',deliveryAddr:'',date:null,time:null,
+    firstName:'',lastName:'',phone:'',email:'',dob:'',homeZip:'',smsConsent:false,
+    dlNumber:'',dlState:'NJ',
+    preQualSkipped:false,employment:'',income:'',housing:'',credit:'',ssnLast4:'',
+    hasTrade:null,tradeYear:'',tradeMake:'',tradeModel:'',tradeMileage:'',tradeCondition:'',tradePayoff:'',tradePayoffAmount:''};
+  }
+  openSheet('drive');buildDrive();
+}
+
+// Effective step count for progress bar — skipped sections don't count
+function bookingTotalSteps(){
+  let t=5; // car, location, datetime, contact, license — always
+  if(!BOOKING.preQualSkipped)t++;
+  if(BOOKING.hasTrade===true)t++;
+  t+=2; // review, confirmed
+  return t;
+}
+function bookingVisibleStepIdx(){
+  // Map logical step 0-8 → displayed progress position
+  let idx=BOOKING.step;
+  if(BOOKING.step>5&&BOOKING.preQualSkipped)idx--;
+  if(BOOKING.step>6&&BOOKING.hasTrade!==true)idx--;
+  return idx;
+}
+
+function bookNext(){BOOKING.step++;saveBookingDraft();buildDrive();}
+function bookBack(){if(BOOKING.step>0){BOOKING.step--;buildDrive();}}
+function bookGoto(s){BOOKING.step=s;buildDrive();}
+function bookSkipPreQual(){BOOKING.preQualSkipped=true;BOOKING.employment='';BOOKING.income='';BOOKING.housing='';BOOKING.credit='';BOOKING.ssnLast4='';bookNext();}
+function bookUnSkipPreQual(){BOOKING.preQualSkipped=false;BOOKING.step=5;buildDrive();}
+function bookNoTrade(){BOOKING.hasTrade=false;BOOKING.step=7;saveBookingDraft();buildDrive();}
+function bookYesTrade(){BOOKING.hasTrade=true;BOOKING.step=6;saveBookingDraft();buildDrive();}
+
+function buildDrive(){
+  const el=document.getElementById('drive-content');
+  const totalSteps=bookingTotalSteps();
+  const curIdx=bookingVisibleStepIdx();
+  const prog=Array.from({length:totalSteps-1},(_,i)=>`<i class="${i<=curIdx?'on':''}"></i>`).join('');
+  const progBar=BOOKING.step<7?`<div class="prog">${prog}</div>`:'';
+  const header=BOOKING.step<7?`<div class="sheet-head" style="padding-bottom:8px"><h2>Book Test Drive</h2><button class="close" onclick="bookConfirmClose()">Cancel</button></div>`:'';
+  let body='';
+
+  if(BOOKING.step===0){body=bookStepVehicle();}
+  else if(BOOKING.step===1){body=bookStepLocation();}
+  else if(BOOKING.step===2){body=bookStepDateTime();}
+  else if(BOOKING.step===3){body=bookStepContact();}
+  else if(BOOKING.step===4){body=bookStepLicense();}
+  else if(BOOKING.step===5){body=bookStepPreQual();}
+  else if(BOOKING.step===6){body=bookStepTrade();}
+  else if(BOOKING.step===7){body=bookStepReview();}
+  else if(BOOKING.step===8){body=bookStepConfirmed();}
+
+  el.innerHTML=header+(progBar?`<div style="padding:0 22px 12px">${progBar}</div>`:'')+body;
+  attachBookingHandlers();
+}
+
+function bookConfirmClose(){
+  if(BOOKING.step>0&&BOOKING.step<8){
+    if(confirm('Leave booking? Your progress is saved and you can resume later.'))closeAllSheets();
+  }else{closeAllSheets();}
+}
+
+// ---- STEP 0: VEHICLE ----
+function bookStepVehicle(){
+  const c=CARS.find(x=>x.id===BOOKING.carId);
+  if(!c)return '<div class="wizard-body"><p>No car selected.</p></div>';
+  return `<div class="wizard-head"><h2>Which Tesla?</h2><p>Confirm the vehicle or swap to another before booking.</p></div>
+    <div class="wizard-body">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:14px;margin-bottom:12px">
+        <div style="width:88px;height:64px;border-radius:10px;overflow:hidden;flex-shrink:0;position:relative">${carArt(c)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.01em">${c.year} ${c.model}</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px">${c.trim} · ${c.color}</div>
+          <div style="font-size:13px;color:var(--text-2);margin-top:4px">Stock #${c.stock} · ${c.mileage.toLocaleString()} mi</div>
+        </div>
+        <div style="font-size:16px;font-weight:800;text-align:right">${c.priceCall?'Call':'$'+c.price.toLocaleString()}</div>
+      </div>
+      <button class="apply-btn secondary" onclick="toast('Vehicle swap — coming soon')" style="color:var(--text);margin-bottom:10px">Swap vehicle</button>
+      <div style="padding:12px 14px;background:rgba(0,209,255,.06);border:1px solid rgba(0,209,255,.18);border-radius:10px;font-size:12px;color:var(--text-2);line-height:1.55;margin-top:10px">
+        <strong style="color:var(--text)">Takes 3–4 minutes.</strong> We review your info before your visit so you're in and out. Everything is saved as you go — you can leave and come back.
+      </div>
+    </div>
+    <div class="sheet-foot"><button class="apply-btn" onclick="bookNext()">Continue →</button></div>`;
+}
+
+// ---- STEP 1: LOCATION ----
+function bookStepLocation(){
+  const opt1On=BOOKING.location==='lot'?'on':'';
+  const opt2On=BOOKING.location==='delivery'?'on':'';
+  const deliveryFields=BOOKING.location==='delivery'?`
+    <div class="input-field"><label>Street address</label><input id="bk-addr" type="text" placeholder="123 Main St, Apt 4B" value="${BOOKING.deliveryAddr}"></div>
+    <div class="input-field"><label>ZIP</label><input id="bk-zip" type="text" maxlength="5" placeholder="07030" value="${BOOKING.deliveryZip}" inputmode="numeric"><div class="hint">Free delivery within 30 mi of Paterson. Beyond that, $75/each direction.</div></div>`:'';
+  return `<div class="wizard-head"><h2>Where would you like to test drive?</h2><p>Come to our Paterson lot, or we'll bring the car to you.</p></div>
+    <div class="wizard-body">
+      <div class="chip-row" data-loc style="margin-bottom:14px">
+        <button class="chip ${opt1On}" data-v="lot" style="flex:1;text-align:center;padding:14px 12px;font-size:14px">🏢 Paterson lot</button>
+        <button class="chip ${opt2On}" data-v="delivery" style="flex:1;text-align:center;padding:14px 12px;font-size:14px">🚗 Deliver to me</button>
+      </div>
+      ${BOOKING.location==='lot'?`<div style="padding:14px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;margin-bottom:10px">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Volt Lot</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.5">1021 Market St<br>Paterson, NJ 07513</div>
+        <div style="font-size:12px;color:var(--text-3);margin-top:8px">Mon–Sat 9am–7pm · Sun by appt<br>Free parking on site</div>
+      </div>`:''}
+      ${deliveryFields}
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookCommitLocation()">Continue →</button>
+    </div>`;
+}
+function bookCommitLocation(){
+  if(BOOKING.location==='delivery'){
+    const addr=document.getElementById('bk-addr')?.value.trim()||'';
+    const zip=document.getElementById('bk-zip')?.value.trim()||'';
+    if(!addr||!zip||zip.length<5){toast('Please enter full address + ZIP','err');return;}
+    BOOKING.deliveryAddr=addr;BOOKING.deliveryZip=zip;
+  }
+  bookNext();
+}
+
+// ---- STEP 2: DATE + TIME ----
+function bookStepDateTime(){
+  const dates=[];const today=new Date();
+  for(let i=1;i<=14;i++){const d=new Date(today);d.setDate(d.getDate()+i);dates.push(d);}
+  const allTimes=['9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
+  const sel=BOOKING.date?new Date(BOOKING.date):null;
+  const isSunday=sel&&sel.getDay()===0;
+  return `<div class="wizard-head"><h2>Pick a day and time</h2><p>${BOOKING.location==='lot'?'Paterson is open Mon–Sat 9–7.':'Deliveries run Mon–Sat 10–5. Please pick a start time.'}</p></div>
+    <div class="wizard-body">
+      <div style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Next 14 days</div>
+      <div class="date-strip">${dates.map((d,i)=>{
+        const closed=d.getDay()===0;
+        const on=sel&&d.toDateString()===sel.toDateString()?'on':'';
+        return `<div class="date-chip ${on}${closed?' disabled':''}" data-date="${i}" ${closed?'style="opacity:.3;pointer-events:none"':''}><div class="dow">${d.toLocaleDateString('en',{weekday:'short'})}</div><div class="day">${d.getDate()}</div><div class="mo">${d.toLocaleDateString('en',{month:'short'})}${closed?' · closed':''}</div></div>`;
+      }).join('')}</div>
+      ${sel?`<div style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;margin:20px 0 8px">Time slot · <span style="color:var(--text)">${sel.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'})}</span></div>
+      <div class="time-grid">${allTimes.map(t=>{
+        // Mock some disabled/busy slots deterministically
+        const busy=[0,3,7].includes(t.length%9);
+        const cls=BOOKING.time===t?'on':busy?'disabled':'';
+        return `<div class="time-chip ${cls}" data-time="${t}" ${busy?'title="Booked"':''}>${t}${busy?' ·':''}</div>`;
+      }).join('')}</div>`:'<div style="padding:20px;text-align:center;color:var(--text-3);font-size:13px">Pick a date to see time slots.</div>'}
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookNext()" ${BOOKING.date&&BOOKING.time?'':'disabled style="opacity:.5"'}>Continue →</button>
+    </div>`;
+}
+
+// ---- STEP 3: CONTACT ----
+function bookStepContact(){
+  return `<div class="wizard-head"><h2>Your contact info</h2><p>We'll text you the confirmation and a reminder 24 hours ahead.</p></div>
+    <div class="wizard-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-field"><label>First name</label><input id="bk-fname" type="text" value="${BOOKING.firstName}"></div>
+        <div class="input-field"><label>Last name</label><input id="bk-lname" type="text" value="${BOOKING.lastName}"></div>
+      </div>
+      <div class="input-field"><label>Mobile phone</label><input id="bk-phone" type="tel" placeholder="201-555-0147" value="${BOOKING.phone}" inputmode="tel"></div>
+      <div class="input-field"><label>Email</label><input id="bk-email" type="email" placeholder="you@example.com" value="${BOOKING.email}" inputmode="email"></div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:10px">
+        <div class="input-field"><label>Date of birth</label><input id="bk-dob" type="text" placeholder="MM/DD/YYYY" value="${BOOKING.dob}" inputmode="numeric"><div class="hint">Must be 21+ to test drive</div></div>
+        <div class="input-field"><label>Your ZIP</label><input id="bk-hzip" type="text" maxlength="5" placeholder="07013" value="${BOOKING.homeZip}" inputmode="numeric"></div>
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 2px;cursor:pointer">
+        <input id="bk-sms" type="checkbox" ${BOOKING.smsConsent?'checked':''} style="margin-top:3px;width:18px;height:18px;accent-color:var(--brand)">
+        <span style="font-size:11px;color:var(--text-3);line-height:1.5">I agree to receive text messages from Volt Lot at the number provided. Message/data rates may apply. Reply STOP to unsubscribe. Consent is not a condition of purchase.</span>
+      </label>
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookCommitContact()">Continue →</button>
+    </div>`;
+}
+function bookCommitContact(){
+  BOOKING.firstName=document.getElementById('bk-fname').value.trim();
+  BOOKING.lastName=document.getElementById('bk-lname').value.trim();
+  BOOKING.phone=document.getElementById('bk-phone').value.trim();
+  BOOKING.email=document.getElementById('bk-email').value.trim();
+  BOOKING.dob=document.getElementById('bk-dob').value.trim();
+  BOOKING.homeZip=document.getElementById('bk-hzip').value.trim();
+  BOOKING.smsConsent=document.getElementById('bk-sms').checked;
+  if(!BOOKING.firstName||!BOOKING.lastName||!BOOKING.phone||!BOOKING.email){toast('Please fill all required fields','err');return;}
+  if(!BOOKING.smsConsent){toast('Please agree to SMS consent','err');return;}
+  bookNext();
+}
+
+// ---- STEP 4: LICENSE ----
+function bookStepLicense(){
+  const states=['NJ','NY','PA','CT','MA','CA','FL','TX','Other'];
+  return `<div class="wizard-head"><h2>Driver's license</h2><p>Required to test drive. Info is encrypted and only used for insurance verification.</p></div>
+    <div class="wizard-body">
+      <div class="input-field"><label>License number</label><input id="bk-dl" type="text" value="${BOOKING.dlNumber}" autocomplete="off"></div>
+      <div class="input-field"><label>State issued</label>
+        <div class="chip-row" data-dlstate style="flex-wrap:wrap">
+          ${states.map(s=>`<button class="chip ${BOOKING.dlState===s?'on':''}" data-v="${s}">${s}</button>`).join('')}
+        </div>
+      </div>
+      <div style="padding:12px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px;margin-top:8px;display:flex;gap:10px;align-items:flex-start">
+        <svg viewBox="0 0 14 14" width="16" height="16" fill="none" stroke="var(--good)" stroke-width="2" stroke-linecap="round"><path d="M7 1l2 4 4 .5-3 3 .8 4.5L7 11l-3.8 2 .8-4.5-3-3 4-.5z"/></svg>
+        <div style="font-size:12px;color:var(--text-2);line-height:1.5"><strong style="color:var(--text)">Bring your physical license</strong> to the test drive — required by our insurance.</div>
+      </div>
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookCommitLicense()">Continue →</button>
+    </div>`;
+}
+function bookCommitLicense(){
+  BOOKING.dlNumber=document.getElementById('bk-dl').value.trim();
+  if(!BOOKING.dlNumber){toast('License number required','err');return;}
+  bookNext();
+}
+
+// ---- STEP 5: PRE-QUAL ----
+function bookStepPreQual(){
+  const employments=[{v:'fulltime',l:'Full-time W2'},{v:'parttime',l:'Part-time'},{v:'self',l:'Self-employed'},{v:'retired',l:'Retired'},{v:'other',l:'Other'}];
+  const incomes=[{v:'<35k',l:'Under $35k'},{v:'35-60k',l:'$35–60k'},{v:'60-85k',l:'$60–85k'},{v:'85-125k',l:'$85–125k'},{v:'125k+',l:'$125k+'}];
+  const housings=[{v:'<800',l:'Under $800'},{v:'800-1500',l:'$800–1500'},{v:'1500-2500',l:'$1500–2500'},{v:'2500+',l:'$2500+'}];
+  const credits=[{v:'750+',l:'Excellent · 750+'},{v:'700-749',l:'Good · 700–749'},{v:'650-699',l:'Fair · 650–699'},{v:'600-649',l:'Poor · 600–649'},{v:'<600',l:'Building · <600'},{v:'unknown',l:"Don't know"}];
+  const chipGroup=(name,opts,cur)=>`<div class="chip-row" data-pq="${name}" style="flex-wrap:wrap">${opts.map(o=>`<button class="chip ${cur===o.v?'on':''}" data-v="${o.v}">${o.l}</button>`).join('')}</div>`;
+  return `<div class="wizard-head">
+      <h2>Quick pre-qualification</h2>
+      <p style="color:var(--text-2)">Helps us line up the right financing options before your visit. <strong style="color:var(--good)">No credit pull. No effect on your score.</strong></p>
+    </div>
+    <div class="wizard-body">
+      <div class="input-field"><label>Employment</label>${chipGroup('employment',employments,BOOKING.employment)}</div>
+      <div class="input-field"><label>Annual income</label>${chipGroup('income',incomes,BOOKING.income)}</div>
+      <div class="input-field"><label>Monthly housing (rent or mortgage)</label>${chipGroup('housing',housings,BOOKING.housing)}</div>
+      <div class="input-field"><label>Self-reported credit range</label>${chipGroup('credit',credits,BOOKING.credit)}</div>
+      <div class="input-field">
+        <label>SSN — last 4 digits (optional)</label>
+        <input id="bk-ssn" type="text" maxlength="4" placeholder="••••" value="${BOOKING.ssnLast4}" inputmode="numeric" autocomplete="off">
+        <div class="hint">Optional. Lets us match pre-qual rates more accurately. Your SSN is not transmitted in full and no hard pull is performed.</div>
+      </div>
+      <button class="apply-btn secondary" onclick="bookSkipPreQual()" style="color:var(--text-2);margin-top:6px;width:100%">Skip — I'll handle this at the dealer</button>
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookCommitPreQual()">Continue →</button>
+    </div>`;
+}
+function bookCommitPreQual(){
+  BOOKING.ssnLast4=document.getElementById('bk-ssn').value.trim();
+  if(!BOOKING.employment||!BOOKING.income||!BOOKING.housing||!BOOKING.credit){
+    toast('Fill all 4 pre-qual sections or tap Skip','err');return;
+  }
+  bookNext();
+}
+
+// ---- STEP 6: TRADE-IN ----
+function bookStepTrade(){
+  // Gate: show yes/no first, then reveal form
+  if(BOOKING.hasTrade===null){
+    return `<div class="wizard-head"><h2>Got a trade-in?</h2><p>We take any vehicle — any make, any year, any condition. Even non-runners.</p></div>
+      <div class="wizard-body" style="display:flex;flex-direction:column;gap:12px;padding-top:10px">
+        <button class="apply-btn" onclick="bookYesTrade()" style="background:var(--surface-2);border:1px solid var(--hairline);color:var(--text);padding:18px;display:flex;align-items:center;gap:12px">
+          <span style="font-size:22px">🚗</span><div style="text-align:left;flex:1"><div style="font-weight:700">Yes, I have a trade</div><div style="font-size:11px;color:var(--text-3);font-weight:400;margin-top:2px">Takes ~90 seconds to enter basics</div></div>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 2l5 5-5 5"/></svg>
+        </button>
+        <button class="apply-btn" onclick="bookNoTrade()" style="background:var(--surface-2);border:1px solid var(--hairline);color:var(--text);padding:18px;display:flex;align-items:center;gap:12px">
+          <span style="font-size:22px">💵</span><div style="text-align:left;flex:1"><div style="font-weight:700">No trade — cash or finance</div><div style="font-size:11px;color:var(--text-3);font-weight:400;margin-top:2px">Skip to review</div></div>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 2l5 5-5 5"/></svg>
+        </button>
+      </div>
+      <div class="sheet-foot"><button class="apply-btn secondary" onclick="bookBack()" style="color:var(--text)">Back</button></div>`;
+  }
+  const makes=['Honda','Toyota','Ford','Chevy','Nissan','Hyundai','Kia','Jeep','BMW','Mercedes','Tesla','Other'];
+  const conds=[{v:'excellent',l:'Excellent'},{v:'good',l:'Good'},{v:'fair',l:'Fair'},{v:'poor',l:'Poor / not running'}];
+  const payoffs=[{v:'own',l:'Own outright'},{v:'finance',l:'Finance — still paying'},{v:'lease',l:'Leased'}];
+  return `<div class="wizard-head"><h2>Your trade-in</h2><p>Rough details only. We'll finalize value in person.</p></div>
+    <div class="wizard-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-field"><label>Year</label><input id="bk-ty" type="text" maxlength="4" placeholder="2016" value="${BOOKING.tradeYear}" inputmode="numeric"></div>
+        <div class="input-field"><label>Mileage</label><input id="bk-tmi" type="text" placeholder="85,000" value="${BOOKING.tradeMileage}" inputmode="numeric"></div>
+      </div>
+      <div class="input-field"><label>Make</label>
+        <div class="chip-row" data-tmake style="flex-wrap:wrap">${makes.map(m=>`<button class="chip ${BOOKING.tradeMake===m?'on':''}" data-v="${m}">${m}</button>`).join('')}</div>
+      </div>
+      <div class="input-field"><label>Model</label><input id="bk-tmodel" type="text" placeholder="Accord, Camry, F-150..." value="${BOOKING.tradeModel}"></div>
+      <div class="input-field"><label>Condition</label>
+        <div class="chip-row" data-tcond style="flex-wrap:wrap">${conds.map(c=>`<button class="chip ${BOOKING.tradeCondition===c.v?'on':''}" data-v="${c.v}">${c.l}</button>`).join('')}</div>
+      </div>
+      <div class="input-field"><label>Payoff status</label>
+        <div class="chip-row" data-tpayoff style="flex-wrap:wrap">${payoffs.map(p=>`<button class="chip ${BOOKING.tradePayoff===p.v?'on':''}" data-v="${p.v}">${p.l}</button>`).join('')}</div>
+      </div>
+      ${BOOKING.tradePayoff==='finance'||BOOKING.tradePayoff==='lease'?`<div class="input-field"><label>Approx payoff owed</label><input id="bk-tpa" type="text" placeholder="$12,500" value="${BOOKING.tradePayoffAmount}" inputmode="numeric"></div>`:''}
+      <button class="apply-btn secondary" onclick="BOOKING.hasTrade=null;buildDrive();" style="color:var(--text-2);margin-top:8px;width:100%">← Actually, no trade</button>
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookCommitTrade()">Continue →</button>
+    </div>`;
+}
+function bookCommitTrade(){
+  BOOKING.tradeYear=document.getElementById('bk-ty').value.trim();
+  BOOKING.tradeMileage=document.getElementById('bk-tmi').value.trim();
+  BOOKING.tradeModel=document.getElementById('bk-tmodel').value.trim();
+  const pa=document.getElementById('bk-tpa');if(pa)BOOKING.tradePayoffAmount=pa.value.trim();
+  if(!BOOKING.tradeYear||!BOOKING.tradeMake||!BOOKING.tradeModel||!BOOKING.tradeMileage||!BOOKING.tradeCondition||!BOOKING.tradePayoff){
+    toast('Fill out all trade-in fields','err');return;
+  }
+  bookNext();
+}
+
+// ---- STEP 7: REVIEW ----
+function bookStepReview(){
+  const c=CARS.find(x=>x.id===BOOKING.carId);
+  const d=new Date(BOOKING.date);
+  const prettyDate=d.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const loc=BOOKING.location==='lot'?'Volt Lot · 1021 Market St, Paterson NJ':`Delivered to ${BOOKING.deliveryAddr}, ZIP ${BOOKING.deliveryZip}`;
+  const sect=(t,edit,rows)=>`<div style="padding:14px 0;border-bottom:1px solid var(--hairline)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)">${t}</div>
+      <button onclick="bookGoto(${edit})" style="color:var(--brand-2);font-size:12px;font-weight:600">Edit</button>
+    </div>${rows.map(r=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:2px 0"><span style="color:var(--text-2)">${r[0]}</span><span style="font-weight:600;text-align:right">${r[1]}</span></div>`).join('')}</div>`;
+  return `<div class="wizard-head"><h2>Review &amp; confirm</h2><p>This gets emailed and texted to the sales team. Noel calls you within 2 hours.</p></div>
+    <div class="wizard-body">
+      ${sect('Vehicle',0,[['Car',`${c.year} ${c.model} ${c.trim}`],['Stock #',c.stock],['Price',c.priceCall?'Call for price':'$'+c.price.toLocaleString()]])}
+      ${sect('Where &amp; when',1,[['Location',BOOKING.location==='lot'?'Paterson lot':'Delivered'],['Address',loc],['Date',prettyDate],['Time',BOOKING.time]])}
+      ${sect('You',3,[['Name',`${BOOKING.firstName} ${BOOKING.lastName}`],['Phone',BOOKING.phone],['Email',BOOKING.email],['DOB',BOOKING.dob],['ZIP',BOOKING.homeZip]])}
+      ${sect('License',4,[['Number',BOOKING.dlNumber.replace(/./g,'•').slice(0,-2)+BOOKING.dlNumber.slice(-2)],['State',BOOKING.dlState]])}
+      ${BOOKING.preQualSkipped?`<div style="padding:14px 0;border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)">Pre-Qualification</div><div style="font-size:13px;color:var(--text-3);margin-top:4px">Skipped — will complete at dealer</div></div><button onclick="bookUnSkipPreQual()" style="color:var(--brand-2);font-size:12px;font-weight:600">Add now</button></div>`:sect('Pre-Qualification',5,[['Employment',BOOKING.employment],['Income',BOOKING.income],['Housing',BOOKING.housing],['Credit range',BOOKING.credit],['SSN last 4',BOOKING.ssnLast4?'••'+BOOKING.ssnLast4.slice(-2):'Not provided']])}
+      ${BOOKING.hasTrade?sect('Trade-In',6,[['Vehicle',`${BOOKING.tradeYear} ${BOOKING.tradeMake} ${BOOKING.tradeModel}`],['Mileage',BOOKING.tradeMileage+' mi'],['Condition',BOOKING.tradeCondition],['Payoff',BOOKING.tradePayoff],...(BOOKING.tradePayoffAmount?[['Amount',BOOKING.tradePayoffAmount]]:[])]):`<div style="padding:14px 0;border-bottom:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)">Trade-In</div><div style="font-size:13px;color:var(--text-3);margin-top:4px">No trade · cash or finance</div></div><button onclick="BOOKING.hasTrade=null;BOOKING.step=6;buildDrive();" style="color:var(--brand-2);font-size:12px;font-weight:600">Add</button></div>`}
+      <div style="margin-top:14px;padding:12px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.2);border-radius:10px;font-size:12px;color:var(--text-2);line-height:1.55"><strong style="color:var(--good)">What happens next:</strong> You'll get a text confirmation immediately. The sales team gets an email with everything above. Noel (or whoever's closing) calls you within 2 hours to confirm timing.</div>
+    </div>
+    <div class="sheet-foot" style="display:flex;gap:8px">
+      <button class="apply-btn secondary" onclick="bookBack()" style="flex:0 0 80px;color:var(--text)">Back</button>
+      <button class="apply-btn" onclick="bookSubmit()">Confirm booking 🚀</button>
+    </div>`;
+}
+
+function bookSubmit(){
+  // In production this would POST to the dealer's email/SMS webhook.
+  // For the prototype we just advance to the confirmation screen and show a preview of what would be sent.
+  clearBookingDraft();
+  BOOKING.step=8;
+  buildDrive();
+}
+
+// ---- STEP 8: CONFIRMED ----
+function bookStepConfirmed(){
+  const c=CARS.find(x=>x.id===BOOKING.carId);
+  const d=new Date(BOOKING.date);
+  const prettyDate=d.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'});
+  const emailSubj=`New Test Drive · ${c.year} ${c.model} · Stock #${c.stock}`;
+  const emailBody=`CUSTOMER: ${BOOKING.firstName} ${BOOKING.lastName}
+Phone: ${BOOKING.phone}
+Email: ${BOOKING.email}
+DOB: ${BOOKING.dob} · ZIP: ${BOOKING.homeZip}
+DL: ${BOOKING.dlState} ${BOOKING.dlNumber}
+
+BOOKING
+Vehicle: ${c.year} ${c.model} ${c.trim} (Stock #${c.stock}, VIN ${c.vin})
+Price: ${c.priceCall?'Call':'$'+c.price.toLocaleString()}
+Location: ${BOOKING.location==='lot'?'Paterson lot':'DELIVERY to '+BOOKING.deliveryAddr+', '+BOOKING.deliveryZip}
+Date/Time: ${prettyDate} at ${BOOKING.time}
+
+PRE-QUAL ${BOOKING.preQualSkipped?'(skipped — handle at dealer)':''}
+${BOOKING.preQualSkipped?'—':`Employment: ${BOOKING.employment}
+Income: ${BOOKING.income}
+Housing: ${BOOKING.housing}
+Credit range: ${BOOKING.credit}
+SSN last 4: ${BOOKING.ssnLast4||'not provided'}`}
+
+TRADE-IN
+${BOOKING.hasTrade?`${BOOKING.tradeYear} ${BOOKING.tradeMake} ${BOOKING.tradeModel}
+Mileage: ${BOOKING.tradeMileage}
+Condition: ${BOOKING.tradeCondition}
+Payoff: ${BOOKING.tradePayoff}${BOOKING.tradePayoffAmount?' ($'+BOOKING.tradePayoffAmount+')':''}`:'No trade'}
+
+SOURCE: Volt Exchange app · ${new Date().toISOString()}`;
+
+  return `<div class="wizard-body" style="padding:30px 22px 20px;text-align:center">
+      <div style="width:72px;height:72px;border-radius:50%;margin:10px auto 18px;background:linear-gradient(135deg,var(--good),#25A040);display:grid;place-items:center;box-shadow:0 12px 30px -8px rgba(48,209,88,.4);animation:logoPop .7s var(--ease-emph)">
+        <svg viewBox="0 0 32 32" width="36" height="36" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16l6 6 12-12"/></svg>
+      </div>
+      <h2 style="font-size:23px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">You're booked!</h2>
+      <p style="font-size:14px;color:var(--text-2);line-height:1.55;max-width:300px;margin:0 auto 20px">
+        ${prettyDate} at <strong style="color:var(--text)">${BOOKING.time}</strong><br>${BOOKING.location==='lot'?'at our Paterson lot':'delivered to your door'}
+      </p>
+      <div style="background:var(--surface-2);border:1px solid var(--hairline);border-radius:14px;padding:14px;text-align:left;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="width:60px;height:44px;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative">${carArt(c)}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:700">${c.year} ${c.model}</div>
+            <div style="font-size:11px;color:var(--text-3)">Stock #${c.stock} · ${c.priceCall?'Call for price':'$'+c.price.toLocaleString()}</div>
+          </div>
+        </div>
+        <div style="display:grid;gap:4px;font-size:12px;color:var(--text-2)">
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:var(--good)">✓</span> Confirmation text sent to ${BOOKING.phone}</div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:var(--good)">✓</span> Email sent to sales@voltlot.ai</div>
+          <div style="display:flex;gap:8px;align-items:center"><span style="color:var(--good)">✓</span> 24hr reminder pre-scheduled</div>
+        </div>
+      </div>
+
+      <details style="background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;padding:0;margin-bottom:12px;text-align:left">
+        <summary style="padding:12px 14px;font-size:13px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">Preview what the sales team got <span style="color:var(--text-3);font-size:11px">tap to expand</span></summary>
+        <div style="padding:4px 14px 14px;font-family:var(--ff-mono);font-size:10.5px;color:var(--text-2);line-height:1.6;white-space:pre-wrap;border-top:1px solid var(--hairline);padding-top:10px">To: sales@voltlot.ai
+Subject: ${emailSubj}
+
+${emailBody}</div>
+      </details>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="apply-btn secondary" onclick="downloadICS()" style="color:var(--text);padding:12px 10px;font-size:13px">📅 Add to calendar</button>
+        <button class="apply-btn secondary" onclick="window.location.href='tel:8558658568'" style="color:var(--text);padding:12px 10px;font-size:13px">📞 Call dealer</button>
+      </div>
+      <button class="apply-btn" onclick="closeAllSheets();toast('See you soon!')" style="margin-top:10px">Done</button>
+    </div>`;
+}
+
+function downloadICS(){
+  const c=CARS.find(x=>x.id===BOOKING.carId);
+  const d=new Date(BOOKING.date);
+  // Parse time like "10:00 AM" into 24hr
+  const tm=BOOKING.time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  let h=parseInt(tm[1]),m=parseInt(tm[2]);if(/PM/i.test(tm[3])&&h<12)h+=12;if(/AM/i.test(tm[3])&&h===12)h=0;
+  d.setHours(h,m,0,0);
+  const end=new Date(d.getTime()+45*60000);
+  const fmt=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const loc=BOOKING.location==='lot'?'1021 Market St\\, Paterson NJ 07513':BOOKING.deliveryAddr+'\\, '+BOOKING.deliveryZip;
+  const ics=`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Volt Lot//Volt Exchange//EN
+BEGIN:VEVENT
+UID:booking-${c.stock}-${Date.now()}@voltlot.ai
+DTSTAMP:${fmt(new Date())}
+DTSTART:${fmt(d)}
+DTEND:${fmt(end)}
+SUMMARY:Test Drive — ${c.year} ${c.model} (Stock #${c.stock})
+DESCRIPTION:Test drive booking with Volt Lot. Stock #${c.stock}. Bring your driver's license.\\n\\nCall 855-VOLT-LOT if you need to reschedule.
+LOCATION:${loc}
+END:VEVENT
+END:VCALENDAR`;
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`test-drive-${c.stock}.ics`;a.click();
+  URL.revokeObjectURL(url);toast('Calendar file downloaded');
+}
+
+// ---- GLOBAL HANDLER ATTACHMENT ----
+function attachBookingHandlers(){
+  const el=document.getElementById('drive-content');
+  el.querySelectorAll('[data-loc] .chip').forEach(b=>b.onclick=()=>{BOOKING.location=b.dataset.v;buildDrive();});
+  el.querySelectorAll('.date-chip:not(.disabled)').forEach(c=>c.onclick=()=>{
+    const dates=[];const today=new Date();for(let i=1;i<=14;i++){const d=new Date(today);d.setDate(d.getDate()+i);dates.push(d);}
+    BOOKING.date=dates[+c.dataset.date].toISOString();BOOKING.time=null;buildDrive();
+  });
+  el.querySelectorAll('.time-chip:not(.disabled)').forEach(t=>t.onclick=()=>{BOOKING.time=t.dataset.time;buildDrive();});
+  el.querySelectorAll('[data-dlstate] .chip').forEach(b=>b.onclick=()=>{BOOKING.dlState=b.dataset.v;buildDrive();});
+  el.querySelectorAll('[data-pq]').forEach(group=>{
+    const k=group.dataset.pq;
+    group.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{
+      const ssn=document.getElementById('bk-ssn');if(ssn)BOOKING.ssnLast4=ssn.value.trim();
+      BOOKING[k]=b.dataset.v;buildDrive();
+    });
+  });
+  el.querySelectorAll('[data-tmake] .chip').forEach(b=>b.onclick=()=>{
+    ['bk-ty','bk-tmi','bk-tmodel','bk-tpa'].forEach(id=>{const x=document.getElementById(id);if(x)BOOKING[{ 'bk-ty':'tradeYear','bk-tmi':'tradeMileage','bk-tmodel':'tradeModel','bk-tpa':'tradePayoffAmount'}[id]]=x.value.trim();});
+    BOOKING.tradeMake=b.dataset.v;buildDrive();
+  });
+  el.querySelectorAll('[data-tcond] .chip').forEach(b=>b.onclick=()=>{
+    ['bk-ty','bk-tmi','bk-tmodel','bk-tpa'].forEach(id=>{const x=document.getElementById(id);if(x)BOOKING[{'bk-ty':'tradeYear','bk-tmi':'tradeMileage','bk-tmodel':'tradeModel','bk-tpa':'tradePayoffAmount'}[id]]=x.value.trim();});
+    BOOKING.tradeCondition=b.dataset.v;buildDrive();
+  });
+  el.querySelectorAll('[data-tpayoff] .chip').forEach(b=>b.onclick=()=>{
+    ['bk-ty','bk-tmi','bk-tmodel','bk-tpa'].forEach(id=>{const x=document.getElementById(id);if(x)BOOKING[{'bk-ty':'tradeYear','bk-tmi':'tradeMileage','bk-tmodel':'tradeModel','bk-tpa':'tradePayoffAmount'}[id]]=x.value.trim();});
+    BOOKING.tradePayoff=b.dataset.v;buildDrive();
+  });
+}
+
+function checkDriveReady(){}
+
+// ============ COMPARE ============
+function buildCompare(){
+  if(S.compare.size<2){document.getElementById('compare-content').innerHTML='<div class="empty"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16v16H4zM4 12h16M12 4v16"/></svg></div><h3>Select 2 or 3 vehicles</h3><p>Tap the checkmark on listings to compare up to 3 at once.</p></div>';return;}
+  const cars=[...S.compare].map(id=>CARS.find(c=>c.id===id));
+  const cols=`repeat(${cars.length},1fr)`;
+  const best=(key,dir='max')=>{const vals=cars.map(c=>c[key]);return dir==='max'?Math.max(...vals):Math.min(...vals);};
+
+  const rows=[
+    {k:'Price',fn:c=>money(c.price),best:best('price','min'),get:c=>c.price,dir:'min'},
+    {k:'Mileage',fn:c=>c.mileage.toLocaleString()+' mi',best:best('mileage','min'),get:c=>c.mileage,dir:'min'},
+    {k:'Battery Health',fn:c=>c.soh+'%',best:best('soh'),get:c=>c.soh,dir:'max'},
+    {k:'Current Range',fn:c=>c.curRange+' mi',best:best('curRange'),get:c=>c.curRange,dir:'max'},
+    {k:'Year',fn:c=>c.year,best:best('year'),get:c=>c.year,dir:'max'},
+    {k:'Hardware',fn:c=>c.hwFull},
+    {k:'Autopilot',fn:c=>c.apFull},
+    {k:'FSD Transferable',fn:c=>c.fsdTransferable?'Yes':'No'},
+    {k:'Accidents',fn:c=>c.accidents?c.accidents+' minor':'None',best:best('accidents','min'),get:c=>c.accidents,dir:'min'},
+    {k:'Days on lot',fn:c=>c.days,best:best('days','min'),get:c=>c.days,dir:'min'}
+  ];
+
+  document.getElementById('compare-content').innerHTML=`
+    <div class="compare-head-row" style="grid-template-columns:${cols}">
+      ${cars.map(c=>`<div class="col"><div class="car-photo">${carArt(c)}</div><div class="t">${c.year} ${c.model}</div><div class="p">${money(c.price)}</div></div>`).join('')}
+    </div>
+    <div class="compare-rows">
+      ${rows.map(r=>`<div class="compare-row" style="grid-template-columns:${cols}">
+        <div class="k">${r.k}</div>
+        ${cars.map(c=>{
+          const isBest=r.get&&r.get(c)===r.best;
+          return`<div class="v ${isBest?'best':''}">${r.fn(c)}</div>`;
+        }).join('')}
+      </div>`).join('')}
+    </div>
+    <div style="padding:4px 22px 20px;text-align:center">
+      <button class="apply-btn secondary" onclick="clearCompare()" style="color:var(--bad)">Clear selection</button>
+    </div>`;
+}
+function clearCompare(){
+  S.compare.forEach(id=>syncCardState(id));
+  S.compare.clear();
+  document.querySelectorAll('.compared').forEach(e=>e.classList.remove('compared'));
+  document.querySelectorAll('.compare-tick.on').forEach(e=>e.classList.remove('on'));
+  updateCompareBar();closeAllSheets();toast('Selection cleared');
+}
+
+// ============ CHAT ============
+const INITIAL_MSGS=[
+  {from:'them',text:'Hi! This is the Volt Lot team. 60 Teslas on the lot, all under $30K.',time:'11:42 AM'},
+  {from:'them',text:'Got a question about financing, trade-in, Free Supercharging, or a specific car? Ask away 👇'}
+];
+const AUTO_REPLIES={
+  financing:['Every lender we work with handles sub-700 credit — including buy-here-pay-here options if needed. Apply online at voltlot.ai/apply or tap Call Dealer at 855-VOLT-LOT and we\'ll get you a real number today. No hard pull for pre-qual.'],
+  delivery:['Free delivery within 50 miles of Paterson (NJ, NY metro, parts of CT/PA). Outside that, $400–$1,800 via Montway. Every car leaves our lot with a fresh NJ state inspection.'],
+  battery:['Fair question — most of our Teslas have 100K+ miles. We pull a battery health report from the car\'s service menu before listing and it\'s on file. Expect 75–90% SOH on 100K+ cars. Replacement batteries run $12–20K out of pocket if the worst happens, but warranty usually covers degradation below 70%.'],
+  supercharging:['⚡ Huge perk. About 13 of our Model S and Model X units come with Free Supercharging for Life — Tesla killed this program years ago, and it transfers with the VIN. Saves ~$1,500/year if you supercharge regularly. Look for "FREE SUPERCHARGER" in the trim name.'],
+  fsd:['Several of our cars have FSD from before Tesla made it account-locked in 2024. That license transfers with the car — real $8K value. Search "FSD" in the app to find them.'],
+  trade:['We take any trade-in — any make, any year, any condition, even non-runners. Scan your VIN in the Trade tab and get a firm offer in under 90 seconds, or bring it to 1021 Market St for an in-person appraisal.'],
+  nonrunning:['Yep, the $5,999 2014 Model S is a parts/project car. HV battery is dead. Great donor for someone doing a rebuild or needs interior/drive unit/body panels. We\'ll let you inspect it before any commitment.'],
+  default:['Got it — let me grab that for you. One sec.','Thanks for asking. Let me check our system.','Good question, looking into it now.']
+};
+function openChat(){openSheet('chat');}
+function buildChat(){
+  if(!S.chatMessages.length)S.chatMessages=[...INITIAL_MSGS];
+  const el=document.getElementById('chat-view');
+  el.innerHTML=`
+    <div class="chat-head">
+      <div class="av">S</div>
+      <div class="info"><div class="name">Sarah · Volt Exchange</div><div class="status">Online · replies in ~2 min</div></div>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="quick-replies" id="quick-replies">
+      <div class="qr" onclick="sendMsg('Tell me about financing')">Financing</div>
+      <div class="qr" onclick="sendMsg('How does delivery work?')">Delivery</div>
+      <div class="qr" onclick="sendMsg('How do you measure battery health?')">Battery health</div>
+      <div class="qr" onclick="sendMsg('Does FSD transfer?')">FSD transfer</div>
+      <div class="qr" onclick="sendMsg('I have a trade-in')">Trade-in</div>
+    </div>
+    <div class="chat-foot">
+      <input class="inp" id="chat-input" type="text" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChatInput()">
+      <button class="send" onclick="sendChatInput()"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l14-7-4 14-3-6-7-1z"/></svg></button>
+    </div>`;
+  renderChatMessages();
+}
+function renderChatMessages(){
+  const body=document.getElementById('chat-body');
+  body.innerHTML=`<div class="msg-time">Today · 11:42 AM</div>`+S.chatMessages.map(m=>`<div class="msg ${m.from}">${m.text}</div>`).join('');
+  body.scrollTop=body.scrollHeight;
+}
+function sendChatInput(){
+  const inp=document.getElementById('chat-input');
+  const v=inp.value.trim();if(!v)return;
+  sendMsg(v);inp.value='';
+}
+function sendMsg(text){
+  S.chatMessages.push({from:'me',text});
+  renderChatMessages();
+  // Typing indicator
+  const body=document.getElementById('chat-body');
+  body.insertAdjacentHTML('beforeend','<div class="msg typing" id="typ"><i></i><i></i><i></i></div>');
+  body.scrollTop=body.scrollHeight;
+  setTimeout(()=>{
+    const t=document.getElementById('typ');if(t)t.remove();
+    const lower=text.toLowerCase();
+    let reply=AUTO_REPLIES.default[Math.floor(Math.random()*AUTO_REPLIES.default.length)];
+    if(lower.includes('financ')||lower.includes('loan')||lower.includes('apr'))reply=AUTO_REPLIES.financing[0];
+    else if(lower.includes('deliv')||lower.includes('ship'))reply=AUTO_REPLIES.delivery[0];
+    else if(lower.includes('batter')||lower.includes('health')||lower.includes('range'))reply=AUTO_REPLIES.battery[0];
+    else if(lower.includes('fsd')||lower.includes('self-driving')||lower.includes('autopilot'))reply=AUTO_REPLIES.fsd[0];
+    else if(lower.includes('trade'))reply='Absolutely. You can start a trade-in from the Trade tab — VIN scan, four photos, and you get a firm offer in under 90 seconds. Want me to walk you through it?';
+    else if(lower.includes('hi')||lower.includes('hello')||lower.includes('hey'))reply='Hi there! 👋 What can I help you with today?';
+    S.chatMessages.push({from:'them',text:reply});
+    renderChatMessages();
+  },1100+Math.random()*600);
+}
+
+// ============ LIGHTBOX ============
+function openLightbox(id,view){
+  const c=CARS.find(x=>x.id===id);if(!c)return;
+  document.getElementById('lb-content').innerHTML=carArt(c,view);
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+
+// ============ TOAST ============
+function toast(msg,type='ok'){
+  const wrap=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast '+(type==='err'?'err':'');
+  t.innerHTML=`<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${type==='err'?'<path d="M7 1v7M7 12h.01"/><circle cx="7" cy="7" r="6"/>':'<path d="M2 7l3 3 7-7"/>'}</svg>${msg}`;
+  wrap.appendChild(t);
+  setTimeout(()=>t.remove(),2800);
+}
+
+// ============ INIT ============
+// Search
+document.getElementById('search-input').addEventListener('input',e=>onSearch(e.target.value));
+
+// Filter chips
+document.addEventListener('click',e=>{
+  if(e.target.matches('#sheet-filter .chip')){
+    const group=e.target.parentElement.dataset.filter;
+    const val=e.target.dataset.val;
+    e.target.classList.toggle('on');
+    if(e.target.classList.contains('on')){
+      if(!S.filters[group].includes(val))S.filters[group].push(val);
+    }else{
+      S.filters[group]=S.filters[group].filter(v=>v!==val);
+    }
+    updateFilterCount();updateFilterResultCount();
+  }
+});
+
+// Price slider
+document.getElementById('price-slider').addEventListener('input',e=>{
+  S.filters.maxPrice=+e.target.value;
+  document.getElementById('price-label').textContent=money(S.filters.maxPrice);
+  updateFilterCount();updateFilterResultCount();
+});
+// SOH slider
+document.getElementById('soh-slider').addEventListener('input',e=>{
+  S.filters.minSoh=+e.target.value;
+  document.getElementById('soh-label').textContent=S.filters.minSoh===65?'All':S.filters.minSoh+'%+';
+  updateFilterCount();updateFilterResultCount();
+});
+
+// Sort options
+const SORT_OPTS=[['match','Best Match'],['price-asc','Price: Low to High'],['price-desc','Price: High to Low'],['soh-desc','Battery Health: High to Low'],['mileage-asc','Mileage: Low to High'],['year-desc','Year: Newest First']];
+document.getElementById('sort-options').innerHTML=SORT_OPTS.map(([v,l])=>`<div class="list-item" data-sort="${v}"><div class="t">${l}</div><div class="chev ${v==='match'?'':'hide'}" style="color:var(--brand-2)"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 6l3 3 5-5"/></svg></div></div>`).join('');
+document.querySelectorAll('#sort-options .list-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    S.sort=item.dataset.sort;
+    document.querySelectorAll('#sort-options .chev').forEach(c=>c.classList.add('hide'));
+    item.querySelector('.chev').classList.remove('hide');
+    closeAllSheets();renderBrowse();
+  });
+});
+
+// Match tabs
+document.querySelectorAll('#view-match .seg button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#view-match .seg button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    S.matchTab=b.dataset.mt;renderMatch();
+  });
+});
+
+// Splash
+setTimeout(()=>document.getElementById('splash').classList.add('gone'),1400);
+
+// First render
+renderBrowse();updateSavedBadge();
+</script>
+</body>
+</html>
