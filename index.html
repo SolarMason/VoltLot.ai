@@ -677,10 +677,29 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 }
 
 /* ============ CHATBASE WIDGET POSITION ============ */
-/* Push chat bubble above mobile tab bar */
-iframe[id*="chatbase"],div[id*="chatbase"]{bottom:90px!important}
+/* Bubble button: above tab bar on mobile, normal on desktop */
+iframe[id*="chatbase"],div[id*="chatbase"]{
+  bottom:90px!important;
+  z-index:200!important;
+}
+/* Chat window: respect safe area top, fit between camera and tab bar */
+iframe[title*="chatbase" i][style*="height"]{
+  top:env(safe-area-inset-top,0px)!important;
+  bottom:80px!important;
+  height:auto!important;
+  max-height:calc(100vh - 80px - env(safe-area-inset-top,0px))!important;
+  max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px))!important;
+  border-radius:16px 16px 0 0!important;
+}
 @media(min-width:900px){
   iframe[id*="chatbase"],div[id*="chatbase"]{bottom:20px!important}
+  iframe[title*="chatbase" i][style*="height"]{
+    top:auto!important;
+    bottom:20px!important;
+    height:600px!important;
+    max-height:80vh!important;
+    border-radius:16px!important;
+  }
 }
 
 .hide{display:none !important}
@@ -1994,7 +2013,7 @@ function switchTab(name){
 }
 
 // ============ SHEETS ============
-const SHEETS=['filter','sort','trade','drive','compare','chat','share','admin'];
+const SHEETS=['filter','sort','trade','drive','compare','share','admin'];
 function openSheet(id){
   closeAllSheets();
   document.getElementById('sheet-backdrop').classList.add('open');
@@ -2005,7 +2024,7 @@ function openSheet(id){
 }
 function closeAllSheets(){
   document.getElementById('sheet-backdrop').classList.remove('open');
-  SHEETS.forEach(id=>document.getElementById('sheet-'+id).classList.remove('open'));
+  SHEETS.forEach(id=>{const el=document.getElementById('sheet-'+id);if(el)el.classList.remove('open');});
 }
 
 // ============ GARAGE CALCULATORS ============
@@ -3522,18 +3541,49 @@ renderBrowse();updateSavedBadge();calcSavings();calcBudget();renderGarageSaved()
 <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="V25uHTwgAu1bx6Pnk2lKe";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 
-// Reposition Chatbase bubble above tab bar
+// Reposition Chatbase bubble + chat window for mobile
 (function(){
   var isMobile=window.innerWidth<900;
-  var offset=isMobile?'100px':'24px';
   function nudge(){
-    var els=document.querySelectorAll('iframe[title*="chatbase"],iframe[id*="chatbase"]');
-    els.forEach(function(el){el.style.setProperty('bottom',offset,'important');});
-    var btns=document.querySelectorAll('[class*="chatbase"],[id*="chatbase-bubble"]');
-    btns.forEach(function(el){if(el.tagName!=='SCRIPT')el.style.setProperty('bottom',offset,'important');});
+    isMobile=window.innerWidth<900;
+    // Get safe area top (for notch/Dynamic Island)
+    var safeTop=parseInt(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)'))||0;
+    if(!safeTop){var t=document.createElement('div');t.style.cssText='position:fixed;top:env(safe-area-inset-top,0px);visibility:hidden';document.body.appendChild(t);safeTop=t.getBoundingClientRect().top||0;t.remove();}
+
+    document.querySelectorAll('iframe').forEach(function(el){
+      var src=(el.src||'');var id=(el.id||'');var title=(el.title||'');
+      var isChatbase=src.includes('chatbase')||id.includes('chatbase')||title.toLowerCase().includes('chatbase');
+      if(!isChatbase)return;
+
+      var h=parseInt(el.style.height)||0;
+      var isBubble=h<100;
+      var isWindow=h>=100;
+
+      if(isBubble){
+        // Bubble: push above tab bar on mobile
+        el.style.setProperty('bottom',isMobile?'90px':'20px','important');
+        el.style.setProperty('z-index','200','important');
+      }
+      if(isWindow){
+        // Chat window: below camera, above tab bar
+        if(isMobile){
+          var topOffset=Math.max(safeTop,47);
+          el.style.setProperty('top',topOffset+'px','important');
+          el.style.setProperty('bottom','80px','important');
+          el.style.setProperty('height','auto','important');
+          el.style.setProperty('max-height','calc(100% - '+(topOffset+80)+'px)','important');
+          el.style.setProperty('border-radius','0','important');
+        }else{
+          el.style.setProperty('top','auto','important');
+          el.style.setProperty('bottom','20px','important');
+          el.style.setProperty('max-height','80vh','important');
+        }
+        el.style.setProperty('z-index','300','important');
+      }
+    });
   }
-  setInterval(nudge,1000);
-  window.addEventListener('resize',function(){isMobile=window.innerWidth<900;offset=isMobile?'100px':'24px';nudge();});
+  setInterval(nudge,800);
+  window.addEventListener('resize',nudge);
 })();
 </script>
 </body>
