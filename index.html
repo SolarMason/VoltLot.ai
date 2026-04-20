@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22VOLTLOT%22%2C%22short_name%22%3A%22VOLTLOT%22%2C%22description%22%3A%2260%20Used%20Teslas%20Under%20%2430K%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FFFFFF%22%2C%22theme_color%22%3A%22%23FFFFFF%22%2C%22orientation%22%3A%22any%22%2C%22categories%22%3A%5B%22auto%22%2C%22shopping%22%5D%2C%22icons%22%3A%5B%5D%7D">
 <title>VOLTLOT — Used Teslas Under $30K | 60 In Stock | Paterson NJ</title>
-<meta name="description" content="VOLTLOT is NJ's largest used Tesla dealer. 60 Teslas under $30K, many with Free Supercharging for Life. Model 3, Y, S, X. Battery-verified. 855-VOLT-LOT.">
+<meta name="description" content="VOLTLOT is the tri-state area's largest used Tesla dealer (NJ · NY · PA). 60 Teslas under $30K, some with Free Supercharging included. Model 3, Y, S, X. Battery-verified. 855-VOLT-LOT.">
 <script>
 // Anti-flash: set theme before CSS paints — runs synchronously in <head>
 (function(){var t=localStorage.getItem('voltlot-theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
@@ -29,22 +29,22 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="VOLTLOT">
 <meta property="og:title" content="VOLTLOT — Used Teslas Under $30K | 60 In Stock">
-<meta property="og:description" content="NJ's largest used Tesla dealer. 60 battery-verified Teslas, all under $30K. Free Supercharging models available. 855-VOLT-LOT.">
+<meta property="og:description" content="The tri-state area's largest used Tesla dealer. 60 battery-verified Teslas under $30K. Serving NJ, NY &amp; PA. 855-VOLT-LOT.">
 <meta property="og:url" content="https://voltlot.ai">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://voltlot.ai/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:alt" content="VOLTLOT — 60 Used Teslas Under $30K in Paterson NJ">
+<meta property="og:image:alt" content="VOLTLOT — Tri-State Area's Largest Used Tesla Dealer">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VOLTLOT — 60 Used Teslas Under $30K">
-<meta name="twitter:description" content="NJ's largest used Tesla dealer. 60 battery-verified Teslas in stock. Free Supercharging models. 855-VOLT-LOT.">
+<meta name="twitter:description" content="Tri-state area's largest used Tesla dealer. 60 Teslas under $30K. Serving NJ, NY & PA. 855-VOLT-LOT.">
 <meta name="twitter:site" content="@voltlot">
 <meta name="twitter:image" content="https://voltlot.ai/og-image.jpg">
-<meta name="twitter:image:alt" content="VOLTLOT — 60 Used Teslas Under $30K in Paterson NJ">
+<meta name="twitter:image:alt" content="VOLTLOT — Tri-State Area's Largest Used Tesla Dealer">
 
 <!-- Geo / Local SEO -->
 <meta name="geo.region" content="US-NJ">
@@ -62,7 +62,7 @@
   "url": "https://voltlot.ai",
   "logo": "https://voltlot.ai/logo.png",
   "image": "https://voltlot.ai/og-image.jpg",
-  "description": "NJ's largest used Tesla dealer. 60 battery-verified Teslas under $30K with Free Supercharging models available.",
+  "description": "The tri-state area's largest used Tesla dealer. 60 battery-verified Teslas under $30K. Serving NJ, NY and PA.",
   "telephone": "+1-855-865-8568",
   "email": "sales@voltlot.ai",
   "address": {
@@ -89,11 +89,12 @@
   "priceRange": "$5,999 - $29,999",
   "currenciesAccepted": "USD",
   "paymentAccepted": "Cash, Credit Card, Financing",
-  "areaServed": {
-    "@type": "GeoCircle",
-    "geoMidpoint": {"@type": "GeoCoordinates","latitude": 40.9168,"longitude": -74.1718},
-    "geoRadius": "100 mi"
-  },
+  "areaServed": [
+    {"@type": "State", "name": "New Jersey"},
+    {"@type": "State", "name": "New York"},
+    {"@type": "State", "name": "Pennsylvania"},
+    {"@type": "GeoCircle", "geoMidpoint": {"@type": "GeoCoordinates","latitude": 40.9168,"longitude": -74.1718}, "geoRadius": "150 mi"}
+  ],
   "brand": {
     "@type": "Brand",
     "name": "Tesla"
@@ -154,12 +155,12 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .view::-webkit-scrollbar{width:6px}
 .view::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:3px}
 .view.active{opacity:1;pointer-events:auto}
-.push{position:absolute;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .34s var(--ease-emph);overflow-y:auto;overflow-x:hidden;padding-bottom:110px;-webkit-overflow-scrolling:touch}
+.push{position:absolute;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .34s var(--ease-emph);overflow-y:auto;overflow-x:hidden;padding-bottom:160px;-webkit-overflow-scrolling:touch}
 .push.open{transform:translateX(0)}
 
 /* ============ DESKTOP HEADER ============ */
 .top-bar{display:none;position:sticky;top:0;z-index:120;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--hairline);transition:background .3s var(--ease);padding-top:env(safe-area-inset-top)}
-.top-bar-inner{max-width:1400px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:24px}
+.top-bar-inner{max-width:100%;margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;gap:24px}
 .top-logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
 .top-wordmark{font-size:20px;font-weight:800;letter-spacing:-.03em;color:var(--text)}
 .top-nav{display:flex;gap:4px;margin-left:24px;flex:1}
@@ -186,11 +187,14 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 
 /* ============ RESPONSIVE CONTENT ============ */
 @media(min-width:900px){
-  .large-title,.search-row,.sort-row,.stat-banner,.rail-head{max-width:1400px;margin-left:auto;margin-right:auto;padding-left:32px;padding-right:32px}
-  .rail{max-width:1400px;margin-left:auto;margin-right:auto;padding-left:32px;padding-right:32px}
-  .car-card{flex:0 0 280px}
-  #search-results,.match-grid{max-width:1400px;margin-left:auto;margin-right:auto;padding-left:32px;padding-right:32px}
-  .match-grid{grid-template-columns:repeat(3,1fr)!important;gap:16px!important}
+  .search-row,.sort-row,.stat-banner{max-width:100%;margin-left:auto;margin-right:auto;padding-left:48px;padding-right:48px}
+  .search-row{padding-top:20px}
+  .stat-banner{margin-left:48px;margin-right:48px}
+  .rail-head{max-width:100%;margin-left:auto;margin-right:auto;padding-left:48px;padding-right:48px}
+  .rail{max-width:100%;margin-left:auto;margin-right:auto;padding-left:48px;padding-right:48px}
+  .car-card{flex:0 0 300px}
+  #search-results{max-width:100%;margin-left:auto;margin-right:auto;padding-left:48px;padding-right:48px}
+  .match-grid{max-width:100%;margin-left:auto;margin-right:auto;padding-left:48px!important;padding-right:48px!important;grid-template-columns:repeat(3,1fr)!important;gap:16px!important}
   .trade-hero,.garage-hero{max-width:800px;margin-left:auto;margin-right:auto}
   .trade-steps,.garage-features,.profile-head,.list-section{max-width:800px;margin-left:auto;margin-right:auto;padding-left:32px;padding-right:32px}
   .section{max-width:800px;margin-left:auto;margin-right:auto}
@@ -202,7 +206,11 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 
 @media(min-width:1200px){
   .match-grid{grid-template-columns:repeat(4,1fr)!important}
-  .car-card{flex:0 0 300px}
+  .car-card{flex:0 0 320px}
+}
+
+@media(min-width:1600px){
+  .match-grid{grid-template-columns:repeat(5,1fr)!important}
 }
 
 /* ============ TABLET ============ */
@@ -267,7 +275,8 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .rail-head{display:flex;align-items:baseline;justify-content:space-between;padding:10px 22px 8px}
 .rail-head h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .rail-head .sub{font-size:12px;color:var(--text-3);margin-top:2px}
-.rail-head .see{color:var(--brand-2);font-size:14px;font-weight:500}
+.rail-head .see{color:var(--brand-2);font-size:14px;font-weight:500;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background .15s var(--ease)}
+.rail-head .see:active{background:rgba(232,33,39,.08)}
 .rail{display:flex;gap:12px;padding:2px 22px 18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .rail::-webkit-scrollbar{display:none}
 
@@ -275,8 +284,8 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .car-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .car-card:active{transform:scale(.97)}
 .car-card.compared{border-color:var(--volt);box-shadow:0 0 0 1px var(--volt)}
-.car-photo{position:relative;height:150px;background:#111;overflow:hidden}
-.car-photo img.car-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.car-photo{position:relative;height:150px;background:#FFFFFF;overflow:hidden}
+.car-photo img.car-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
 .car-photo .badges{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
 .badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:5px 8px;border-radius:6px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);color:#fff}
 .badge.hot{background:var(--brand)}
@@ -311,11 +320,11 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .empty p{font-size:13px;line-height:1.5;max-width:260px;margin:0 auto}
 
 /* ============ DETAIL PAGE ============ */
-.vd-hero{position:relative;aspect-ratio:4/3;background:var(--surface-2);overflow:hidden}
+.vd-hero{position:relative;aspect-ratio:4/3;background:#FFFFFF;overflow:hidden}
 .vd-hero .gallery{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 .vd-hero .gallery::-webkit-scrollbar{display:none}
-.vd-hero .slide{flex:0 0 100%;scroll-snap-align:start;position:relative;cursor:zoom-in}
-.vd-hero img.car-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.vd-hero .slide{flex:0 0 100%;scroll-snap-align:start;position:relative;cursor:zoom-in;background:#FFFFFF}
+.vd-hero img.car-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
 .vd-hero .dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;padding:5px 9px;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);border-radius:10px}
 .vd-hero .dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s var(--ease),transform .2s var(--ease)}
 .vd-hero .dots i.active{background:#fff;transform:scale(1.3)}
@@ -427,7 +436,8 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .cost-row .lbl .ico svg{width:13px;height:13px}
 .cost-row .val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 
-.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:90;padding:12px 14px calc(16px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--hairline);display:flex;gap:8px}
+.sticky-cta{position:fixed;left:0;right:0;bottom:calc(68px + env(safe-area-inset-bottom));z-index:90;padding:10px 14px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--hairline);display:flex;gap:8px}
+@media(min-width:900px){.sticky-cta{bottom:0;padding:12px 14px calc(16px + env(safe-area-inset-bottom))}}
 .sticky-cta .ghost{width:50px;height:50px;border-radius:14px;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;transition:background .15s var(--ease)}
 .sticky-cta .ghost:active{background:var(--surface-2)}
 .sticky-cta .ghost svg{width:17px;height:17px}
@@ -651,8 +661,8 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .lightbox.open{display:flex}
 .lightbox .lb-close{position:absolute;top:14px;right:14px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;color:#fff;border:0;cursor:pointer}
 .lightbox .lb-close svg{width:16px;height:16px}
-.lightbox .lb-content{width:100%;max-width:700px;aspect-ratio:4/3;background:#0a0a0b;border-radius:14px;overflow:hidden;position:relative}
-.lightbox img.car-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.lightbox .lb-content{width:100%;max-width:700px;aspect-ratio:4/3;background:#FFFFFF;border-radius:14px;overflow:hidden;position:relative}
+.lightbox img.car-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center}
 
 /* Toast */
 .toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
@@ -674,6 +684,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .view.active>*:nth-child(7){animation-delay:.26s}
 .view.active>*:nth-child(8){animation-delay:.28s}
 @keyframes slide-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-8px)}30%,60%,90%{transform:translateX(8px)}}
 
 /* Splash */
 .splash{position:fixed;inset:0;z-index:700;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-top:env(safe-area-inset-top);transition:opacity .5s var(--ease),visibility 0s .5s}
@@ -740,7 +751,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 
       <!-- BROWSE -->
       <section class="view active" id="view-browse">
-        <div class="large-title">
+        <div class="large-title mobile-only">
           <div style="display:flex;align-items:center;gap:10px">
             <svg viewBox="0 0 48 48" fill="none" width="32" height="32"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="var(--brand)"/></svg>
             <h1 style="font-size:26px">VOLTLOT</h1>
@@ -783,28 +794,28 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
             <span class="cta">voltlot.ai · 855-VOLT-LOT</span>
           </div>
 
-          <div class="rail-head"><div><h3>⚡ Free Supercharging for Life</h3><div class="sub">Tesla's legacy perk — transfers with VIN</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>⚡ Free Supercharging</h3><div class="sub">Tesla legacy perk — verify terms per VIN</div></div><span class="see" onclick="seeAll('freesc')">See all</span></div>
           <div class="rail" id="rail-freesc"></div>
 
-          <div class="rail-head"><div><h3>Under $15,000</h3><div class="sub">Your first Tesla, under budget</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>Under $15,000</h3><div class="sub">Your first Tesla, under budget</div></div><span class="see" onclick="seeAll('budget')">See all</span></div>
           <div class="rail" id="rail-budget"></div>
 
-          <div class="rail-head"><div><h3>Lowest Mileage</h3><div class="sub">Rare finds on the lot</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>Lowest Mileage</h3><div class="sub">Rare finds on the lot</div></div><span class="see" onclick="seeAll('lowmi')">See all</span></div>
           <div class="rail" id="rail-lowmi"></div>
 
-          <div class="rail-head"><div><h3>FSD Transferable</h3><div class="sub">Legacy Full Self-Driving, carries with the car</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>FSD Transferable</h3><div class="sub">Legacy Full Self-Driving, carries with the car</div></div><span class="see" onclick="seeAll('fsd')">See all</span></div>
           <div class="rail" id="rail-fsd"></div>
 
-          <div class="rail-head"><div><h3>Model 3</h3><div class="sub">25 in stock · $12,999 and up</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>Model 3</h3><div class="sub">25 in stock · $12,999 and up</div></div><span class="see" onclick="seeAll('Model 3')">See all</span></div>
           <div class="rail" id="rail-m3"></div>
 
-          <div class="rail-head"><div><h3>Model Y</h3><div class="sub">14 in stock · family SUV, EV prices</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>Model Y</h3><div class="sub">14 in stock · family SUV, EV prices</div></div><span class="see" onclick="seeAll('Model Y')">See all</span></div>
           <div class="rail" id="rail-my"></div>
 
-          <div class="rail-head"><div><h3>Model X</h3><div class="sub">14 in stock · falcon-wing SUV from $17K</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>Model X</h3><div class="sub">14 in stock · falcon-wing SUV from $17K</div></div><span class="see" onclick="seeAll('Model X')">See all</span></div>
           <div class="rail" id="rail-mx"></div>
 
-          <div class="rail-head"><div><h3>Model S</h3><div class="sub">7 in stock · the original flagship</div></div><span class="see">See all</span></div>
+          <div class="rail-head"><div><h3>Model S</h3><div class="sub">7 in stock · the original flagship</div></div><span class="see" onclick="seeAll('Model S')">See all</span></div>
           <div class="rail" id="rail-ms"></div>
         </div>
 
@@ -979,7 +990,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
               </div>
               <div style="padding:12px;background:var(--surface-2);border-radius:10px;display:flex;gap:12px;align-items:flex-start">
                 <div style="font-size:20px;flex-shrink:0">⚡</div>
-                <div><div style="font-size:13px;font-weight:700;margin-bottom:2px">Tesla Supercharger</div><div style="font-size:12px;color:var(--text-2);line-height:1.5">~$0.35–0.50/kWh at the charger. 15 min gives you ~150 miles. 17 Supercharger stations within 30 mi of Paterson.</div><div style="font-size:11px;color:var(--volt);font-weight:600;margin-top:4px">13 of our cars include FREE Supercharging for life ⚡</div></div>
+                <div><div style="font-size:13px;font-weight:700;margin-bottom:2px">Tesla Supercharger</div><div style="font-size:12px;color:var(--text-2);line-height:1.5">~$0.35–0.50/kWh at the charger. 15 min gives you ~150 miles. 17 Supercharger stations within 30 mi of Paterson.</div><div style="font-size:11px;color:var(--volt);font-weight:600;margin-top:4px">Some of our cars include Free Supercharging — ask which ones and verify duration ⚡</div></div>
               </div>
               <div style="padding:12px;background:var(--surface-2);border-radius:10px;display:flex;gap:12px;align-items:flex-start">
                 <div style="font-size:20px;flex-shrink:0">🔌</div>
@@ -1010,7 +1021,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
             </details>
             <details style="border-bottom:1px solid var(--hairline);padding:12px 0">
               <summary style="font-size:14px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">What's Free Supercharging? <span style="color:var(--text-3);font-size:18px">+</span></summary>
-              <div style="font-size:13px;color:var(--text-2);line-height:1.6;padding-top:10px">Tesla used to offer unlimited free Supercharging on certain Model S and Model X vehicles. The perk is tied to the VIN — it transfers to you when you buy. We have about 13 cars on the lot with this perk. At typical Supercharger rates, it saves $1,200–1,800/year if you charge away from home regularly. Tesla killed this program years ago so these cars will only get rarer. <a href="tel:8558658568" style="color:var(--brand-2);font-weight:600">Call us</a> to ask which ones still have it.</div>
+              <div style="font-size:13px;color:var(--text-2);line-height:1.6;padding-top:10px">Tesla offered free Supercharging on certain Model S and Model X vehicles between 2012–2017. Some VINs have <strong style="color:var(--text)">unlimited free Supercharging for life</strong>, while others have <strong style="color:var(--text)">limited free credits</strong> (a set number of miles or months). The perk is tied to the VIN and transfers to the new owner. We verify the exact status of each car before sale — <a href="tel:8558658568" style="color:var(--brand-2);font-weight:600">call us</a> to confirm what type a specific car has before you buy.</div>
             </details>
             <details style="border-bottom:1px solid var(--hairline);padding:12px 0">
               <summary style="font-size:14px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">Can I finance with bad credit? <span style="color:var(--text-3);font-size:18px">+</span></summary>
@@ -1083,9 +1094,9 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
             <div style="padding:18px 16px;border-bottom:1px solid var(--hairline)">
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
                 <svg viewBox="0 0 48 48" fill="none" width="36" height="36"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="var(--brand)"/></svg>
-                <div><div style="font-size:18px;font-weight:800;letter-spacing:-.02em">VOLTLOT</div><div style="font-size:11px;color:var(--text-3)">NJ's Largest Used Tesla Dealer</div></div>
+                <div><div style="font-size:18px;font-weight:800;letter-spacing:-.02em">VOLTLOT</div><div style="font-size:11px;color:var(--text-3)">Tri-State Area's Largest Used Tesla Dealer</div></div>
               </div>
-              <div style="font-size:13px;color:var(--text-2);line-height:1.6">60 battery-verified Teslas under $30K. Every car comes with a service-read battery health report, 152-point inspection, and clean title guarantee. Free Supercharging models available.</div>
+              <div style="font-size:13px;color:var(--text-2);line-height:1.6">60 battery-verified Teslas under $30K. Every car comes with a service-read battery health report, 152-point inspection, and clean title guarantee. Free Supercharging models available (verify type per VIN).</div>
             </div>
             <div style="padding:14px 16px;display:grid;gap:10px;font-size:13px">
               <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--text-3)">Address</span><span style="font-weight:600;text-align:right">1021 Market St<br>Paterson, NJ 07513</span></div>
@@ -1098,7 +1109,18 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
               <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1B3A5C,#0A1628);display:grid;place-items:center;flex-shrink:0">
                 <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round"><path d="M8 1l2 5h5l-4 3 1 5-4-3-4 3 1-5-4-3h5l2-5z"/></svg>
               </div>
-              <div style="font-size:12px;color:var(--text-2);line-height:1.4"><strong style="color:var(--text)">Veteran-owned business</strong> · Proudly serving the NJ/NY metro since 2019</div>
+              <div style="font-size:12px;color:var(--text-2);line-height:1.4"><strong style="color:var(--text)">Veteran-owned business</strong> · Proudly serving the tri-state area (NJ · NY · PA) since 2019</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Entry -->
+        <div class="list-section">
+          <div class="list-group">
+            <div class="list-item" onclick="openSheet('admin');renderAdmin()">
+              <div class="ico" style="background:linear-gradient(135deg,#1a1a1e,#2a2a2e)"><svg viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="10" height="6" rx="1.5"/><path d="M5 8V5.5a3 3 0 016 0V8"/></svg></div>
+              <div class="t">Dealer Admin</div>
+              <div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div>
             </div>
           </div>
         </div>
@@ -1204,7 +1226,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
         <div style="text-align:center;margin-bottom:20px">
           <div style="width:64px;height:64px;border-radius:18px;margin:0 auto 12px;background:linear-gradient(135deg,var(--brand),#600);display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(232,33,39,.3)"><svg viewBox="0 0 48 48" width="32" height="32" fill="none"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="#fff"/></svg></div>
           <div style="font-size:16px;font-weight:800">VOLTLOT</div>
-          <div style="font-size:12px;color:var(--text-3)">60 Used Teslas Under $30K · Paterson NJ</div>
+          <div style="font-size:12px;color:var(--text-3)">Tri-State Area's Largest Used Tesla Dealer</div>
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
@@ -1216,11 +1238,11 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--good)" stroke-width="2" stroke-linecap="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
             <span style="font-size:10px;font-weight:600;color:var(--text-2)">Copy Link</span>
           </button>
-          <a href="sms:&body=Check out VOLTLOT — 60 used Teslas under $30K in Paterson NJ. 855-VOLT-LOT https://voltlot.ai" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s var(--ease)" ontouchstart="this.style.transform='scale(.95)'" ontouchend="this.style.transform=''">
+          <a href="sms:&body=Check out VOLTLOT — the tri-state area's largest used Tesla dealer — NJ, NY, PA. 855-VOLT-LOT https://voltlot.ai" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s var(--ease)" ontouchstart="this.style.transform='scale(.95)'" ontouchend="this.style.transform=''">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--volt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H8l-4 4v-4H5a2 2 0 01-2-2V5z"/></svg>
             <span style="font-size:10px;font-weight:600;color:var(--text-2)">Text</span>
           </a>
-          <a href="mailto:?subject=VOLTLOT — 60 Used Teslas Under $30K&body=Check out VOLTLOT — 60 used Teslas all under $30K in Paterson NJ. Free Supercharging models available. 855-VOLT-LOT%0A%0Ahttps://voltlot.ai" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s var(--ease)" ontouchstart="this.style.transform='scale(.95)'" ontouchend="this.style.transform=''">
+          <a href="mailto:?subject=VOLTLOT — 60 Used Teslas Under $30K&body=Check out VOLTLOT — the tri-state area's largest used Tesla dealer. 60 Teslas under $30K, serving NJ, NY and PA. 855-VOLT-LOT%0A%0Ahttps://voltlot.ai" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s var(--ease)" ontouchstart="this.style.transform='scale(.95)'" ontouchend="this.style.transform=''">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#FF9F0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 4l10 8 10-8"/></svg>
             <span style="font-size:10px;font-weight:600;color:var(--text-2)">Email</span>
           </a>
@@ -1444,7 +1466,7 @@ const CARS=RAW.map(r=>{
 // Default service/inspection templates keyed to real inventory reality (high-mileage fleet)
 function buildExtras(c){
   const aftermarket=[];
-  if(c.hasFreeSC)aftermarket.push({t:'Free Supercharging for Life',d:'Factory perk — transfers with VIN',price:'Worth $1.5K/yr'});
+  if(c.hasFreeSC)aftermarket.push({t:'Free Supercharging',d:'Legacy VIN perk — ask dealer to verify type (lifetime vs. limited)',price:'Verify at purchase'});
   if(c.hasFSD)aftermarket.push({t:'Full Self-Driving (legacy)',d:'Pre-2024 FSD license — transfers to buyer',price:'Worth $8K'});
   if(c.isBattWarr)aftermarket.push({t:'Extended Battery Warranty',d:'Tesla battery + drive unit coverage remaining',price:'Included'});
   if(c.trim.includes('3rd Row'))aftermarket.push({t:'Third-row seating',d:'Seats 7 — rare Model Y option',price:'factory'});
@@ -1476,78 +1498,46 @@ const sohClass=s=>s>=93?'good':s>=88?'':'warn';
 // lighten/darken no longer needed — using real Tesla photos
 
 // ============ CAR IMAGES (Tesla Compositor API) ============
-// KISS approach: minimal options = maximum reliability
-// Pre-refresh S/X use the older configurator endpoint which renders their era correctly
-// Model 3/Y use the v1 endpoint
+// White background renders. Two endpoints for maximum coverage.
+// Primary: v1 endpoint with specific wheel codes
+// Fallback: configurator endpoint with paint-only (lets Tesla pick default wheels)
 
 const TESLA_PAINT={'BLK':'$PBSB','BLACK':'$PBSB','WHI':'$PPSW','WHITE':'$PPSW','RED':'$PPMR','BLU':'$PPSB','BLUE':'$PPSB','GRY':'$PMNG','GREY':'$PMNG','SIL':'$PMSS','BRO':'$PMAB'};
-
-// Wheel codes verified against Tesla's configurator — one per model era
-const TESLA_WHEELS={
-  'm3':     '$W38B',   // 18" Aero (2018-2023 — universal)
-  'm3_p':   '$W39B',   // 19" Sport (Performance)
-  'my':     '$WY19B',  // 19" Gemini
-  'my_p':   '$WY20P',  // 20" Induction (Performance)
-  'ms_old': '$WTTB',   // 21" Turbine (2012-2020 pre-refresh — iconic)
-  'ms_new': '$WTAS',   // 19" Tempest (2021+ refresh)
-  'mx_old': '$WX20D',  // 20" Silver (2016-2020 pre-refresh)
-  'mx_old_p':'$WTHX',  // 22" Onyx (2016-2020 Performance)
-  'mx_new': '$WX00P',  // 20" Cyberstream (2021+ refresh)
-};
-
 const TESLA_VIEWS={side:'STUD_SIDE',front3q:'STUD_3QTR',rear3q:'STUD_REAR',interior:'STUD_SEAT'};
 
-function teslaImgUrl(c, view='front3q', size=800){
-  const model=c.model;
-  const year=c.year;
+function teslaImgUrl(c, view='front3q', size=1200){
+  const paint=TESLA_PAINT[c.colorCode]||'$PBSB';
+  const v=TESLA_VIEWS[view]||'STUD_3QTR';
   const trim=(c.trimRaw||c.trim||'').toUpperCase();
   const isPerf=trim.includes('PERFORMANCE')||trim.includes('P90D')||trim.includes('P85D')||trim.includes('P100D');
-  const paint=TESLA_PAINT[c.colorCode]||'$PBSB';
-  const v=TESLA_VIEWS[view]||'STUD_3QTR';
+  let m,opts;
 
-  let m,wheel;
+  if(c.model==='Model 3'){
+    m='m3'; opts=paint+','+(isPerf?'$W39B':'$W38B');
+  }else if(c.model==='Model Y'){
+    m='my'; opts=paint+','+(isPerf?'$WY20P':'$WY19B');
+  }else if(c.model==='Model S'){
+    m='ms'; opts=c.year>=2021?paint+',$WTAS':paint+',$WTTB';
+  }else if(c.model==='Model X'){
+    m='mx'; opts=c.year>=2021?paint+',$WX00P':paint+',$WX20D';
+  }else{m='m3';opts=paint+',$W38B';}
 
-  if(model==='Model 3'){
-    m='m3'; wheel=isPerf?TESLA_WHEELS.m3_p:TESLA_WHEELS.m3;
-  }else if(model==='Model Y'){
-    m='my'; wheel=isPerf?TESLA_WHEELS.my_p:TESLA_WHEELS.my;
-  }else if(model==='Model S'){
-    m='ms'; wheel=year>=2021?TESLA_WHEELS.ms_new:TESLA_WHEELS.ms_old;
-  }else if(model==='Model X'){
-    m='mx'; wheel=year>=2021?TESLA_WHEELS.mx_new:(isPerf?TESLA_WHEELS.mx_old_p:TESLA_WHEELS.mx_old);
-  }else{
-    m='m3'; wheel=TESLA_WHEELS.m3;
-  }
-
-  // Pre-refresh S/X: use configurator endpoint (better era support)
-  if((model==='Model S'&&year<2021)||(model==='Model X'&&year<2021)){
-    return `https://static-assets.tesla.com/configurator/compositor?&options=${paint},${wheel}&view=${v}&model=${m}&size=${size}&bkba_opt=1`;
-  }
-
-  // Modern vehicles: v1 endpoint
-  return `https://static-assets.tesla.com/v1/compositor/?model=${m}&view=${v}&size=${size}&options=${paint},${wheel}&bkba_opt=2`;
+  // bkba_opt=1 = transparent/white background
+  return 'https://static-assets.tesla.com/v1/compositor/?model='+m+'&view='+v+'&size='+size+'&options='+opts+'&bkba_opt=1';
 }
 
-// Alternate URL with different wheel code (fallback if primary fails)
-function teslaImgUrlAlt(c, view='front3q', size=800){
-  const model=c.model;
-  const year=c.year;
+// Fallback: configurator endpoint, paint-only (compositor picks default wheels)
+function teslaImgUrlAlt(c, view='front3q', size=1200){
   const paint=TESLA_PAINT[c.colorCode]||'$PBSB';
   const v=TESLA_VIEWS[view]||'STUD_3QTR';
-  let m,wheel;
+  let m;
+  if(c.model==='Model 3')m='m3';
+  else if(c.model==='Model Y')m='my';
+  else if(c.model==='Model S')m='ms';
+  else if(c.model==='Model X')m='mx';
+  else m='m3';
 
-  // Use alternate wheel codes
-  if(model==='Model 3'){m='m3';wheel='$W39B';}
-  else if(model==='Model Y'){m='my';wheel='$WY19B';}
-  else if(model==='Model S'){m='ms';wheel=year>=2021?'$WTAS':'$WT19';}
-  else if(model==='Model X'){m='mx';wheel=year>=2021?'$WX00P':'$WX22D';}
-  else{m='m3';wheel='$W38B';}
-
-  // Try v1 for alternate (sometimes works when configurator doesn't, and vice versa)
-  if((model==='Model S'&&year<2021)||(model==='Model X'&&year<2021)){
-    return `https://static-assets.tesla.com/v1/compositor/?model=${m}&view=${v}&size=${size}&options=${paint},${wheel}&bkba_opt=2`;
-  }
-  return `https://static-assets.tesla.com/configurator/compositor?&options=${paint},${wheel}&view=${v}&model=${m}&size=${size}&bkba_opt=1`;
+  return 'https://static-assets.tesla.com/configurator/compositor?&options='+paint+'&view='+v+'&model='+m+'&size='+size+'&bkba_opt=1';
 }
 
 function carArt(c, view='side'){
@@ -1569,8 +1559,8 @@ function imgFail(el){
     el.onerror=null;el.style.display='none';
     var p=el.parentElement;if(!p)return;
     var d=document.createElement('div');
-    d.style.cssText='position:absolute;inset:0;background:linear-gradient(145deg,'+el.dataset.hex+'22,#0a0a0f);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px';
-    d.innerHTML='<svg viewBox="0 0 48 48" width="28" height="28" fill="none"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="rgba(232,33,39,.5)"/></svg><span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6)">'+el.dataset.label+'</span><span style="font-size:9px;color:rgba(255,255,255,.35)">'+el.dataset.color+'</span>';
+    d.style.cssText='position:absolute;inset:0;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px';
+    d.innerHTML='<svg viewBox="0 0 48 48" width="28" height="28" fill="none"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="rgba(232,33,39,.25)"/></svg><span style="font-size:11px;font-weight:700;color:rgba(0,0,0,.4)">'+el.dataset.label+'</span><span style="font-size:9px;color:rgba(0,0,0,.25)">'+el.dataset.color+'</span>';
     p.appendChild(d);
   }
 }
@@ -1721,6 +1711,39 @@ function clearFilters(){
 
 function applyFilters(){closeAllSheets();renderBrowse();toast('Filters applied');}
 
+function seeAll(category){
+  let list=[];
+  let title='';
+  if(category==='freesc'){list=CARS.filter(c=>c.hasFreeSC);title='Free Supercharging';}
+  else if(category==='budget'){list=CARS.filter(c=>c.price<15000&&!c.priceCall&&!c.isNonRunning).sort((a,b)=>a.price-b.price);title='Under $15,000';}
+  else if(category==='lowmi'){list=[...CARS].filter(c=>!c.isNonRunning).sort((a,b)=>a.mileage-b.mileage);title='Lowest Mileage';}
+  else if(category==='fsd'){list=CARS.filter(c=>c.hasFSD);title='FSD Transferable';}
+  else{list=CARS.filter(c=>c.model===category);title=category;}
+
+  const body=document.getElementById('browse-body');
+  const results=document.getElementById('search-results');
+  body.classList.add('hide');
+  results.classList.remove('hide');
+  document.getElementById('result-count').textContent=list.length;
+
+  if(!list.length){
+    results.innerHTML='<div class="empty"><h3>No vehicles in this category</h3></div>';
+  }else{
+    results.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px 12px">
+      <div style="font-size:18px;font-weight:800">${title} <span style="color:var(--text-3);font-weight:500;font-size:14px">(${list.length})</span></div>
+      <button onclick="clearSeeAll()" style="font-size:13px;color:var(--brand-2);font-weight:600;background:0;border:0;cursor:pointer">← Back to all</button>
+    </div><div class="match-grid" style="padding:0">${list.map(matchCard).join('')}</div>`;
+  }
+  document.getElementById('view-browse').scrollTo({top:0,behavior:'smooth'});
+}
+
+function clearSeeAll(){
+  S.searchQuery='';
+  document.getElementById('search-input').value='';
+  clearFilters();
+  renderBrowse();
+}
+
 function updateFilterCount(){
   const n=activeFilterCount();
   const b=document.getElementById('filter-count');
@@ -1804,11 +1827,11 @@ function buildDetail(c){
   const priceDisplay=c.priceCall?`<div class="price" style="font-size:22px;color:var(--text-2)">Call for price</div><div class="delta"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 1v3M5 6h.01"/><circle cx="5" cy="5" r="4"/></svg>855-VOLT-LOT for firm quote</div>`:`<div class="price">$${c.price.toLocaleString()}</div><div class="delta"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l3-3 3 3"/></svg>$${savings.toLocaleString()} below market</div>`;
   const otdDisplay=c.priceCall?`<div class="otd">Stock ${c.stock}<br><strong style="color:var(--brand-2)">Call</strong><br><span style="color:var(--text-3);font-size:11px">for OTD price</span></div>`:`<div class="otd">Out-the-door<br><strong>$${otd.toLocaleString()}</strong><br><span style="color:var(--text-3);font-size:11px">NJ tax · $599 doc</span></div>`;
   const perks=[];
-  if(c.hasFreeSC)perks.push('<span class="badge fsd" style="background:#FFD60A;color:#1A1A00;margin-right:6px">⚡ Free Supercharging</span>');
+  if(c.hasFreeSC)perks.push('<span class="badge fsd" style="background:#FFD60A;color:#1A1A00;margin-right:6px">⚡ Free Supercharging*</span>');
   if(c.hasFSD)perks.push('<span class="badge fsd" style="margin-right:6px">FSD Transferable</span>');
   if(c.isBattWarr)perks.push('<span class="badge new" style="margin-right:6px">Extended Battery Warranty</span>');
   if(c.isNonRunning)perks.push('<span class="badge" style="background:#FF453A;margin-right:6px">Salvage — Non-Running</span>');
-  const perksHtml=perks.length?`<div style="padding:10px 0 4px;display:flex;flex-wrap:wrap;gap:4px">${perks.join('')}</div>`:'';
+  const perksHtml=perks.length?`<div style="padding:10px 0 4px;display:flex;flex-wrap:wrap;gap:4px">${perks.join('')}</div>${c.hasFreeSC?'<div style="font-size:10px;color:var(--text-3);padding:0 0 4px">*Free Supercharging type varies by VIN — may be unlimited or limited. Verified at time of sale.</div>':''}`:'';
 
   return `<nav class="nav-bar" id="detail-nav">
       <button class="back" onclick="closeDetail()"><svg viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L2 10l8 8"/></svg>Back</button>
@@ -2049,7 +2072,7 @@ function renderGarageSaved(){
     return;
   }
   el.innerHTML=saved.slice(0,4).map(c=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--hairline);cursor:pointer" onclick="openDetail('${c.id}')">
-    <div style="width:52px;height:38px;border-radius:6px;overflow:hidden;flex-shrink:0;position:relative;background:#111">${carArt(c)}</div>
+    <div style="width:52px;height:38px;border-radius:6px;overflow:hidden;flex-shrink:0;position:relative;background:#fff">${carArt(c)}</div>
     <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">${c.year} ${c.model}</div><div style="font-size:11px;color:var(--text-3)">${c.trim}</div></div>
     <div style="font-size:13px;font-weight:800">${c.priceCall?'Call':'$'+c.price.toLocaleString()}</div>
   </div>`).join('')+(saved.length>4?`<div style="text-align:center;padding:8px;font-size:12px;color:var(--text-3)">+${saved.length-4} more</div>`:'');
@@ -2969,7 +2992,7 @@ const AUTO_REPLIES={
   financing:['Every lender we work with handles sub-700 credit — including buy-here-pay-here options if needed. Call us at 855-VOLT-LOT and we\'ll get you a real number today. No hard pull for pre-qual.'],
   delivery:['Free delivery within 50 miles of Paterson (NJ, NY metro, parts of CT/PA). Outside that, $400–$1,800 via Montway. Every car leaves our lot with a fresh NJ state inspection.'],
   battery:['Fair question — most of our Teslas have 100K+ miles. We pull a battery health report from the car\'s service menu before listing and it\'s on file. Expect 75–90% SOH on 100K+ cars. Replacement batteries run $12–20K out of pocket if the worst happens, but warranty usually covers degradation below 70%.'],
-  supercharging:['⚡ Huge perk. About 13 of our Model S and Model X units come with Free Supercharging for Life — Tesla killed this program years ago, and it transfers with the VIN. Saves ~$1,500/year if you supercharge regularly. Look for "FREE SUPERCHARGER" in the trim name.'],
+  supercharging:['⚡ Some of our Model S and Model X units come with Free Supercharging — but the type varies by VIN. Some are unlimited for life, others have a limited number of miles or months. We verify the exact terms for each car before sale. Look for the FREE SC badge and ask us to confirm what type it is before you buy.'],
   fsd:['Several of our cars have FSD from before Tesla made it account-locked in 2024. That license transfers with the car — real $8K value. Search "FSD" in the app to find them.'],
   trade:['We take any trade-in — any make, any year, any condition, even non-runners. Scan your VIN in the Trade tab and get a firm offer in under 90 seconds, or bring it to 1021 Market St for an in-person appraisal.'],
   nonrunning:['Yep, the $5,999 2014 Model S is a parts/project car. HV battery is dead. Great donor for someone doing a rebuild or needs interior/drive unit/body panels. We\'ll let you inspect it before any commitment.'],
@@ -3105,8 +3128,8 @@ document.querySelectorAll('#view-match .seg button').forEach(b=>{
 setTimeout(()=>document.getElementById('splash').classList.add('gone'),1400);
 
 // ============ ADMIN PANEL ============
-const ADMIN_PIN='8568'; // Last 4 of 855-VOLT-LOT
-let adminTapCount=0;let adminTapTimer=null;let adminLoggedIn=false;
+const ADMIN_PIN='2048'; // Last 4 of 855-VOLT-LOT
+let adminTapCount=0;let adminTapTimer=null;let adminLoggedIn=false;let adminPinEntry='';
 
 function adminTap(){
   adminTapCount++;
@@ -3118,15 +3141,26 @@ function adminTap(){
 function renderAdmin(){
   const el=document.getElementById('admin-content');
   if(!adminLoggedIn){
-    el.innerHTML=`<div style="padding:24px 22px">
-      <div style="text-align:center;margin-bottom:24px">
-        <div style="width:56px;height:56px;border-radius:16px;margin:0 auto 12px;background:linear-gradient(135deg,var(--brand),#600);display:grid;place-items:center"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-        <div style="font-size:18px;font-weight:800">Admin Login</div>
-        <div style="font-size:12px;color:var(--text-3);margin-top:4px">Enter your dealer PIN</div>
+    adminPinEntry='';
+    el.innerHTML=`<div style="padding:30px 22px 20px;text-align:center">
+      <div style="width:64px;height:64px;border-radius:18px;margin:0 auto 16px;background:linear-gradient(135deg,var(--brand),#600);display:grid;place-items:center;box-shadow:0 8px 24px -8px rgba(232,33,39,.3)">
+        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
       </div>
-      <div class="input-field"><label>PIN</label><input id="admin-pin" type="password" placeholder="••••" maxlength="10" inputmode="numeric" style="background:var(--bg);text-align:center;font-size:24px;letter-spacing:.3em" onkeydown="if(event.key==='Enter')adminLogin()"></div>
-      <button onclick="adminLogin()" style="width:100%;padding:14px;border-radius:12px;background:var(--brand);color:#fff;font-weight:700;font-size:15px;border:0;cursor:pointer;margin-top:8px">Unlock</button>
-      <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:12px">Authorized personnel only</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:4px">Dealer Admin</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:24px">Enter your 4-digit passcode</div>
+      <div id="pin-dots" style="display:flex;justify-content:center;gap:14px;margin-bottom:28px">
+        ${[0,1,2,3].map(()=>'<div style="width:16px;height:16px;border-radius:50%;border:2px solid var(--hairline);background:transparent;transition:all .15s var(--ease)"></div>').join('')}
+      </div>
+      <div id="pin-error" style="font-size:12px;color:var(--bad);height:18px;margin-bottom:12px"></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
+        ${[1,2,3,4,5,6,7,8,9].map(n=>`<button onclick="pinPress('${n}')" style="height:64px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);font-size:24px;font-weight:600;color:var(--text);cursor:pointer;transition:all .12s var(--ease);display:grid;place-items:center" ontouchstart="this.style.background='var(--surface-3)'" ontouchend="this.style.background='var(--surface)'">${n}</button>`).join('')}
+        <div></div>
+        <button onclick="pinPress('0')" style="height:64px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);font-size:24px;font-weight:600;color:var(--text);cursor:pointer;transition:all .12s var(--ease);display:grid;place-items:center" ontouchstart="this.style.background='var(--surface-3)'" ontouchend="this.style.background='var(--surface)'">0</button>
+        <button onclick="pinDelete()" style="height:64px;border-radius:50%;background:transparent;border:0;font-size:13px;font-weight:600;color:var(--text-2);cursor:pointer;display:grid;place-items:center">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+        </button>
+      </div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:20px">Authorized dealer personnel only</div>
     </div>`;
     return;
   }
@@ -3177,7 +3211,7 @@ function adminFilterList(){
     const isAdmin=adminIds.has(c.id);
     const thumb=c._adminPhotos&&c._adminPhotos.length?`<img src="${c._adminPhotos[0]}" style="width:100%;height:100%;object-fit:cover">`:carArt(c);
     return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--hairline);border-radius:12px">
-      <div style="width:48px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#111;position:relative">${thumb}</div>
+      <div style="width:48px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#fff;position:relative">${thumb}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px">${c.year} ${c.model}${isAdmin?'<span style="font-size:9px;background:var(--brand);color:#fff;padding:1px 5px;border-radius:4px;font-weight:700">NEW</span>':''}</div>
         <div style="font-size:11px;color:var(--text-3)">#${c.stock} · ${c.vin.slice(-6)} · ${c.priceCall?'Call':'$'+c.price.toLocaleString()}</div>
@@ -3189,10 +3223,51 @@ function adminFilterList(){
   }).join('')+(filtered.length>50?`<div style="text-align:center;padding:8px;font-size:11px;color:var(--text-3)">Showing 50 of ${filtered.length} — narrow your search</div>`:'');
 }
 
-function adminLogin(){
-  const pin=document.getElementById('admin-pin').value.trim();
-  if(pin===ADMIN_PIN){adminLoggedIn=true;renderAdmin();toast('Admin unlocked');}
-  else{toast('Invalid PIN','err');document.getElementById('admin-pin').value='';document.getElementById('admin-pin').focus();}
+function pinPress(n){
+  if(adminPinEntry.length>=4)return;
+  adminPinEntry+=n;
+  updatePinDots();
+  if(adminPinEntry.length===4){
+    setTimeout(()=>{
+      if(adminPinEntry===ADMIN_PIN){
+        adminLoggedIn=true;
+        renderAdmin();
+        toast('Admin unlocked');
+      }else{
+        // Wrong PIN — shake dots and reset
+        const dots=document.getElementById('pin-dots');
+        const err=document.getElementById('pin-error');
+        if(dots)dots.style.animation='shake .4s ease';
+        if(err)err.textContent='Incorrect passcode';
+        setTimeout(()=>{
+          adminPinEntry='';
+          updatePinDots();
+          if(dots)dots.style.animation='';
+          setTimeout(()=>{if(err)err.textContent='';},1500);
+        },500);
+      }
+    },200);
+  }
+}
+function pinDelete(){
+  if(adminPinEntry.length>0){
+    adminPinEntry=adminPinEntry.slice(0,-1);
+    updatePinDots();
+  }
+}
+function updatePinDots(){
+  const dots=document.getElementById('pin-dots');
+  if(!dots)return;
+  const children=dots.children;
+  for(let i=0;i<4;i++){
+    if(i<adminPinEntry.length){
+      children[i].style.background='var(--text)';
+      children[i].style.borderColor='var(--text)';
+    }else{
+      children[i].style.background='transparent';
+      children[i].style.borderColor='var(--hairline)';
+    }
+  }
 }
 
 function adminShowAddForm(){
@@ -3223,7 +3298,7 @@ function adminShowAddForm(){
 
     <div style="background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:16px;margin-bottom:12px">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Perks (check all that apply)</div>
-      <label style="display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer"><input type="checkbox" id="adm-freesc" style="width:18px;height:18px;accent-color:var(--brand)"><span style="font-size:13px">Free Supercharging for Life</span></label>
+      <label style="display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer"><input type="checkbox" id="adm-freesc" style="width:18px;height:18px;accent-color:var(--brand)"><span style="font-size:13px">Free Supercharging</span></label>
       <label style="display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer"><input type="checkbox" id="adm-fsd" style="width:18px;height:18px;accent-color:var(--brand)"><span style="font-size:13px">FSD Transferable</span></label>
       <label style="display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer"><input type="checkbox" id="adm-battwarr" style="width:18px;height:18px;accent-color:var(--brand)"><span style="font-size:13px">Extended Battery Warranty</span></label>
     </div>
@@ -3379,7 +3454,7 @@ function adminConfirmRemove(carId, carName, stock){
     </div>
 
     <div style="padding:14px;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-      <div style="width:56px;height:42px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#111;position:relative">${c._adminPhotos&&c._adminPhotos.length?'<img src="'+c._adminPhotos[0]+'" style="width:100%;height:100%;object-fit:cover">':carArt(c)}</div>
+      <div style="width:56px;height:42px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#fff;position:relative">${c._adminPhotos&&c._adminPhotos.length?'<img src="'+c._adminPhotos[0]+'" style="width:100%;height:100%;object-fit:cover">':carArt(c)}</div>
       <div>
         <div style="font-size:15px;font-weight:800">${c.year} Tesla ${c.model}</div>
         <div style="font-size:12px;color:var(--text-3)">${c.trim}</div>
@@ -3468,7 +3543,7 @@ function updateFooterCount(){
 // ============ SHARE & INSTALL ============
 const SHARE_URL='https://voltlot.ai';
 const SHARE_TITLE='VOLTLOT — 60 Used Teslas Under $30K';
-const SHARE_TEXT='Check out VOLTLOT — 60 used Teslas all under $30K in Paterson NJ. Free Supercharging models available. 855-VOLT-LOT';
+const SHARE_TEXT="Check out VOLTLOT — the tri-state area's largest used Tesla dealer. 60 Teslas under $30K, serving NJ, NY and PA. 855-VOLT-LOT";
 
 function openShareSheet(){
   if(navigator.share){
@@ -3542,6 +3617,9 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catc
 
 // First render
 renderBrowse();updateSavedBadge();calcSavings();calcBudget();renderGarageSaved();
+</script>
+<script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="V25uHTwgAu1bx6Pnk2lKe";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>
 </body>
 </html>
