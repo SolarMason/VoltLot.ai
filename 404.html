@@ -155,7 +155,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .view::-webkit-scrollbar{width:6px}
 .view::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:3px}
 .view.active{opacity:1;pointer-events:auto}
-.push{position:absolute;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .34s var(--ease-emph);overflow-y:auto;overflow-x:hidden;padding-bottom:160px;-webkit-overflow-scrolling:touch}
+.push{position:absolute;inset:0;z-index:50;background:var(--bg);transform:translateX(100%);transition:transform .34s var(--ease-emph);overflow-y:auto;overflow-x:hidden;padding-bottom:100px;-webkit-overflow-scrolling:touch}
 .push.open{transform:translateX(0)}
 
 /* ============ DESKTOP HEADER ============ */
@@ -200,7 +200,7 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
   .section{max-width:800px;margin-left:auto;margin-right:auto}
   .price-card{max-width:800px;margin-left:auto;margin-right:auto}
   .quick-actions{max-width:800px;margin-left:auto;margin-right:auto}
-  .sticky-cta{max-width:800px;margin-left:auto;margin-right:auto;border-radius:16px 16px 0 0;left:50%;transform:translateX(-50%)}
+  .detail-cta{max-width:800px;margin-left:auto;margin-right:auto}
   .vd-hero{max-height:500px}
 }
 
@@ -301,11 +301,11 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .compare-tick.on{background:var(--volt);color:#001e25;border-color:var(--volt)}
 .compare-tick svg{width:13px;height:13px}
 
-.car-info{padding:12px 13px 13px;display:flex;flex-direction:column;gap:3px}
-.car-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
-.car-title{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.car-price{font-size:15px;font-weight:700;white-space:nowrap}
-.car-sub{font-size:12px;color:var(--text-3)}
+.car-info{padding:12px 13px 13px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.car-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px;min-width:0}
+.car-title{font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.car-price{font-size:15px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.car-sub{font-size:12px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .car-stats{display:flex;gap:10px;margin-top:6px;padding-top:8px;border-top:1px solid var(--hairline)}
 .car-stat{display:flex;flex-direction:column;flex:1;min-width:0}
 .car-stat .lbl{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
@@ -436,13 +436,12 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .cost-row .lbl .ico svg{width:13px;height:13px}
 .cost-row .val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 
-.sticky-cta{position:fixed;left:0;right:0;bottom:calc(68px + env(safe-area-inset-bottom));z-index:90;padding:10px 14px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--hairline);display:flex;gap:8px}
-@media(min-width:900px){.sticky-cta{bottom:0;padding:12px 14px calc(16px + env(safe-area-inset-bottom))}}
-.sticky-cta .ghost{width:50px;height:50px;border-radius:14px;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;transition:background .15s var(--ease)}
-.sticky-cta .ghost:active{background:var(--surface-2)}
-.sticky-cta .ghost svg{width:17px;height:17px}
-.sticky-cta .primary{flex:1;height:50px;border-radius:14px;background:linear-gradient(180deg,var(--brand-2),var(--brand));color:#fff;font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px -6px rgba(232,33,39,.35);transition:transform .15s var(--ease)}
-.sticky-cta .primary:active{transform:scale(.98)}
+/* Detail page inline CTA */
+.detail-cta{padding:0 14px 8px;display:flex;gap:8px}
+.detail-cta .ghost{width:50px;height:50px;border-radius:14px;background:var(--surface);border:1px solid var(--hairline);display:grid;place-items:center;flex-shrink:0}
+.detail-cta .ghost svg{width:17px;height:17px}
+.detail-cta .primary{flex:1;height:50px;border-radius:14px;background:linear-gradient(180deg,var(--brand-2),var(--brand));color:#fff;font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px -6px rgba(232,33,39,.35);transition:transform .15s var(--ease);border:0;cursor:pointer}
+.detail-cta .primary:active{transform:scale(.98)}
 
 /* ============ TAB BAR (MOBILE) ============ */
 .tab-bar{position:fixed;left:0;right:0;bottom:0;z-index:100;padding:8px 6px calc(14px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border-top:1px solid var(--hairline);display:grid;grid-template-columns:repeat(5,1fr);align-items:end}
@@ -477,9 +476,9 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .match-card:active{transform:scale(.97)}
 .match-card.compared{border-color:var(--volt);box-shadow:0 0 0 1px var(--volt)}
 .match-card .car-photo{height:120px}
-.match-card .info{padding:9px 11px 11px}
-.match-card .info .t{font-size:13px;font-weight:700;letter-spacing:-.01em}
-.match-card .info .s{font-size:11px;color:var(--text-3);margin-top:2px}
+.match-card .info{padding:9px 11px 11px;min-width:0;overflow:hidden}
+.match-card .info .t{font-size:13px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.match-card .info .s{font-size:11px;color:var(--text-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .match-card .info .p{font-size:14px;font-weight:800;margin-top:4px}
 .match-score{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--good);background:rgba(36,138,61,.08);padding:2px 6px;border-radius:5px;margin-top:4px}
 
@@ -677,10 +676,11 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 }
 
 /* ============ CHATBASE WIDGET POSITION ============ */
-/* Bubble button: above tab bar on mobile, normal on desktop */
+/* Bubble: well above tab bar, shifted left to avoid More button */
 iframe[id*="chatbase"],div[id*="chatbase"]{
-  bottom:90px!important;
-  z-index:200!important;
+  bottom:160px!important;
+  right:16px!important;
+  z-index:95!important;
 }
 /* Chat window: respect safe area top, fit between camera and tab bar */
 iframe[title*="chatbase" i][style*="height"]{
@@ -690,15 +690,20 @@ iframe[title*="chatbase" i][style*="height"]{
   max-height:calc(100vh - 80px - env(safe-area-inset-top,0px))!important;
   max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px))!important;
   border-radius:16px 16px 0 0!important;
+  z-index:150!important;
 }
+/* Tab bar MUST capture all pointer events */
+.tab-bar{pointer-events:auto!important}
+.tab-bar *{pointer-events:auto!important}
 @media(min-width:900px){
-  iframe[id*="chatbase"],div[id*="chatbase"]{bottom:20px!important}
+  iframe[id*="chatbase"],div[id*="chatbase"]{bottom:20px!important;right:20px!important;z-index:95!important}
   iframe[title*="chatbase" i][style*="height"]{
     top:auto!important;
     bottom:20px!important;
     height:600px!important;
     max-height:80vh!important;
     border-radius:16px!important;
+    z-index:150!important;
   }
 }
 
@@ -1205,11 +1210,11 @@ iframe[title*="chatbase" i][style*="height"]{
     </div>
 
     <nav class="tab-bar">
-      <button class="tab active" data-tab="browse" onclick="switchTab('browse')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M4 8h16M4 16h16"/></svg><span class="lbl">Browse</span></button>
+      <button class="tab" data-tab="more" onclick="switchTab('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span class="lbl">More</span></button>
       <button class="tab" data-tab="match" onclick="switchTab('match')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5-7-11a4 4 0 017-3 4 4 0 017 3c0 6-7 11-7 11z"/></svg><span class="lbl">Saved</span><span class="badge-dot hide" id="saved-count">0</span></button>
       <button class="tab-center" onclick="openShareSheet()" aria-label="Share"><div class="tab-center-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 3v12M8 7l4-4 4 4"/></svg></div><span class="lbl" style="color:var(--brand-2)">Share</span></button>
       <button class="tab" data-tab="trade" onclick="switchTab('trade')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h13l-3-3M20 18H7l3 3"/></svg><span class="lbl">Trade</span></button>
-      <button class="tab" data-tab="more" onclick="switchTab('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span class="lbl">More</span></button>
+      <button class="tab active" data-tab="browse" onclick="switchTab('browse')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M4 8h16M4 16h16"/></svg><span class="lbl">Browse</span></button>
     </nav>
 
     <!-- SHARE SHEET -->
@@ -1954,7 +1959,7 @@ function buildDetail(c){
       <div style="padding:18px 22px 30px;text-align:center;color:var(--text-3);font-size:11px;line-height:1.7">Stock #${c.stock} · Listed ${c.days} days · VIN ${c.vin}<br>1021 Market St, Paterson NJ 07513 · VOLTLOT<br><a href="tel:8558658568" style="color:var(--brand-2);font-weight:600">855-VOLT-LOT</a></div>
     </div>
 
-    <div class="sticky-cta">
+    <div class="detail-cta">
       <button class="ghost" onclick="window.location.href='tel:8558658568'"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3a2 2 0 012-2h1l2 4-2 1a10 10 0 005 5l1-2 4 2v1a2 2 0 01-2 2A14 14 0 013 3z"/></svg></button>
       <button class="primary" onclick="openDrive('${c.id}')">Book Test Drive<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 7h8M7 3l4 4-4 4"/></svg></button>
     </div>`;
@@ -3543,42 +3548,35 @@ renderBrowse();updateSavedBadge();calcSavings();calcBudget();renderGarageSaved()
 
 // Reposition Chatbase bubble + chat window for mobile
 (function(){
-  var isMobile=window.innerWidth<900;
   function nudge(){
-    isMobile=window.innerWidth<900;
-    // Get safe area top (for notch/Dynamic Island)
-    var safeTop=parseInt(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)'))||0;
-    if(!safeTop){var t=document.createElement('div');t.style.cssText='position:fixed;top:env(safe-area-inset-top,0px);visibility:hidden';document.body.appendChild(t);safeTop=t.getBoundingClientRect().top||0;t.remove();}
-
+    var isMobile=window.innerWidth<900;
     document.querySelectorAll('iframe').forEach(function(el){
       var src=(el.src||'');var id=(el.id||'');var title=(el.title||'');
       var isChatbase=src.includes('chatbase')||id.includes('chatbase')||title.toLowerCase().includes('chatbase');
       if(!isChatbase)return;
 
       var h=parseInt(el.style.height)||0;
-      var isBubble=h<100;
       var isWindow=h>=100;
 
-      if(isBubble){
-        // Bubble: push above tab bar on mobile
-        el.style.setProperty('bottom',isMobile?'90px':'20px','important');
-        el.style.setProperty('z-index','200','important');
-      }
-      if(isWindow){
+      if(!isWindow){
+        // Bubble: push well above tab bar
+        el.style.setProperty('bottom',isMobile?'160px':'20px','important');
+        el.style.setProperty('right',isMobile?'16px':'20px','important');
+        el.style.setProperty('z-index','95','important');
+      }else{
         // Chat window: below camera, above tab bar
         if(isMobile){
-          var topOffset=Math.max(safeTop,47);
-          el.style.setProperty('top',topOffset+'px','important');
+          el.style.setProperty('top','env(safe-area-inset-top, 47px)','important');
           el.style.setProperty('bottom','80px','important');
           el.style.setProperty('height','auto','important');
-          el.style.setProperty('max-height','calc(100% - '+(topOffset+80)+'px)','important');
+          el.style.setProperty('max-height','calc(100dvh - 130px)','important');
           el.style.setProperty('border-radius','0','important');
         }else{
           el.style.setProperty('top','auto','important');
           el.style.setProperty('bottom','20px','important');
           el.style.setProperty('max-height','80vh','important');
         }
-        el.style.setProperty('z-index','300','important');
+        el.style.setProperty('z-index','150','important');
       }
     });
   }
