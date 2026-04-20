@@ -705,6 +705,13 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
   .view{top:0!important}
 }
 
+/* ============ CHATBASE WIDGET POSITION ============ */
+/* Push chat bubble above mobile tab bar */
+iframe[id*="chatbase"],div[id*="chatbase"]{bottom:90px!important}
+@media(min-width:900px){
+  iframe[id*="chatbase"],div[id*="chatbase"]{bottom:20px!important}
+}
+
 .hide{display:none !important}
 
 </style>
@@ -3620,6 +3627,20 @@ renderBrowse();updateSavedBadge();calcSavings();calcBudget();renderGarageSaved()
 </script>
 <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="V25uHTwgAu1bx6Pnk2lKe";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+
+// Reposition Chatbase bubble above tab bar
+(function(){
+  var isMobile=window.innerWidth<900;
+  var offset=isMobile?'100px':'24px';
+  function nudge(){
+    var els=document.querySelectorAll('iframe[title*="chatbase"],iframe[id*="chatbase"]');
+    els.forEach(function(el){el.style.setProperty('bottom',offset,'important');});
+    var btns=document.querySelectorAll('[class*="chatbase"],[id*="chatbase-bubble"]');
+    btns.forEach(function(el){if(el.tagName!=='SCRIPT')el.style.setProperty('bottom',offset,'important');});
+  }
+  setInterval(nudge,1000);
+  window.addEventListener('resize',function(){isMobile=window.innerWidth<900;offset=isMobile?'100px':'24px';nudge();});
+})();
 </script>
 </body>
 </html>
