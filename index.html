@@ -448,17 +448,6 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 .tab-center{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;position:relative}
 .tab-center-btn{width:38px;height:38px;border-radius:50%;background:var(--brand);display:grid;place-items:center;transition:transform .15s var(--ease)}
 .tab-center:active .tab-center-btn{transform:scale(.88)}
-.install-banner{position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));left:12px;right:12px;z-index:95;background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.2);animation:slide-up .4s var(--ease-emph);transition:transform .3s var(--ease),opacity .3s var(--ease)}
-@media(min-width:900px){.install-banner{bottom:20px;max-width:420px;left:50%;transform:translateX(-50%)}}
-.install-banner.dismissed{transform:translateY(120%);opacity:0}
-.install-banner .ib-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--brand),#600);display:grid;place-items:center;flex-shrink:0}
-.install-banner .ib-icon svg{width:22px;height:22px;color:#fff}
-.install-banner .ib-text{flex:1;min-width:0}
-.install-banner .ib-text .t{font-size:14px;font-weight:700;margin-bottom:2px}
-.install-banner .ib-text .d{font-size:11px;color:var(--text-3);line-height:1.4}
-.install-banner .ib-btn{padding:9px 14px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:12px;white-space:nowrap;flex-shrink:0}
-.install-banner .ib-close{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;color:var(--text-3);border:0;cursor:pointer}
-.install-banner .ib-close svg{width:10px;height:10px}
 .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;color:var(--text-3);transition:color .2s var(--ease);position:relative}
 .tab svg{width:24px;height:24px}
 .tab .lbl{font-size:10px;font-weight:600}
@@ -674,17 +663,6 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
 @media(display-mode:standalone) and (min-width:900px){
   .view{top:0!important}
 }
-
-/* ============ CHATBASE WIDGET ============ */
-/* Only adjust the bubble position — let Chatbase handle its own window */
-@media(max-width:899px){
-  #chatbase-bubble-button,
-  #chatbase-bubble-window,
-  iframe[title*="chatbase" i]{
-    transform:translateY(-90px)!important;
-  }
-}
-.tab-bar{pointer-events:auto!important}
 
 .hide{display:none !important}
 
@@ -1061,7 +1039,6 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
             <a href="tel:8558658568" class="list-item" style="text-decoration:none;color:inherit"><div class="ico" style="background:var(--good)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3a1.5 1.5 0 011.5-1.5h1l1.5 3.5-2 1a8 8 0 004 4l1-2 3.5 1.5v1A1.5 1.5 0 0112 12 10 10 0 013 3z"/></svg></div><div class="t">Call 855-VOLT-LOT</div><div style="font-size:11px;color:var(--text-3)">Mon–Sat 9am–7pm</div></a>
             <a href="sms:8558658568" class="list-item" style="text-decoration:none;color:inherit"><div class="ico" style="background:var(--blue)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4a2 2 0 012-2h8a2 2 0 012 2v5a2 2 0 01-2 2H6l-3 3v-3H4a2 2 0 01-2-2V4z"/><path d="M5 6h6M5 9h3"/></svg></div><div class="t">Text us</div><div style="font-size:11px;color:var(--text-3)">Quick questions</div></a>
             <a href="mailto:sales@voltlot.ai" class="list-item" style="text-decoration:none;color:inherit"><div class="ico" style="background:#FF9F0A"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M2 3l6 5 6-5"/></svg></div><div class="t">Email sales@voltlot.ai</div><div class="chev"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 1l4 4-4 4"/></svg></div></a>
-            <div class="list-item" onclick="openChatWidget()"><div class="ico" style="background:var(--volt)"><svg viewBox="0 0 16 16" fill="none" stroke="#001922" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4a2 2 0 012-2h8a2 2 0 012 2v5a2 2 0 01-2 2H6l-3 3v-3H4a2 2 0 01-2-2V4z"/></svg></div><div class="t">Live chat</div><div style="font-size:11px;color:var(--good);font-weight:600">Online now</div></div>
             <a href="https://maps.apple.com/?address=1021+Market+St,+Paterson,+NJ+07513" class="list-item" style="text-decoration:none;color:inherit"><div class="ico" style="background:#5E5CE6"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1C5 1 3 3.5 3 6.5S8 15 8 15s5-5.5 5-8.5S11 1 8 1z"/><circle cx="8" cy="6.5" r="2"/></svg></div><div class="t">Get directions</div><div style="font-size:11px;color:var(--text-3)">1021 Market St, Paterson NJ</div></a>
           </div>
         </div>
@@ -1189,11 +1166,11 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
     </div>
 
     <nav class="tab-bar">
-      <button class="tab" data-tab="more" onclick="switchTab('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span class="lbl">More</span></button>
+      <button class="tab active" data-tab="browse" onclick="switchTab('browse')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M4 8h16M4 16h16"/></svg><span class="lbl">Browse</span></button>
       <button class="tab" data-tab="match" onclick="switchTab('match')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5-7-11a4 4 0 017-3 4 4 0 017 3c0 6-7 11-7 11z"/></svg><span class="lbl">Saved</span><span class="badge-dot hide" id="saved-count">0</span></button>
       <button class="tab-center" onclick="openShareSheet()" aria-label="Share"><div class="tab-center-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 3v12M8 7l4-4 4 4"/></svg></div><span class="lbl" style="color:var(--brand-2)">Share</span></button>
       <button class="tab" data-tab="trade" onclick="switchTab('trade')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h13l-3-3M20 18H7l3 3"/></svg><span class="lbl">Trade</span></button>
-      <button class="tab active" data-tab="browse" onclick="switchTab('browse')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M4 8h16M4 16h16"/></svg><span class="lbl">Browse</span></button>
+      <button class="tab" data-tab="more" onclick="switchTab('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span class="lbl">More</span></button>
     </nav>
 
     <!-- SHARE SHEET -->
@@ -1226,30 +1203,13 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
           </a>
         </div>
 
-        <!-- Add to Home Screen CTA -->
-        <div style="background:linear-gradient(135deg,rgba(232,33,39,.08),rgba(232,33,39,.02));border:1px solid rgba(232,33,39,.15);border-radius:14px;padding:16px;margin-bottom:12px">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
-            <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#600);display:grid;place-items:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-            <div style="flex:1"><div style="font-size:14px;font-weight:700">Add VOLTLOT to Home Screen</div><div style="font-size:11px;color:var(--text-3);margin-top:2px">Opens like a native app — no App Store needed</div></div>
-          </div>
-          <div id="install-instructions" style="font-size:12px;color:var(--text-2);line-height:1.6"></div>
-        </div>
-
         <div style="text-align:center;font-size:11px;color:var(--text-3);line-height:1.6;padding:4px 0">
           voltlot.ai · 855-VOLT-LOT<br>Refer a friend — $250 per purchase
         </div>
       </div>
     </div>
 
-    <!-- INSTALL BANNER (shown once, dismissable) -->
-    <div class="install-banner" id="install-banner" style="display:none">
-      <button class="ib-close" onclick="dismissInstall()"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"/></svg></button>
-      <div class="ib-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 4 L10 28 L22 28 L18 44 L38 20 L26 20 L30 4 Z" fill="#fff"/></svg></div>
-      <div class="ib-text">
-        <div class="t">Add VOLTLOT to Home Screen</div>
-        <div class="d">Instant access — works like a native app</div>
       </div>
-      <button class="ib-btn" onclick="openFullShareSheet()">Add</button>
     </div>
 
     <div class="toast-wrap" id="toasts"></div>
@@ -1260,7 +1220,6 @@ input,textarea,select{font:inherit;color:inherit;background:transparent;border:0
   <defs><linearGradient id="sohgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0097B2"/><stop offset="100%" stop-color="#248A3D"/></linearGradient></defs>
 </svg>
 
-<script src="inventory.js"></script>
 <script>
 
 // ============ THEME ============
@@ -1291,7 +1250,69 @@ darkMQ.addEventListener('change',function(){if(!localStorage.getItem(THEME_KEY))
 applyTheme(getActiveTheme());
 
 // ============ REAL INVENTORY DATA ============
-// Inventory loaded from inventory.js
+// VOLTLOT inventory — auto-synced from automarketstreet.com
+const RAW=[
+['23458088',2018,'Model 3','LONG RANGE AWD',2580,'BLK',138946,'AWD',13999,'5YJ3E1EB7JF127247'],
+['23595283',2018,'Model 3','LONG RANGE',2614,'BLK',156995,'RWD',12999,'5YJ3E1EA6JF152678'],
+['23666273',2018,'Model 3','LONG RANGE AWD',2638,'SIL',152475,'AWD',14999,'5YJ3E1EB6JF121424'],
+['23580304',2018,'Model 3','LONG RANGE',2607,'WHI',88255,'RWD',17999,'5YJ3E1EA9JF044443'],
+['23135674',2018,'Model 3','LONG RANGE AWD',2424,'RED',138823,'AWD',15999,'5YJ3E1EB0JF117238'],
+['23438320',2018,'Model 3','MID RANGE FREE FSD',2564,'RED',158569,'RWD',12999,'5YJ3E1EA3JF159751'],
+['23713628',2018,'Model 3','LONG RANGE',2659,'BLK',150516,'RWD',13999,'5YJ3E1EAXJF044158'],
+['23674539',2018,'Model 3','LONG RANGE AWD',2644,'RED',142560,'AWD',15999,'5YJ3E1EBXJF065682'],
+['23726183',2018,'Model 3','PERFORMANCE',2665,'BLU',181451,'AWD',14999,'5YJ3E1EB0JF080949'],
+['23673902',2018,'Model 3','LONG RANGE',2643,'WHI',136241,'AWD',13999,'5YJ3E1EA0JF051202'],
+['23653745',2018,'Model 3','PERFORMANCE',2632,'BLK',152047,'AWD',14999,'5YJ3E1EB8JF082545'],
+['23666322',2019,'Model 3','PERFORMANCE',2640,'BLU',123870,'AWD',15999,'5YJ3E1EB9KF454959'],
+['23590398',2019,'Model 3','LONG RANGE',2613,'BLK',143998,'RWD',14999,'5YJ3E1EA2KF396006'],
+['23628845',2019,'Model 3','LONG RANGE AWD',2624,'BLU',176334,'AWD',14999,'5YJ3E1EB0KF452775'],
+['23653829',2019,'Model 3','STANDARD PLUS',2633,'BLK',93917,'RWD',16999,'5YJ3E1EA9KF410466'],
+['23775630',2019,'Model 3','LONG RANGE',2678,'GREY',181355,'AWD',0,'5YJ3E1EB3KF418555'],
+['23382042',2019,'Model 3','STANDARD PLUS',2549,'BLK',130475,'RWD',12999,'5YJ3E1EA1KF306084'],
+['23448420',2019,'Model 3','PERFORMANCE',2576,'RED',196641,'AWD',12999,'5YJ3E1EBXKF440519'],
+['23686417',2020,'Model 3','LONG RANGE AWD',2651,'WHI',151724,'AWD',15999,'5YJ3E1EB8LF665569'],
+['23733801',2020,'Model 3','LONG RANGE',2668,'BLK',155531,'AWD',15999,'5YJ3E1EB9LF734804'],
+['23697201',2020,'Model 3','LONG RANGE AWD',2656,'BLK',148797,'AWD',15999,'5YJ3E1EB2LF790857'],
+['23729832',2020,'Model 3','LONG RANGE AWD FREE FSD',2667,'BLK',132280,'AWD',17999,'5YJ3E1EB2LF735776'],
+['23419175',2021,'Model 3','STANDARD PLUS',2557,'BLU',138401,'RWD',15999,'5YJ3E1EA6MF089733'],
+['23713659',2021,'Model 3','LONG RANGE',2660,'WHI',154101,'AWD',15999,'5YJ3E1EB6MF869692'],
+['23687617',2021,'Model 3','LONG RANGE AWD',2654,'BLK',125449,'AWD',16999,'5YJ3E1EB8MF919041'],
+['21998905',2014,'Model S','NON RUNNING CAR',2006,'BLK',132455,'RWD',5999,'5YJSA1S17EFP41577'],
+['23616651',2015,'Model S','70D FREE SUPERCHARGER',2620,'BLU',141876,'AWD',13999,'5YJSA1E21FF109499'],
+['23448263',2017,'Model S','75D',2573,'GRY',32403,'AWD',0,'5YJSA1E27HF232341'],
+['22717839',2017,'Model S','75D',2279,'GRY',103737,'AWD',16999,'5YJSA1E27HF193072'],
+['23666884',2017,'Model S','75D',2641,'BLK',156115,'AWD',11999,'5YJSA1E26HF205003'],
+['23304124',2017,'Model S','90D FSD',2513,'BLU',135608,'AWD',14999,'5YJSA1E22HF180195'],
+['23775882',2019,'Model S','75D',2679,'BLK',146890,'AWD',0,'5YJSA1E21KF299878'],
+['23330631',2016,'Model X','P90D',2531,'BLK',84932,'AWD',29999,'5YJXCBE43GF001913'],
+['23576970',2016,'Model X','75D FREE SUPERCHARGER',2604,'WHI',45241,'AWD',29999,'5YJXCAE26GF010159'],
+['23580877',2016,'Model X','90D FREE SUPERCHARGER',2610,'BRO',153536,'AWD',19999,'5YJXCBE20GF005867'],
+['23681488',2016,'Model X','90D FREE SUPERCHARGING',2648,'WHI',124851,'AWD',21999,'5YJXCAE28GF004914'],
+['23515645',2016,'Model X','75D FREE SUPERCHARG BATT WARR',2587,'BLK',127945,'AWD',24999,'5YJXCAE22GF008540'],
+['23417636',2016,'Model X','90D',2551,'GREY',142644,'AWD',17999,'5YJXCBE28GF007866'],
+['23349210',2016,'Model X','90D FREE SUPERCHARGER',2538,'BLK',144311,'AWD',21999,'5YJXCBE26GF005761'],
+['23596884',2016,'Model X','FREE SUPERCHARGER',2616,'WHI',140436,'AWD',19999,'5YJXCBE2XGF008713'],
+['23734359',2016,'Model X','FREE SUPERCHARGING',2670,'GREY',145558,'AWD',21999,'5YJXCBE26GF002438'],
+['23319408',2016,'Model X','P90D',2519,'BLK',120202,'AWD',19999,'5YJXCAE44GF004457'],
+['23735411',2016,'Model X','75D FSD',2671,'GREY',142842,'AWD',19999,'5YJXCDE25GF026564'],
+['23568574',2017,'Model X','100D',2597,'GRY',99316,'AWD',21999,'5YJXCBE29HF048914'],
+['23757893',2017,'Model X','',2674,'WHI',156681,'AWD',17999,'5YJXCBE24HF041580'],
+['23764068',2017,'Model X','75D FSD',2675,'RED',176336,'AWD',14999,'5YJXCDE27HF039639'],
+['23576784',2020,'Model Y','LONG RANGE',2602,'WHI',144991,'AWD',19999,'5YJYGDEE3LF010750'],
+['23733824',2020,'Model Y','LONG RANGE',2669,'WHI',143105,'AWD',19999,'5YJYGDEE9LF023387'],
+['23775892',2020,'Model Y','LONG RANGE',2680,'WHI',134559,'AWD',0,'5YJYGDEEXLF038612'],
+['23743505',2021,'Model Y','LONG RANGE',2672,'BLK',197693,'AWD',14999,'5YJYGDEE6MF180814'],
+['23671650',2021,'Model Y','LONG RANGE',2642,'BLU',178696,'AWD',16999,'5YJYGAEE3MF117426'],
+['23628915',2021,'Model Y','LONG RANGE AWD',2625,'BLK',151065,'AWD',18999,'5YJYGDEE2MF113269'],
+['23686933',2021,'Model Y','LONG RANGE 3RD ROW',2652,'RED',138614,'AWD',19999,'5YJYGAEE6MF190466'],
+['23722809',2021,'Model Y','LONG RANGE MAX CHARGE 167',2662,'RED',224765,'AWD',9999,'5YJYGDEEXMF095958'],
+['23726241',2021,'Model Y','LONG RANGE',2666,'WHI',143429,'AWD',19999,'5YJYGDEE7MF125594'],
+['23580235',2021,'Model Y','LONG RANGE',2606,'BLK',137529,'AWD',20999,'5YJYGDEE7MF129662'],
+['23767886',2021,'Model Y','LONG RANGE',2676,'BLU',147135,'AWD',18999,'5YJYGDEE7MF073643'],
+['23767893',2021,'Model Y','LONG RANGE',2677,'GRY',168560,'AWD',19999,'5YJYGDEE0MF159358'],
+['23743573',2022,'Model Y','LONG RANGE 3RD ROW',2673,'BLU',140201,'AWD',20999,'7SAYGAEE6NF388503'],
+['23696840',2022,'Model Y','PERFORMANCE',2655,'GREY',134239,'AWD',21999,'7SAYGDEF1NF340997']
+];
 
 
 // Derived-data helpers
@@ -2882,12 +2903,6 @@ function clearCompare(){
   updateCompareBar();closeAllSheets();toast('Selection cleared');
 }
 
-// ============ CHAT (Chatbase widget) ============
-function openChatWidget(){
-  if(window.chatbase)try{window.chatbase('open');}catch(e){}
-}
-function openChat(){openChatWidget();}
-
 // ============ LIGHTBOX ============
 function openLightbox(id,view){
   const c=CARS.find(x=>x.id===id);if(!c)return;
@@ -3383,31 +3398,11 @@ const SHARE_TEXT="Check out VOLTLOT — the tri-state area's largest used Tesla 
 function openShareSheet(){
   if(navigator.share){
     navigator.share({title:SHARE_TITLE,text:SHARE_TEXT,url:SHARE_URL}).catch(e=>{
-      // Native share failed or was cancelled — show our sheet as fallback
-      if(e.name!=='AbortError'){openSheet('share');renderInstallInstructions();}
+      if(e.name!=='AbortError'){openSheet('share');}
     });
   }else{
-    openSheet('share');renderInstallInstructions();
+    openSheet('share');
   }
-}
-function renderInstallInstructions(){
-  const inst=document.getElementById('install-instructions');
-  if(!inst)return;
-  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid=/Android/.test(navigator.userAgent);
-  if(isIOS){
-    inst.innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;color:var(--text);width:20px;text-align:center">1</span> Tap the <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:-3px"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 3v12M8 7l4-4 4 4"/></svg> share button in Safari</div><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;color:var(--text);width:20px;text-align:center">2</span> Scroll down and tap <strong style="color:var(--text)">Add to Home Screen</strong></div><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;color:var(--text);width:20px;text-align:center">3</span> Tap <strong style="color:var(--text)">Add</strong> — done!</div></div>`;
-  }else if(isAndroid){
-    inst.innerHTML=`<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;color:var(--text);width:20px;text-align:center">1</span> Tap the <strong style="color:var(--text)">⋮</strong> menu in Chrome</div><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;color:var(--text);width:20px;text-align:center">2</span> Tap <strong style="color:var(--text)">Add to Home Screen</strong></div><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;color:var(--text);width:20px;text-align:center">3</span> Tap <strong style="color:var(--text)">Add</strong></div></div>`;
-  }else{
-    inst.innerHTML='<div>Open <strong style="color:var(--text)">voltlot.ai</strong> in your phone\'s browser, then use the browser menu to add to home screen.</div>';
-  }
-}
-
-// Long-press or second tap opens the full share sheet with install instructions
-function openFullShareSheet(){
-  openSheet('share');
-  renderInstallInstructions();
 }
 
 async function shareNative(){
@@ -3418,46 +3413,17 @@ async function shareNative(){
 }
 function copyLink(){
   navigator.clipboard.writeText(SHARE_URL).then(()=>toast('Link copied to clipboard')).catch(()=>{
-    // Fallback for older browsers
     const t=document.createElement('textarea');t.value=SHARE_URL;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);toast('Link copied');
   });
 }
 function shareSMS(){window.location.href='sms:?&body='+encodeURIComponent(SHARE_TEXT+' '+SHARE_URL);}
 function shareEmail(){window.location.href='mailto:?subject='+encodeURIComponent(SHARE_TITLE)+'&body='+encodeURIComponent(SHARE_TEXT+'\n\n'+SHARE_URL);}
 
-// Install banner — show once after 10 seconds, remember dismissal
-function showInstallBanner(){
-  if(localStorage.getItem('voltlot-install-dismissed'))return;
-  // Don't show if already installed as PWA
-  if(window.matchMedia('(display-mode:standalone)').matches)return;
-  setTimeout(()=>{
-    const b=document.getElementById('install-banner');
-    if(b)b.style.display='flex';
-  },10000);
-}
-function dismissInstall(){
-  const b=document.getElementById('install-banner');
-  if(b){b.classList.add('dismissed');setTimeout(()=>b.style.display='none',400);}
-  localStorage.setItem('voltlot-install-dismissed','1');
-}
-
-// Capture Android beforeinstallprompt
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
-
-showInstallBanner();
-
 // Register service worker for offline PWA
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
 
 // First render
 renderBrowse();updateSavedBadge();calcSavings();calcBudget();renderGarageSaved();
-</script>
-<script>
-window.chatbaseConfig = {
-  chatbotId: "V25uHTwgAu1bx6Pnk2lKe"
-};
-(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="V25uHTwgAu1bx6Pnk2lKe";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>
 </body>
 </html>
